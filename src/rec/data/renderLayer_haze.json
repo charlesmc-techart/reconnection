@@ -1,0 +1,83 @@
+{
+  "renderSetup": {
+    "name": "renderSetup",
+    "notes": "For rendering haze using Arnold",
+    "renderLayers": [
+      {
+        "renderSetupLayer": {
+          "collections": [
+            {
+              "collection": {
+                "children": [
+                  {
+                    "materialOverride": {
+                      "attribute": "",
+                      "connectionStr": "initialShadingGroup.message",
+                      "localRender": false,
+                      "name": "initialShadingGroup_ovr",
+                      "selfEnabled": true
+                    }
+                  },
+                  {
+                    "absOverride": {
+                      "attrValue": {
+                        "connectable": true,
+                        "type": "Bool",
+                        "value": true
+                      },
+                      "attribute": "aiMatte",
+                      "localRender": false,
+                      "name": "aiMatte_ovr",
+                      "selfEnabled": true
+                    }
+                  },
+                  {
+                    "collection": {
+                      "children": [
+                        {
+                          "shaderOverride": {
+                            "attribute": "",
+                            "connectionStr": "aiLambert.outColor",
+                            "localRender": false,
+                            "name": "aiLambert_ovr",
+                            "selfEnabled": true
+                          }
+                        }
+                      ],
+                      "isolateSelected": false,
+                      "name": "materials",
+                      "selector": {
+                        "simpleSelector": {
+                          "customFilterValue": "",
+                          "pattern": "*",
+                          "previousPattern": "*",
+                          "staticSelection": "",
+                          "typeFilter": 11
+                        }
+                      },
+                      "selfEnabled": true
+                    }
+                  }
+                ],
+                "isolateSelected": false,
+                "name": "geo_holdouts",
+                "selector": {
+                  "simpleSelector": {
+                    "customFilterValue": "mesh",
+                    "pattern": "*",
+                    "previousPattern": "*",
+                    "staticSelection": "",
+                    "typeFilter": 8
+                  }
+                },
+                "selfEnabled": true
+              }
+            }
+          ],
+          "name": "HAZE",
+          "renderable": true
+        }
+      }
+    ]
+  }
+}

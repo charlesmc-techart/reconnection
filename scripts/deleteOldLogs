@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+deleteOldLogs() {
+  find "${1:A}" -type f -name '*.log' -Btime +2w -delete
+}
+
+deleteOldLogs "${0:h:h}"
+deleteOldLogs "${REC_CLOUD_SCRIPTS_PATH}"

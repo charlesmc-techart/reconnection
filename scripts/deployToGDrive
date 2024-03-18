@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+declare -a NAMES_TO_EXCLUDE args
+readonly NAMES_TO_EXCLUDE=('*.log' '.DS_Store' '__pycache__')
+
+args=(--archive)
+if [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
+  args+=(--dry-run --verbose)
+elif [[ -n "$1" ]]; then
+  echo "${0:t}: only valid flag is '-n' or '--dry-run'" >&2
+  exit 1
+fi
+
+for name in "${NAMES_TO_EXCLUDE[@]}"; do
+  args+=(--exclude="${name}")
+done
+
+rsync "${args[@]}" "${0:A:h:h}/src/" "${REC_CLOUD_SCRIPTS_PATH:A}"

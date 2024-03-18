@@ -1,0 +1,17 @@
+# Main
+?archive
+*.log
+*helloWorld.*
+misc
+tests
+
+# Python
+__pycache__
+src/rec/modules/files/assets.py
+
+# Zsh
+*.zwc
+
+# Misc
+.DS_Store
+.vscode
