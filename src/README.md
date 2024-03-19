@@ -1,0 +1,1 @@
+The scripts affixed with "maya" in this directory are wrappers of similarly-named scripts inside the "rec" pacakge. They are to be drag-and-dropped into the Maya viewport.
