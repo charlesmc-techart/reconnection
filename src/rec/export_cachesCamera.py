@@ -11,6 +11,7 @@ from typing import NoReturn, Optional
 
 import maya.cmds as cmds
 
+import rec.export_geometryCaches as export_geometryCaches
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.app as mapp
@@ -18,33 +19,6 @@ import rec.modules.maya.objects as mobj
 import rec.modules.maya.ui as mui
 
 _EXPORT_MAYA_BINARY_SCRIPT = "export_mayaBinary.py"
-
-
-def constructFilename(
-    dir: Path,
-    shot: fname.ShotID,
-    assetType: fname.AssetType,
-    assetName: Optional[fname.AssetName] = None,
-) -> str:
-    filenameBase = fname.constructFilenameBase(
-        shot, assetName=assetName, assetType=assetType
-    )
-    assetValidator = fname.constructAssetValidator(
-        filenameBase, assetName=assetName, assetType=assetType
-    )
-    versionSuffix = fname.constructVersionSuffix(
-        assetValidator,
-        files=fpath.filterShotFiles(shot, dir=dir),
-    )
-    return f"{filenameBase}_{versionSuffix}"
-
-
-def exportGeometryCache(
-    geometryGrp: mobj.DAGNode, dir: Path, fileName: str
-) -> None:
-    geometry = mobj.lsChildren(geometryGrp)
-    with mobj.TemporarySelection(geometry):
-        mobj.exportGeometryCache(dir, fileName=fileName)
 
 
 def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
@@ -149,9 +123,13 @@ def main() -> None:
     shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
 
     constructFilenameCmd = partial(
-        constructFilename, dir=shotCachesDirPath, shot=shot
+        export_geometryCaches.constructFilename,
+        dir=shotCachesDirPath,
+        shot=shot,
     )
-    exportGeometryCacheCmd = partial(exportGeometryCache, dir=shotCachesDirPath)
+    exportGeometryCacheCmd = partial(
+        export_geometryCaches.exportGeometryCache, dir=shotCachesDirPath
+    )
 
     ui = buildWindow(shotCachesDirPath).show()
 
@@ -161,7 +139,7 @@ def main() -> None:
             assetName=fname.AssetName.MECHANIC,
             assetType=fname.AssetType.CACHE,
         )
-        exportGeometryCacheCmd(mechanicRigGeoGrp, fileName=mechanicFilename)
+        exportGeometryCacheCmd(mechanicRigGeoGrp, filename=mechanicFilename)
     ui.update()
 
     robotRigGeoGrp = mobj.ROBOT_RIG_GEO_GRP
@@ -170,7 +148,7 @@ def main() -> None:
             assetName=fname.AssetName.ROBOT,
             assetType=fname.AssetType.CACHE,
         )
-        exportGeometryCacheCmd(robotRigGeoGrp, fileName=robotFilename)
+        exportGeometryCacheCmd(robotRigGeoGrp, filename=robotFilename)
     ui.update()
 
     robotFaceRigGeoGrp = mobj.ROBOT_FACE_RIG_GEO

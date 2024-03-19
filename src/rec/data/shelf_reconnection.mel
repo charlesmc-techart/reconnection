@@ -14,7 +14,7 @@ global proc shelf_reconnection () {
         -manage 1
         -visible 1
         -preventOverride 0
-        -annotation "Export geometry cache for selected object"
+        -annotation "Export a geometry cache for each selected object"
         -enableBackground 0
         -backgroundColor 0 0 0
         -highlightColor 0.321569 0.521569 0.65098
@@ -34,7 +34,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.export as export\n\nexport.main()"
+        -command "import rec.export_geometryCaches as export_geometryCaches\n\nexport_geometryCaches.main()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1

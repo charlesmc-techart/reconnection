@@ -66,7 +66,7 @@ class AssetType(strEnum.StringEnum):
 
 
 def constructFilenameBase(
-    shotName: ShotID, assetName: Optional[AssetName], assetType: AssetType
+    shotName: ShotID, assetName: Optional[AssetName | str], assetType: AssetType
 ) -> str:
     if assetName:
         return f"{shotName.full}_{assetName}_{assetType}"
@@ -95,8 +95,8 @@ AssetValidator = Callable[[Path], bool]
 
 def constructAssetValidator(
     filenameBase: str,
+    assetName: Optional[AssetName | str],
     assetType: AssetType,
-    assetName: Optional[AssetName],
 ) -> AssetValidator:
     def isFileWithExt(file: Path, fileExt: FileExt) -> bool:
         return file.suffix == f"{fileExt}"
