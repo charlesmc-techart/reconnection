@@ -19,7 +19,7 @@ def main() -> None:
 
     mayaVersion = cmds.about(version=True)
     envDir = Path(os.environ["MAYA_APP_DIR"], mayaVersion, "Maya.env")
-    pathSeparator = ";" if cmds.about(operatingSystem=True) == "win64" else ":"
+    pathSeparator = ";" if cmds.about(ntOS=True) else ":"
     try:
         file = envDir.open("r+", encoding="utf-8")
     except FileNotFoundError:
