@@ -15,7 +15,7 @@ import rec.modules.maya.objects as mobj
 
 def lsWithWildcard(
     identifier: fname.RecIdentifier, **kwargs: Optional[Any]
-) -> mobj.DGNode:
+) -> list[mobj.DGNode]:
     return cmds.ls(f"*{identifier}*", **kwargs)
 
 
