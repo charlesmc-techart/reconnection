@@ -34,7 +34,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.export_geometryCaches as export_geometryCaches\n\nexport_geometryCaches.main()"
+        -command "import rec.export_geometryCache as export_geometryCache\n\nexport_geometryCache.main()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
