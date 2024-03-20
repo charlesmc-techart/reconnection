@@ -1,5 +1,8 @@
+from __future__ import annotations
+
+from collections.abc import Sequence
 from functools import partial
-from typing import Any, Optional
+from typing import Any, NoReturn, Optional
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -23,6 +26,13 @@ def constructNamespace(filename: str, assetType: fname.AssetType) -> str:
 
 class GeometryCacheComponents:
     __slots__ = ("_origCacheFile", "cacheFile")
+
+    def __new__(
+        cls, cacheFileNode: mobj.DGNode
+    ) -> GeometryCacheComponents | NoReturn:
+        if cmds.objectType(cacheFileNode, isType="cacheFile"):
+            return super().__new__(cls)
+        raise TypeError(f"{cacheFileNode!r} must be a cacheFile node")
 
     def __init__(self, cacheFileNode: mobj.DGNode) -> None:
         self._origCacheFile = cacheFileNode
