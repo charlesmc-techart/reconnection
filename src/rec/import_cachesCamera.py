@@ -116,9 +116,7 @@ def importGeometryCache(
     with mobj.TemporarySelection(geometry):
         mel.eval(doImportCacheFileCmd)
 
-    import_geometryCache.assetizeGeometryCacheComponents(
-        assetName, namespace=namespace
-    )
+    igcs.assetize(assetName, namespace=namespace)
 
 
 def replaceRigWithCachedModel(

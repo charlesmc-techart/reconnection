@@ -144,6 +144,4 @@ def main() -> None:
     )
     assetName = cacheFilename.split("_", 3)[2]
 
-    assetizeGeometryCacheComponents(
-        assetName, constructNamespace(cacheFilename, assetType=assetType)
-    )
+    assetize(assetName, constructNamespace(cacheFilename, assetType=assetType))
