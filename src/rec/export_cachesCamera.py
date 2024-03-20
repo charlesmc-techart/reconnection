@@ -21,6 +21,15 @@ import rec.modules.maya.ui as mui
 _EXPORT_MAYA_BINARY_SCRIPT = "export_mayaBinary.py"
 
 
+def exportGeometryCache(
+    geometryGrp: mobj.DAGNode, dir: Path, filename: str
+) -> None:
+    geometry = mobj.lsChildren(geometryGrp)
+    export_geometryCaches.exportGeometryCache(
+        geometry, dir=dir, filename=filename
+    )
+
+
 def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
     mapp.loadPlugin("AbcExport")
     cmds.workspace(fileRule=("alembicCache", "cache"))
@@ -127,9 +136,7 @@ def main() -> None:
         dir=shotCachesDirPath,
         shot=shot,
     )
-    exportGeometryCacheCmd = partial(
-        export_geometryCaches.exportGeometryCache, dir=shotCachesDirPath
-    )
+    exportGeometryCacheCmd = partial(exportGeometryCache, dir=shotCachesDirPath)
 
     ui = buildWindow(shotCachesDirPath).show()
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Optional
 
@@ -32,9 +33,8 @@ def constructFilename(
 
 
 def exportGeometryCache(
-    geometryGrp: mobj.DAGNode, dir: Path, filename: str
+    geometry: mobj.DAGNode | Sequence[mobj.DAGNode], dir: Path, filename: str
 ) -> None:
-    geometry = mobj.lsChildren(geometryGrp)
     with mobj.TemporarySelection(geometry):
         mobj.exportGeometryCache(dir, fileName=filename)
 
@@ -64,9 +64,14 @@ def main() -> None:
     shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
     shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
 
-    objects = cmds.ls(selection=True, transforms=True)
+    # TODO: test if this actually filters xforms with just mesh shapes
+    objects = [
+        o
+        for o in cmds.ls(selection=True, transforms=True)
+        if cmds.listRelatives(o, type="mesh")
+    ]
     if not objects:
-        raise ValueError("Nothing is selected!")
+        raise ValueError("No geometry is selected")
 
     ui = buildWindow(*objects, outputPath=shotCachesDirPath).show()
 
