@@ -53,7 +53,7 @@ class GeometryCacheComponents:
     def meshPart(self) -> str:
         return self.mesh.rsplit(":", 1)[-1].rsplit("_", 1)[0]
 
-    def renameComponents(self, identifier: fname.RecIdentifier) -> None:
+    def rename(self, identifier: fname.RecIdentifier) -> None:
         nameBase = f"{identifier}_{self.meshPart}"
         self.cacheFile = cmds.rename(self.cacheFile, nameBase + "_cache")
         cmds.rename(self.historySwitch, nameBase + "_historySwitch")
@@ -88,34 +88,30 @@ class GeometryCacheNetwork:
             )
 
 
-def assetizeGeometryCacheComponents(
-    assetName: fname.AssetName, namespace: str
-) -> None:
-    geometryCacheComponents = []
-    for cacheFileNode in lsWithWildcard(assetName, type="cacheFile"):
-        components = GeometryCacheComponents(cacheFileNode)
-        components.renameComponents(assetName)
+def assetize(assetName: fname.AssetName, namespace: str) -> None:
+    cacheFileNodes = lsWithWildcard(assetName, type="cacheFile")
+    componentNodes = []
+    for i, c in enumerate(cacheFileNodes):
+        components = GeometryCacheComponents(c)
+        components.rename(assetName)
 
-        geometryCacheComponents.extend(
-            (components.cacheFile, components.historySwitch)
-        )
+        cacheFileNodes[i] = components.cacheFile
+        componentNodes.extend((components.cacheFile, components.historySwitch))
 
     asset = cmds.createNode("container", name=namespace + "_container")
     containerCmd = partial(cmds.container, asset, edit=True)
-    containerCmd(addNode=geometryCacheComponents, force=True)
+
+    containerCmd(addNode=componentNodes, force=True)
     cmds.setAttr(asset + ".blackBox", True)
     cmds.setAttr(asset + ".viewMode", 0)
 
-    firstCacheFileNode = None
-    isCacheFileNode = partial(cmds.objectType, isType="cacheFile")
-    for n in filter(isCacheFileNode, geometryCacheComponents):
-        if firstCacheFileNode is None:
-            firstCacheFileNode = n
-            containerCmd(publishAndBind=(n + ".cachePath", "folder"))
-            containerCmd(publishAndBind=(n + ".cacheName", "filename"))
-            continue
-        cmds.connectAttr(firstCacheFileNode + ".cachePath", n + ".cachePath")
-        cmds.connectAttr(firstCacheFileNode + ".cacheName", n + ".cacheName")
+    cacheFileNode0, *cacheFileNodes = cacheFileNodes
+    containerCmd(publishAndBind=(cacheFileNode0 + ".cachePath", "folder"))
+    containerCmd(publishAndBind=(cacheFileNode0 + ".cacheName", "filename"))
+
+    for c in cacheFileNodes:
+        cmds.connectAttr(cacheFileNode0 + ".cachePath", c + ".cachePath")
+        cmds.connectAttr(cacheFileNode0 + ".cacheName", c + ".cacheName")
 
 
 # FIXME: make importing from test folder separate from main
