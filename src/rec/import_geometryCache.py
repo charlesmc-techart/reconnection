@@ -21,38 +21,52 @@ def constructNamespace(filename: str, assetType: fname.AssetType) -> str:
     return filename[:cutoff]
 
 
-def renameCacheFileAndHistorySwitchNodes(
+class GeometryCacheComponents:
+    __slots__ = ("_origCacheFile", "cacheFile")
+
+    def __init__(self, cacheFileNode: mobj.DGNode) -> None:
+        self._origCacheFile = cacheFileNode
+        self.cacheFile = cacheFileNode
+
+    @property
+    def historySwitch(self) -> mobj.DGNode:
+        return cmds.listConnections(self.cacheFile, type="historySwitch")[0]
+
+    @property
+    def mesh(self) -> mobj.ShapeNode:
+        return cmds.listConnections(self.historySwitch, type="mesh")[0]
+
+    @property
+    def meshPart(self) -> str:
+        return self.mesh.rsplit(":", 1)[-1].rsplit("_", 1)[0]
+
+    def renameComponents(self, identifier: fname.RecIdentifier) -> None:
+        nameBase = f"{identifier}_{self.meshPart}"
+        self.cacheFile = cmds.rename(self.cacheFile, nameBase + "_cache")
+        cmds.rename(self.historySwitch, nameBase + "_historySwitch")
+
+
+def assetizeGeometryCacheComponents(
     assetName: fname.AssetName, namespace: str
 ) -> None:
-    cacheFileAndHistoryNodes = []
-    for cacheFileNode in lsWithWildcard(
-        assetName, type="cacheFile"
-    ):
-        historySwitch = cmds.listConnections(
-            cacheFileNode, type="historySwitch"
-        )[0]
-        mesh = cmds.listConnections(historySwitch, type="shape")[0]
-        meshPart = mesh.rsplit(":", 1)[-1].rsplit("_", 1)[0]
+    geometryCacheComponents = []
+    for cacheFileNode in lsWithWildcard(assetName, type="cacheFile"):
+        components = GeometryCacheComponents(cacheFileNode)
+        components.renameComponents(assetName)
 
-        cacheFileNewName = cmds.rename(
-            cacheFileNode, f"{assetName}_{meshPart}_cache"
-        )
-        historySwitchNewName = cmds.rename(
-            historySwitch, f"{assetName}_{meshPart}_historySwitch"
-        )
-        cacheFileAndHistoryNodes.extend(
-            (cacheFileNewName, historySwitchNewName)
+        geometryCacheComponents.extend(
+            (components.cacheFile, components.historySwitch)
         )
 
     asset = cmds.createNode("container", name=namespace + "_container")
     containerCmd = partial(cmds.container, asset, edit=True)
-    containerCmd(addNode=cacheFileAndHistoryNodes, force=True)
+    containerCmd(addNode=geometryCacheComponents, force=True)
     cmds.setAttr(asset + ".blackBox", True)
     cmds.setAttr(asset + ".viewMode", 0)
 
     firstCacheFileNode = None
     isCacheFileNode = partial(cmds.objectType, isType="cacheFile")
-    for n in filter(isCacheFileNode, cacheFileAndHistoryNodes):
+    for n in filter(isCacheFileNode, geometryCacheComponents):
         if firstCacheFileNode is None:
             firstCacheFileNode = n
             containerCmd(publishAndBind=(n + ".cachePath", "folder"))
@@ -77,3 +91,14 @@ def main() -> None:
     #        $args[] = none
     doImportCacheArgListCmd = "doImportCacheArgList 0 {}"
     mel.eval(doImportCacheArgListCmd)
+
+    assetType = fname.AssetType.CACHE
+    cacheFileNodeNamePattern = f"{shot.full}_*_{assetType}_v???"
+    cacheFilename = cmds.getAttr(
+        cmds.ls(cacheFileNodeNamePattern + "Cache1")[0] + ".cacheName"
+    )
+    assetName = cacheFilename.split("_", 3)[2]
+
+    assetizeGeometryCacheComponents(
+        assetName, constructNamespace(cacheFilename, assetType=assetType)
+    )

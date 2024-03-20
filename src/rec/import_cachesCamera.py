@@ -116,7 +116,7 @@ def importGeometryCache(
     with mobj.TemporarySelection(geometry):
         mel.eval(doImportCacheFileCmd)
 
-    import_geometryCache.renameCacheFileAndHistorySwitchNodes(
+    import_geometryCache.assetizeGeometryCacheComponents(
         assetName, namespace=namespace
     )
 
