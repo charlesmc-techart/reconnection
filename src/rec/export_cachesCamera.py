@@ -43,7 +43,6 @@ def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
     cmds.AbcExport(jobArg=args)
 
 
-# TODO: maybe simplify if export selected isn't strict?
 # TODO: fix type annotation
 def getCameraComponents(
     cameraGrp: mobj.TopLevelGroup,
@@ -71,7 +70,6 @@ def getCameraComponents(
     return lookAt, xform, camera, locator, locatorShape
 
 
-# TODO: maybe don't unpack nodes?
 def exportMayaAsciiThenBinary(
     nodes: Sequence[mobj.DGNode], filePath: Path
 ) -> None:
