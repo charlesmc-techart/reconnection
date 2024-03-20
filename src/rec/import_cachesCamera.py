@@ -8,7 +8,7 @@ import maya.api.OpenMaya as om
 import maya.cmds as cmds
 import maya.mel as mel
 
-import rec.import_geometryCache as import_geometryCache
+import rec.import_geometryCache as igcs
 import rec.modules.files.assets as fasset
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
@@ -36,7 +36,7 @@ def getLatestVersionAsset(
 
 
 def getReferenceNode(identifier: fname.RecIdentifier) -> mobj.ReferenceNode:
-    return import_geometryCache.lsWithWildcard(identifier, type="reference")[0]
+    return igcs.lsWithWildcard(identifier, type="reference")[0]
 
 
 def reference(filePath: Path, namespace: str) -> None:
@@ -129,7 +129,7 @@ def replaceRigWithCachedModel(
     characterGrp: mobj.TopLevelGroup,
 ) -> None:
     unloadReference(assetName)
-    namespace = import_geometryCache.constructNamespace(
+    namespace = igcs.constructNamespace(
         cacheFilePath.stem, fname.AssetType.CACHE
     )
     referenceCharacter(
@@ -140,9 +140,7 @@ def replaceRigWithCachedModel(
     )
 
     try:
-        container = import_geometryCache.lsWithWildcard(
-            namespace, type="container"
-        )[0]
+        container = igcs.lsWithWildcard(namespace, type="container")[0]
     except IndexError:
         importGeometryCache(
             geometryGrp,
@@ -222,7 +220,7 @@ def main() -> None:
         assetType=fname.AssetType.CACHE,
     ):
         mapp.loadPlugin("AbcImport")
-        robotFaceNamespace = import_geometryCache.constructNamespace(
+        robotFaceNamespace = igcs.constructNamespace(
             robotFaceCache.stem, assetType=fname.AssetType.CACHE
         )
         referenceCharacter(
@@ -234,7 +232,7 @@ def main() -> None:
     ui.update()
 
     if cameraFile := getLatestVersionAssetCmd(assetType=fname.AssetType.CAMERA):
-        cameraNamespace = import_geometryCache.constructNamespace(
+        cameraNamespace = igcs.constructNamespace(
             cameraFile.stem, assetType=fname.AssetType.CAMERA
         )
         reference(filePath=cameraFile, namespace=cameraNamespace)
