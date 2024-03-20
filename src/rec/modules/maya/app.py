@@ -66,6 +66,7 @@ def logScriptEditorOutput(
             func()
         except:
             traceback.print_exc()
+            raise
         finally:
             cmds.cmdFileOutput(close=fileDescriptor)
 
