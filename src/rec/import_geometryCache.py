@@ -32,7 +32,7 @@ class GeometryCacheComponents:
     ) -> GeometryCacheComponents | NoReturn:
         if cmds.objectType(cacheFileNode, isType="cacheFile"):
             return super().__new__(cls)
-        raise TypeError(f"{cacheFileNode!r} must be a cacheFile node")
+        raise TypeError(f"{cacheFileNode} must be a cacheFile node")
 
     def __init__(self, cacheFileNode: mobj.DGNode) -> None:
         self._origCacheFile = cacheFileNode

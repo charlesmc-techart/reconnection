@@ -18,7 +18,7 @@ class ReConnectionFilenameError(Exception):
 
     def __init__(self, filename: str) -> None:
         message = (
-            f"The current scene's filename, {filename}, must contain "
+            f"The scene's filename, {filename}, must contain "
             "'rec_seq###' for the script to work properly."
         )
         super().__init__(message)
@@ -27,10 +27,17 @@ class ReConnectionFilenameError(Exception):
 class ShotID:
     __slots__ = "name", "sequence", "number", "full"
 
+    def __new__(cls, name: str) -> ShotID:
+        try:
+            int(name[3:])
+        except ValueError as e:
+            raise ValueError(f"{name} must follow 'seq###'") from e
+        return super().__new__(cls)
+
     def __init__(self, name: str) -> None:
         self.name = name
         self.sequence = name[:3]
-        self.number = name[3:]
+        self.number = name[3:6]
         self.full = f"{SHOW}_{name}"
 
     def __str__(self) -> str:
@@ -45,11 +52,6 @@ class ShotID:
         if affix not in filename:
             raise ReConnectionFilenameError(filename)
         name = filename.split(affix, 1)[-1][:6]
-        try:
-            int(name[3:])
-        except ValueError as e:
-            raise ReConnectionFilenameError(filename) from e
-
         return cls(name)
 
 
