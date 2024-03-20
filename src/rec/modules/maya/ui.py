@@ -39,6 +39,9 @@ class ProgressWindow:
         self.tasks: Iterator[str]
         self.tasksDone = 0
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self._name!r}, {self._title!r})"
+
     def build(self) -> ProgressWindow:
         if cmds.window(self.name, exists=True):
             cmds.deleteUI(self.name, window=True)

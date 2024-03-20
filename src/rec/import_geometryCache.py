@@ -28,6 +28,9 @@ class GeometryCacheComponents:
         self._origCacheFile = cacheFileNode
         self.cacheFile = cacheFileNode
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self._origCacheFile!r})"
+
     @property
     def historySwitch(self) -> mobj.DGNode:
         return cmds.listConnections(self.cacheFile, type="historySwitch")[0]
