@@ -1,21 +1,33 @@
+from functools import partial
+from typing import Any, Optional
+
 import maya.cmds as cmds
 import maya.mel as mel
 
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.app as mapp
+import rec.modules.maya.objects as mobj
 
 
-def importGeometryCache(
-    filePath: Path, assetName: fname.AssetName, namespace: str
+def lsWithWildcard(
+    identifier: fname.RecIdentifier, **kwargs: Optional[Any]
+) -> mobj.DGNode:
+    return cmds.ls(f"*{identifier}*", **kwargs)
+
+
+def constructNamespace(filename: str, assetType: fname.AssetType) -> str:
+    cutoff = filename.index(f"{assetType}") + len(assetType)
+    return filename[:cutoff]
+
+
+def renameCacheFileAndHistorySwitchNodes(
+    assetName: fname.AssetName, namespace: str
 ) -> None:
-    doImportCacheFileCmd = (
-        f'doImportCacheFile "{filePath.as_posix()}" "" {{}} {{}}'
-    )
-    mel.eval(doImportCacheFileCmd)
-
     cacheFileAndHistoryNodes = []
-    for cacheFileNode in lsWithWildcard(assetName, type="cacheFile"):
+    for cacheFileNode in lsWithWildcard(
+        assetName, type="cacheFile"
+    ):
         historySwitch = cmds.listConnections(
             cacheFileNode, type="historySwitch"
         )[0]

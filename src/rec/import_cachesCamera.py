@@ -8,6 +8,7 @@ import maya.api.OpenMaya as om
 import maya.cmds as cmds
 import maya.mel as mel
 
+import rec.import_geometryCache as import_geometryCache
 import rec.modules.files.assets as fasset
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
@@ -34,13 +35,8 @@ def getLatestVersionAsset(
     )
 
 
-def constructNamespace(filename: str, assetType: fname.AssetType) -> str:
-    cutoff = filename.index(f"{assetType}") + len(assetType)
-    return filename[:cutoff]
-
-
 def getReferenceNode(identifier: fname.RecIdentifier) -> mobj.ReferenceNode:
-    return mobj.lsWithWildcard(identifier, type="reference")[0]
+    return import_geometryCache.lsWithWildcard(identifier, type="reference")[0]
 
 
 def reference(filePath: Path, namespace: str) -> None:
@@ -112,10 +108,17 @@ def importGeometryCache(
 ) -> None:
     geometry = mobj.lsChildren(geometryGrp)
 
+    cmds.workspace(fileRule=("fileCache", filePath.parent.as_posix()))
+
+    doImportCacheFileCmd = (
+        f'doImportCacheFile "{filePath.as_posix()}" "" {{}} {{}}'
+    )
     with mobj.TemporarySelection(geometry):
-        mobj.importGeometryCache(
-            filePath, assetName=assetName, namespace=namespace
-        )
+        mel.eval(doImportCacheFileCmd)
+
+    import_geometryCache.renameCacheFileAndHistorySwitchNodes(
+        assetName, namespace=namespace
+    )
 
 
 def replaceRigWithCachedModel(
@@ -126,7 +129,9 @@ def replaceRigWithCachedModel(
     characterGrp: mobj.TopLevelGroup,
 ) -> None:
     unloadReference(assetName)
-    namespace = constructNamespace(cacheFilePath.stem, fname.AssetType.CACHE)
+    namespace = import_geometryCache.constructNamespace(
+        cacheFilePath.stem, fname.AssetType.CACHE
+    )
     referenceCharacter(
         modelFilePath,
         namespace=namespace,
@@ -135,7 +140,9 @@ def replaceRigWithCachedModel(
     )
 
     try:
-        container = mobj.lsWithWildcard(namespace, type="container")[0]
+        container = import_geometryCache.lsWithWildcard(
+            namespace, type="container"
+        )[0]
     except IndexError:
         importGeometryCache(
             geometryGrp,
@@ -215,7 +222,7 @@ def main() -> None:
         assetType=fname.AssetType.CACHE,
     ):
         mapp.loadPlugin("AbcImport")
-        robotFaceNamespace = constructNamespace(
+        robotFaceNamespace = import_geometryCache.constructNamespace(
             robotFaceCache.stem, assetType=fname.AssetType.CACHE
         )
         referenceCharacter(
@@ -227,7 +234,7 @@ def main() -> None:
     ui.update()
 
     if cameraFile := getLatestVersionAssetCmd(assetType=fname.AssetType.CAMERA):
-        cameraNamespace = constructNamespace(
+        cameraNamespace = import_geometryCache.constructNamespace(
             cameraFile.stem, assetType=fname.AssetType.CAMERA
         )
         reference(filePath=cameraFile, namespace=cameraNamespace)

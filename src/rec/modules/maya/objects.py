@@ -67,12 +67,6 @@ def getParent(node: DAGNode) -> Optional[DAGNode]:
         return None
 
 
-def lsWithWildcard(
-    identifier: fname.RecIdentifier, **kwargs: Optional[Any]
-) -> mobj.DGNode:
-    return cmds.ls(f"*{identifier}*", **kwargs)
-
-
 def lsUnknown() -> list[DGNode]:
     return cmds.ls(type="unknown")
 
