@@ -32,7 +32,7 @@ def exportGeometryCache(
 
 def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
     mapp.loadPlugin("AbcExport")
-    cmds.workspace(fileRule=("alembicCache", "cache"))
+    cmds.workspace(fileRule=("alembicCache", filePath.parent.as_posix()))
 
     startTime = cmds.playbackOptions(query=True, animationStartTime=True)
     endTime = cmds.playbackOptions(query=True, animationEndTime=True)

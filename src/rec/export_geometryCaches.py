@@ -37,6 +37,8 @@ def exportGeometryCache(
     geometry: mobj.DAGNode | Sequence[mobj.DAGNode], dir: Path, filename: str
 ) -> None:
     """Call the MEL procedure for exporting a geometry cache"""
+    cmds.workspace(fileRule=("fileCache", dir.as_posix()))
+
     # global proc stirng[] doCreateGeometryCache( int $version, string $args[] )
     #     $version == 1:
     #         $args[0] =  time range mode:
