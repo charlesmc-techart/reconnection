@@ -110,18 +110,18 @@ def buildWindow(*objects: str, outputPath: Path) -> mui.ProgressWindow:
 @mapp.logScriptEditorOutput
 def main() -> None:
     shot = fname.ShotID.getFromFilename(mapp.getScenePath().stem)
-    gDriveShotDir = fpath.getShotPath(shot, parentDir=fpath.getSharedDrive())
-    shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
-    shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
-
     # TODO: test if this actually filters xforms with just mesh shapes
     objects = [
-        o
-        for o in cmds.ls(selection=True, transforms=True)
-        if cmds.listRelatives(o, type="mesh")
+        s
+        for s in cmds.ls(selection=True, transforms=True)
+        if cmds.listRelatives(s, shapes=True, noIntermediate=True, type="mesh")
     ]
     if not objects:
         raise ValueError("No geometry is selected")
+
+    gDriveShotDir = fpath.getShotPath(shot, parentDir=fpath.getSharedDrive())
+    shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
+    shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
 
     ui = buildWindow(*objects, outputPath=shotCachesDirPath).show()
 
