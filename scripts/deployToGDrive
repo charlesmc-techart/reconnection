@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+source "${0:h}/directories.zsh"
+
 declare -a NAMES_TO_EXCLUDE args
 readonly NAMES_TO_EXCLUDE=('*.log' '.DS_Store' '__pycache__')
 
@@ -15,4 +17,4 @@ for name in "${NAMES_TO_EXCLUDE[@]}"; do
   args+=(--exclude="${name}")
 done
 
-rsync "${args[@]}" "${0:A:h:h}/src/" "${REC_CLOUD_SCRIPTS_PATH:A}"
+rsync "${args[@]}" "${localScriptsDir}/" "${gDriveScriptsDir}"

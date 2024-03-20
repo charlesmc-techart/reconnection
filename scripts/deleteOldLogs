@@ -1,8 +1,10 @@
 #!/bin/zsh
 
+source "${0:h}/directories.zsh"
+
 deleteOldLogs() {
-  find "${1:A}" -type f -name '*.log' -Btime +2w -delete
+  find "$1" -type f -name '*.log' -Btime +2w -delete
 }
 
-deleteOldLogs "${0:h:h}"
-deleteOldLogs "${REC_CLOUD_SCRIPTS_PATH}"
+deleteOldLogs "${localScriptsDir}"
+deleteOldLogs "${gDriveScriptsDir}"
