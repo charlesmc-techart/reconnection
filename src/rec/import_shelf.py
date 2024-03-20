@@ -15,7 +15,12 @@ def main() -> None:
         sys.path.insert(0, f"{scriptsDir}")
 
     shelfFile = scriptsDir / _SHELF_DIR
-    mel.eval(f'loadNewShelf "{shelfFile.as_posix()}"')
+    try:
+        mel.eval(f'deleteShelfTab "{_SHELF_NAME}"')
+    except RuntimeError as e:
+        raise
+    finally:
+        mel.eval(f'loadNewShelf "{shelfFile.as_posix()}"')
 
     mayaVersion = cmds.about(version=True)
     envDir = Path(os.environ["MAYA_APP_DIR"], mayaVersion, "Maya.env")
