@@ -9,10 +9,8 @@ import rec.modules.maya.app as mapp
 # FIXME: make importing from test folder separate from main
 @mapp.logScriptEditorOutput
 def main() -> None:
-    gDriveShotDir = fpath.getShotPath(
-        fname.ShotID.getFromFilename(mapp.getScenePath().stem),
-        parentDir=fpath.getSharedDrive(),
-    )
+    shot = fname.ShotID.getFromFilename(mapp.getScenePath().stem)
+    gDriveShotDir = fpath.getShotPath(shot, parentDir=fpath.getSharedDrive())
     shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
     shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
 
