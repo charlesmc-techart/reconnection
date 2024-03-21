@@ -9,6 +9,7 @@ import rec.modules.files.names as fname
 
 _DRIVE = "G"
 _POST_PRODUCTION_DIR = "REC_POST"
+ASSETS_DIR = "REC_ASSETS"
 CACHE_DIR = Path("LIGHT", "cache")
 
 
@@ -50,10 +51,19 @@ def getSharedDrive(
             return path.resolve()
         raise DirecetoryNotFoundOnGoogleSharedDriveError(dir)
     else:
-        macGDrivePathPattern = "**/*Google*/**/Shared drives"
+        macGDrivePathPattern = "Library/CloudStorage/GoogleDrive*/Shared drives"
         for path in Path.home().glob(f"{macGDrivePathPattern}/{dir}"):
-            return path.resolve()
+            if path.is_dir():
+                return path.resolve()
         raise DirecetoryNotFoundOnGoogleSharedDriveError(dir)
+
+
+def getModelPath(assetName: fname.AssetName, parentDir: Path) -> Path:
+    assetType = fname.AssetType.MODEL
+    filenamePattern = f"rec_asset_{assetName}_{assetType}_*.*_MASTER.m?"
+    dir = Path(parentDir, f"{assetName}".upper(), f"{assetType}".upper())
+    dir = next(dir.glob("*.*")).joinpath("MAYA", "scenes")
+    return next(dir.glob(filenamePattern)).resolve()
 
 
 def getShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:

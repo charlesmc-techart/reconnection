@@ -9,7 +9,6 @@ import maya.cmds as cmds
 import maya.mel as mel
 
 import rec.import_geometryCache as igcs
-import rec.modules.files.assets as fasset
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.app as mapp
@@ -191,23 +190,31 @@ def main() -> None:
 
     ui = buildWindow(shotCachesDirPath).show()
 
+    mechanicName = fname.AssetName.MECHANIC
     if mechanicCache := getLatestVersionAssetCmd(
-        assetName=fname.AssetName.MECHANIC, assetType=fname.AssetType.CACHE
+        assetName=mechanicName, assetType=fname.AssetType.CACHE
     ):
+        mechanicModel = fpath.getModelPath(
+            mechanicName, parentDir=gDriveAssetsDirPath
+        )
         replaceRigWithCachedModelCmd(
-            fname.AssetName.MECHANIC,
-            modelFilePath=gDriveAssetsDirPath / fasset.MECHANIC_MODEL_DIR,
+            mechanicName,
+            modelFilePath=mechanicModel,
             cacheFilePath=mechanicCache,
             geometryGrp=mobj.MECHANIC_MODEL_GEO_GRP,
         )
     ui.update()
 
+    robotName = fname.AssetName.ROBOT
     if robotCache := getLatestVersionAssetCmd(
-        assetName=fname.AssetName.ROBOT, assetType=fname.AssetType.CACHE
+        assetName=robotName, assetType=fname.AssetType.CACHE
     ):
+        robotModel = fpath.getModelPath(
+            robotName, parentDir=gDriveAssetsDirPath
+        )
         replaceRigWithCachedModelCmd(
-            fname.AssetName.ROBOT,
-            modelFilePath=gDriveAssetsDirPath / fasset.ROBOT_MODEL_DIR,
+            robotName,
+            modelFilePath=robotModel,
             cacheFilePath=robotCache,
             geometryGrp=mobj.ROBOT_MODEL_GEO_GRP,
         )
