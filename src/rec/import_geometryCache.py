@@ -123,7 +123,7 @@ def main() -> None:
     shot = fname.ShotID.getFromFilename(mapp.getScenePath().stem)
     gDriveShotDir = fpath.getShotPath(shot, parentDir=fpath.getSharedDrive())
     shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
-    shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
+    # shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
 
     cmds.workspace(fileRule=("cacheFile", shotCachesDirPath))
 
