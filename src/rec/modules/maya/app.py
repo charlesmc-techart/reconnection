@@ -18,7 +18,12 @@ class FileType(strEnum.StringEnum):
 
 
 def getScenePath() -> Path:
-    return Path(cmds.file(query=True, sceneName=True)).resolve()
+    """Get the current scene's path or 'path/to/default/project/untitled'"""
+    if path := cmds.file(query=True, sceneName=True):
+        path = Path(path)
+    else:
+        path = Path(cmds.workspace(query=True, fullName=True), "untitled")
+    return path.resolve()
 
 
 def loadPlugin(pluginName: str) -> None:
