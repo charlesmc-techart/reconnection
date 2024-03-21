@@ -24,11 +24,13 @@ _EXPORT_MAYA_BINARY_SCRIPT = "export_mayaBinary.py"
 def exportGeometryCache(
     geometryGrp: mobj.DAGNode, dir: Path, filename: str
 ) -> None:
+    """Export a geometry cache for all geometry under a group"""
     geometry = mobj.lsChildren(geometryGrp)
     ogcs.exportGeometryCache(geometry, dir=dir, filename=filename)
 
 
 def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
+    """Export an Alembic cache"""
     mapp.loadPlugin("AbcExport")
     cmds.workspace(fileRule=("alembicCache", filePath.parent.as_posix()))
 
@@ -45,6 +47,10 @@ def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
 def getCameraComponents(
     cameraGrp: mobj.TopLevelGroup,
 ) -> Optional[tuple[mobj.DAGNode, ...]] | NoReturn:
+    """Get all components of a shot camera: transform and shape nodes
+
+    If the camera uses a camera and aim, get the lookAt and locator nodes, too.
+    """
     try:
         camera = mobj.lsChildren(cameraGrp, allDescendents=True, type="camera")
     except ValueError as e:
@@ -71,6 +77,11 @@ def getCameraComponents(
 def exportMayaAsciiThenBinary(
     nodes: Sequence[mobj.DGNode], filePath: Path
 ) -> None:
+    """Export the nodes to a temporary ASCII file before a binary one
+
+    The nodes exported to an ASCII file in a temporary directory. Then, another
+    instance of Maya is opened to export the nodes into a binary file.
+    """
     prefix = fname.SHOW + "_"
     with TemporaryDirectory(prefix=prefix) as tempDir:
         tempFilePath = Path(tempDir) / f"{prefix}temp{fname.FileExt.MAYA_ASCII}"
@@ -94,6 +105,7 @@ def exportMayaAsciiThenBinary(
 
 
 def exportCamera(cameraNodes: Sequence[mobj.DAGNode], filePath: Path) -> None:
+    """If unknown nodes are present, temporarily export to an ASCII file"""
     if mobj.lsUnknown():
         exportMayaAsciiThenBinary(cameraNodes, filePath=filePath)
     else:

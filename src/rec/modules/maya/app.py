@@ -12,13 +12,19 @@ _LOGS_PATH = Path(__file__).parents[3] / "logs"
 
 
 class FileType(strEnum.StringEnum):
+    """File types accepted by Maya's cmds.file function"""
+
     ASCII = "mayaAscii"
     BINARY = "mayaBinary"
     ALEMBIC = "Alembic"
 
 
 def getScenePath() -> Path:
-    """Get the current scene's path or 'path/to/default/project/untitled'"""
+    """Get the path to the current scene
+
+    If the scene is blank and unsaved, it gets the path to the current project,
+    including the untitled file.
+    """
     if path := cmds.file(query=True, sceneName=True):
         path = Path(path)
     else:
@@ -27,10 +33,13 @@ def getScenePath() -> Path:
 
 
 def loadPlugin(pluginName: str) -> None:
+    """Quietly load a plugin"""
     cmds.loadPlugin(pluginName, quiet=True)
 
 
 class SuspendedRedraw(ContextDecorator):
+    """Temporarily disable Maya from redrawing"""
+
     def __enter__(self) -> None:
         cmds.refresh(suspend=True)
 
@@ -41,7 +50,7 @@ class SuspendedRedraw(ContextDecorator):
 def logScriptEditorOutput(
     func: Callable[[], Any], *, dir: Path = _LOGS_PATH
 ) -> Callable[[], None]:
-    """Decorator to write the script editor's output to a file"""
+    """Decorator for writing the script editor's output to a text file"""
     projectPath = Path(cmds.workspace(query=True, fullName=True)).resolve()
     scenePath = getScenePath()
     sceneFilename = scenePath.stem or "untitled"

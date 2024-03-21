@@ -5,6 +5,8 @@ from typing import NoReturn
 
 
 class StringEnum(Enum):
+    """Enum that also behaves like a string"""
+
     def __str__(self) -> str:
         return f"{self.value}"
 

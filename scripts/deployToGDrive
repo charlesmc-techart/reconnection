@@ -1,5 +1,9 @@
 #!/bin/zsh
 
+################################################################################
+# Sync the scripts to the Google shared drive
+################################################################################
+
 source "${0:h}/directories.zsh"
 
 declare -a NAMES_TO_EXCLUDE args

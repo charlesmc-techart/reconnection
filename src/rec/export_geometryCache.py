@@ -20,6 +20,7 @@ def constructFilename(
     assetType: fname.AssetType,
     assetName: Optional[fname.AssetName | str] = None,
 ) -> str:
+    """Construct a filename, formatted 'rec_seq###_name_type_v###"""
     filenameBase = fname.constructFilenameBase(
         shot, assetName=assetName, assetType=assetType
     )
@@ -90,6 +91,7 @@ def exportGeometryCache(
 
 
 def getNodeNameBase(node: mobj.DAGNode) -> str:
+    """From a node name 'namespace:node_name_type', get 'node_name'"""
     return node.rsplit(":", 1)[-1].rsplit("_", 1)[0]
 
 

@@ -18,6 +18,8 @@ ReferenceNode = DGNode
 
 
 class TopLevelGroup(strEnum.StringEnum):
+    """Patterns for top-level groups parented under the world"""
+
     CHARACTER = "::_*CHARACTER*_"
     CAMERA = "::_*CAMERA*_"
 

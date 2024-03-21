@@ -1,5 +1,9 @@
 #!/bin/zsh
 
+################################################################################
+# Delete local and Google Drive log files older than two weeks
+################################################################################
+
 source "${0:h}/directories.zsh"
 
 deleteOldLogs() {

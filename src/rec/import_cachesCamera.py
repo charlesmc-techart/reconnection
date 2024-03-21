@@ -22,6 +22,7 @@ def getLatestVersionAsset(
     assetType: fname.AssetType,
     assetName: Optional[fname.AssetName] = None,
 ) -> Optional[Path]:
+    """Get the file path to the asset's latest version"""
     filenameBase = fname.constructFilenameBase(
         shot, assetName=assetName, assetType=assetType
     )
@@ -35,10 +36,12 @@ def getLatestVersionAsset(
 
 
 def getReferenceNode(identifier: fname.RecIdentifier) -> mobj.ReferenceNode:
+    """Get an asset's reference node"""
     return igcs.lsWithWildcard(identifier, type="reference")[0]
 
 
 def reference(filePath: Path, namespace: str) -> None:
+    """Reference an asset into the scene if it isn't yet"""
     try:
         getReferenceNode(namespace)
     except IndexError:
@@ -64,6 +67,7 @@ def reference(filePath: Path, namespace: str) -> None:
 def parent(
     node: mobj.DAGNode, parent: mobj.DAGNode | mobj.TopLevelGroup
 ) -> None:
+    """Parent a node if it isn't parented to anything"""
     if mobj.getParent(node):
         return
 
@@ -79,6 +83,7 @@ def referenceCharacter(
     geometry: mobj.DAGNode,
     characterGrp: mobj.TopLevelGroup,
 ) -> None:
+    """Reference a or a component of a character"""
     reference(filePath=filePath, namespace=namespace)
 
     with mobj.TemporarySelection(geometry):
@@ -89,6 +94,7 @@ def referenceCharacter(
 
 # TODO: Python warning or something more meaningful?
 def unloadReference(assetName: fname.AssetName) -> None:
+    """Unload a referenced asset"""
     try:
         referenceNode = getReferenceNode(f"{assetName}_{fname.AssetType.RIG}")
     except IndexError as e:
@@ -105,6 +111,7 @@ def importGeometryCache(
     assetName: fname.AssetName,
     namespace: str,
 ) -> None:
+    """Call the MEL procedure for importing a geometry cache"""
     geometry = mobj.lsChildren(geometryGrp)
 
     cmds.workspace(fileRule=("fileCache", filePath.parent.as_posix()))
@@ -125,6 +132,7 @@ def replaceRigWithCachedModel(
     geometryGrp: mobj.DAGNode,
     characterGrp: mobj.TopLevelGroup,
 ) -> None:
+    """Unload a referenced rig, reference just the model, then apply a cache"""
     unloadReference(assetName)
     namespace = igcs.constructNamespace(
         cacheFilePath.stem, fname.AssetType.CACHE

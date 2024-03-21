@@ -24,6 +24,7 @@ class ProgressWindow:
     )
 
     def __new__(cls, name: str, title: str) -> ProgressWindow:
+        """Only create one instance for each title"""
         if title not in cls._instances:
             cls._instances[title] = super().__new__(cls)
         return cls._instances[title]

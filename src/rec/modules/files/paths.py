@@ -14,7 +14,11 @@ CACHE_DIR = Path("LIGHT", "cache")
 
 
 def filterShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
-    """Filter shot files in the provided directory, then sort them."""
+    """Filter shot files in the provided directory
+
+    The internal list is sorted so the last item is the latest version,
+    then it is returned as a tuple.
+    """
     files = [
         f
         for f in dir.iterdir()
@@ -27,6 +31,7 @@ def filterShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
 def getLatestVersionAsset(
     assetValidator: fname.AssetValidator, files: Iterable[Path]
 ) -> Optional[Path]:
+    """Get the file path to the asset's latest version"""
     file = None
     for file in filter(assetValidator, files):
         continue
@@ -45,6 +50,10 @@ class DirecetoryNotFoundOnGoogleSharedDriveError(FileNotFoundError):
 def getSharedDrive(
     *, drive: str = _DRIVE, dir: str = _POST_PRODUCTION_DIR
 ) -> Path | NoReturn:
+    """Get the path to re:connection's Google shared drive
+
+    By default, it gets the post-production shared drive.
+    """
     if sys.platform == "win32":
         path = Path(f"{drive}:", "Shared drives", dir)
         if path.is_dir():
@@ -59,6 +68,7 @@ def getSharedDrive(
 
 
 def getModelPath(assetName: fname.AssetName, parentDir: Path) -> Path:
+    """Get the path to the model's master file"""
     assetType = fname.AssetType.MODEL
     filenamePattern = f"rec_asset_{assetName}_{assetType}_*.*_MASTER.m?"
     dir = Path(parentDir, f"{assetName}".upper(), f"{assetType}".upper())
@@ -67,6 +77,8 @@ def getModelPath(assetName: fname.AssetName, parentDir: Path) -> Path:
 
 
 def getShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:
+    """Get the path to the specific shot directory"""
+
     def findDir(identifier: str, parentDir: Path) -> Path:
         for d in parentDir.iterdir():
             if d.is_dir() and d.stem.endswith(identifier):

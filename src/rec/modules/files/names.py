@@ -25,6 +25,8 @@ class ReConnectionFilenameError(Exception):
 
 
 class ShotID:
+    """Shot identifier used in asset filenames, formatted 'rec_seq###'"""
+
     __slots__ = "name", "sequence", "number", "full"
 
     def __new__(cls, name: str) -> ShotID:
@@ -56,6 +58,8 @@ class ShotID:
 
 
 class AssetName(strEnum.StringEnum):
+    """Name identifiers used in asset filenames"""
+
     MECHANIC = "mechanic"
     ROBOT = "robot"
     ROBOT_FACE = "robotFace"
@@ -63,6 +67,8 @@ class AssetName(strEnum.StringEnum):
 
 
 class AssetType(strEnum.StringEnum):
+    """Type identifiers used in asset filenames"""
+
     MODEL = "model"
     RIG = "rig"
     CACHE = "cache"
@@ -73,6 +79,7 @@ class AssetType(strEnum.StringEnum):
 def constructFilenameBase(
     shotName: ShotID, assetName: Optional[AssetName | str], assetType: AssetType
 ) -> str:
+    """Construct a filename base, formatted 'rec_seq###_name_type'"""
     if assetName:
         return f"{shotName.full}_{assetName}_{assetType}"
     else:
@@ -80,6 +87,8 @@ def constructFilenameBase(
 
 
 class FileExt(strEnum.StringEnum):
+    """File extensions used in asset files"""
+
     MAYA_ASCII = ".ma"
     MAYA_BINARY = ".mb"
     MAYA_CACHE = ".mcx"
@@ -92,6 +101,7 @@ RecIdentifier = Union[ShotID, AssetName, AssetType, str]
 
 
 def inFilename(identifier: RecIdentifier, file: Path) -> bool:
+    """Check if an identifier is the filename"""
     return f"{identifier}" in file.stem
 
 
@@ -103,6 +113,8 @@ def constructAssetValidator(
     assetName: Optional[AssetName | str],
     assetType: AssetType,
 ) -> AssetValidator:
+    """Construct a validator used for filtering assets"""
+
     def isFileWithExt(file: Path, fileExt: FileExt) -> bool:
         return file.suffix == f"{fileExt}"
 
@@ -130,6 +142,7 @@ def constructVersionSuffix(
     files: Iterable[Path],
     versionIndicator: str = _VERSION_INDICATOR,
 ) -> str:
+    """Construct a filename version, formatted 'v###'"""
     filenames = {f.stem for f in files if assetValidator(f)}
     try:
         filename = sorted(filenames)[-1]

@@ -16,20 +16,25 @@ import rec.modules.maya.objects as mobj
 def lsWithWildcard(
     identifier: fname.RecIdentifier, **kwargs: Optional[Any]
 ) -> list[mobj.DGNode]:
+    """Find a node using wildcards"""
     return cmds.ls(f"*{identifier}*", **kwargs)
 
 
 def constructNamespace(filename: str, assetType: fname.AssetType) -> str:
+    """Construct a namespace based an asset's filename and type"""
     cutoff = filename.index(f"{assetType}") + len(assetType)
     return filename[:cutoff]
 
 
 class GeometryCacheComponents:
+    """Group of nodes that comprise a geometry cache"""
+
     __slots__ = ("_origCacheFile", "cacheFile")
 
     def __new__(
         cls, cacheFileNode: mobj.DGNode
     ) -> GeometryCacheComponents | NoReturn:
+        """Don't create an instance if not provided a cacheFile node"""
         if cmds.objectType(cacheFileNode, isType="cacheFile"):
             return super().__new__(cls)
         raise TypeError(f"{cacheFileNode} must be a cacheFile node")
@@ -89,6 +94,10 @@ class GeometryCacheNetwork:
 
 
 def assetize(assetName: fname.AssetName, namespace: str) -> None:
+    """Contain the geometry cache network in an asset
+
+    Also, expose the cacheFile node's cache directory and filename attributes.
+    """
     cacheFileNodes = lsWithWildcard(assetName, type="cacheFile")
     componentNodes = []
     for i, c in enumerate(cacheFileNodes):
@@ -115,8 +124,10 @@ def assetize(assetName: fname.AssetName, namespace: str) -> None:
 
 
 # FIXME: make importing from test folder separate from main
+@mapp.SuspendedRedraw()
 @mapp.logScriptEditorOutput
 def main() -> None:
+    """Call the MEL procedure that opens the UI for importing a geometry cache"""
     if not mobj.lsSelectedGeometry():
         raise mobj.NoGeometrySelectedError
 
@@ -133,6 +144,7 @@ def main() -> None:
     doImportCacheArgListCmd = "doImportCacheArgList 0 {}"
     mel.eval(doImportCacheArgListCmd)
 
+    # Assetize network
     assetType = fname.AssetType.CACHE
     cacheFileNodeNamePattern = f"{shot.full}_*_{assetType}_v???"
     cacheFilename = cmds.getAttr(
