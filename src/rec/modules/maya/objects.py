@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from functools import partial
 from pathlib import Path
 from typing import Any, Optional
 
 import maya.cmds as cmds
-import maya.mel as mel
 
-import rec.modules.files.names as fname
 import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
 import rec.modules.stringEnum as strEnum

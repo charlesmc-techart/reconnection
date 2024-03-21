@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
 from typing import Any, NoReturn, Optional
 
@@ -62,35 +61,6 @@ class GeometryCacheComponents:
         nameBase = f"{identifier}_{self.meshPart}"
         self.cacheFile = cmds.rename(self.cacheFile, nameBase + "_cache")
         cmds.rename(self.historySwitch, nameBase + "_historySwitch")
-
-
-class GeometryCacheNetwork:
-    def __init__(self, components: Sequence[GeometryCacheComponents]) -> None:
-        self.components = components
-        self.cacheFiles = [c.cacheFile for c in components]
-        self.historySwitches = [c.historySwitch for c in components]
-
-    def assetize(self, identifier: fname.RecIdentifier) -> None:
-        asset = cmds.createNode("container", name=f"{identifier}_container")
-        containerCmd = partial(cmds.container, asset, edit=True)
-        containerCmd(addNode=self.cacheFiles + self.historySwitches, force=True)
-        cmds.setAttr(asset + ".blackBox", True)
-        cmds.setAttr(asset + ".viewMode", 0)
-
-        firstCacheFileNode = self.cacheFiles[0]
-        containerCmd(
-            publishAndBind=(firstCacheFileNode + ".cachePath", "folder")
-        )
-        containerCmd(
-            publishAndBind=(firstCacheFileNode + ".cacheName", "filename")
-        )
-        for n in self.cacheFiles[1:]:
-            cmds.connectAttr(
-                firstCacheFileNode + ".cachePath", n + ".cachePath"
-            )
-            cmds.connectAttr(
-                firstCacheFileNode + ".cacheName", n + ".cacheName"
-            )
 
 
 def assetize(assetName: fname.AssetName, namespace: str) -> None:
