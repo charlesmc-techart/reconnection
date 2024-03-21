@@ -116,18 +116,16 @@ def main() -> None:
     shot = fname.ShotID.getFromFilename(mapp.getScenePath().stem)
     gDriveShotDir = fpath.getShotPath(shot, parentDir=fpath.getSharedDrive())
     shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
-    shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
+    # shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
 
-    ui = buildWindow(*objects, outputPath=shotCachesDirPath).show()
+    ui = buildWindow(*geometry, outputPath=shotCachesDirPath).show()
 
-    for o in objects:
-        nameBase = getNodeNameBase(o)
-        filename = constructFilename(
-            shotCachesDirPath,
-            shot=shot,
-            assetName=nameBase,
-            assetType=fname.AssetType.CACHE,
-        )
-        exportGeometryCache(o, dir=shotCachesDirPath, filename=filename)
-        ui.update()
+    nameBase = getNodeNameBase(geometry[0])
+    filename = constructFilename(
+        shotCachesDirPath,
+        shot=shot,
+        assetName=nameBase,
+        assetType=fname.AssetType.CACHE,
+    )
+    exportGeometryCache(geometry, dir=shotCachesDirPath, filename=filename)
     ui.close()
