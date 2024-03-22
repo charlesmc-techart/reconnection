@@ -1,17 +1,15 @@
-# Main
+# main
 ?archive
 *.log
 *helloWorld.*
 misc
 tests
 
-# Python
-__pycache__
-src/rec/modules/files/assets.py
-
-# Zsh
+# caches
+.cache
 *.zwc
+__pycache__
 
-# Misc
+# misc
 .DS_Store
 .vscode
