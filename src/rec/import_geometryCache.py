@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any, NoReturn, Optional
+from typing import NoReturn
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -10,19 +10,6 @@ import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
-
-
-def lsWithWildcard(
-    identifier: fname.RecIdentifier, **kwargs: Optional[Any]
-) -> list[mobj.DGNode]:
-    """Find a node using wildcards"""
-    return cmds.ls(f"*{identifier}*", **kwargs)
-
-
-def constructNamespace(filename: str, assetType: fname.AssetType) -> str:
-    """Construct a namespace based an asset's filename and type"""
-    cutoff = filename.index(f"{assetType}") + len(assetType)
-    return filename[:cutoff]
 
 
 class GeometryCacheComponents:
@@ -68,7 +55,7 @@ def assetize(assetName: fname.AssetName, namespace: str) -> None:
 
     Also, expose the cacheFile node's cache directory and filename attributes.
     """
-    cacheFileNodes = lsWithWildcard(assetName, type="cacheFile")
+    cacheFileNodes = mobj.lsWithWildcard(assetName, type="cacheFile")
     componentNodes = []
     for i, c in enumerate(cacheFileNodes):
         components = GeometryCacheComponents(c)
@@ -94,7 +81,6 @@ def assetize(assetName: fname.AssetName, namespace: str) -> None:
 
 
 # FIXME: make importing from test folder separate from main
-@mapp.SuspendedRedraw()
 @mapp.logScriptEditorOutput
 def main() -> None:
     """Call the MEL procedure that opens the UI for importing a geometry cache"""
@@ -120,6 +106,7 @@ def main() -> None:
     cacheFilename = cmds.getAttr(
         cmds.ls(cacheFileNodeNamePattern + "Cache1")[0] + ".cacheName"
     )
-    assetName = cacheFilename.split("_", 3)[2]
-
-    assetize(assetName, constructNamespace(cacheFilename, assetType=assetType))
+    assetize(
+        cacheFilename.split("_", 3)[2],
+        mobj.constructNamespace(cacheFilename, assetType=assetType),
+    )

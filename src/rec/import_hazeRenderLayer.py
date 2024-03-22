@@ -30,7 +30,6 @@ def createAiNode(node: mobj.DGNode) -> mobj.DGNode:
     return node
 
 
-@mapp.SuspendedRedraw()
 @mapp.logScriptEditorOutput
 def main() -> None:
     # Create aiLambert and aiAtmosphereVolume

@@ -35,35 +35,6 @@ def getLatestVersionAsset(
     )
 
 
-def getReferenceNode(identifier: fname.RecIdentifier) -> mobj.ReferenceNode:
-    """Get an asset's reference node"""
-    return igcs.lsWithWildcard(identifier, type="reference")[0]
-
-
-def reference(filePath: Path, namespace: str) -> None:
-    """Reference an asset into the scene if it isn't yet"""
-    try:
-        getReferenceNode(namespace)
-    except IndexError:
-        fileExt = filePath.suffix
-        if fileExt == fname.FileExt.MAYA_BINARY:
-            fileType = mapp.FileType.BINARY
-        elif fileExt == fname.FileExt.MAYA_ASCII:
-            fileType = mapp.FileType.ASCII
-        else:
-            fileType = mapp.FileType.ALEMBIC
-
-        cmds.file(
-            filePath.resolve().as_posix(),
-            ignoreVersion=True,
-            loadReferenceDepth="all",
-            mergeNamespacesOnClash=True,
-            namespace=namespace,
-            reference=True,
-            type=fileType,
-        )
-
-
 def parent(
     node: mobj.DAGNode, parent: mobj.DAGNode | mobj.TopLevelGroup
 ) -> None:
@@ -134,7 +105,7 @@ def replaceRigWithCachedModel(
 ) -> None:
     """Unload a referenced rig, reference just the model, then apply a cache"""
     unloadReference(assetName)
-    namespace = igcs.constructNamespace(
+    namespace = mobj.constructNamespace(
         cacheFilePath.stem, fname.AssetType.CACHE
     )
     referenceCharacter(
@@ -145,7 +116,7 @@ def replaceRigWithCachedModel(
     )
 
     try:
-        container = igcs.lsWithWildcard(namespace, type="container")[0]
+        container = mobj.lsWithWildcard(namespace, type="container")[0]
     except IndexError:
         importGeometryCache(
             geometryGrp,
@@ -233,7 +204,7 @@ def main() -> None:
         assetType=fname.AssetType.CACHE,
     ):
         mapp.loadPlugin("AbcImport")
-        robotFaceNamespace = igcs.constructNamespace(
+        robotFaceNamespace = mobj.constructNamespace(
             robotFaceCache.stem, assetType=fname.AssetType.CACHE
         )
         referenceCharacter(
@@ -245,7 +216,7 @@ def main() -> None:
     ui.update()
 
     if cameraFile := getLatestVersionAssetCmd(assetType=fname.AssetType.CAMERA):
-        cameraNamespace = igcs.constructNamespace(
+        cameraNamespace = mobj.constructNamespace(
             cameraFile.stem, assetType=fname.AssetType.CAMERA
         )
         reference(filePath=cameraFile, namespace=cameraNamespace)

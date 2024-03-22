@@ -6,6 +6,7 @@ from typing import Any, Optional
 
 import maya.cmds as cmds
 
+import rec.modules.files.names as fname
 import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
 import rec.modules.stringEnum as strEnum
@@ -94,3 +95,16 @@ def exportNodes(
             options="v=0",
             type=fileType,
         )
+
+
+def lsWithWildcard(
+    identifier: fname.RecIdentifier, **kwargs: Optional[Any]
+) -> list[mobj.DGNode]:
+    """Find a node using wildcards"""
+    return cmds.ls(f"*{identifier}*", **kwargs)
+
+
+def constructNamespace(filename: str, assetType: fname.AssetType) -> str:
+    """Construct a namespace based an asset's filename and type"""
+    cutoff = filename.index(f"{assetType}") + len(assetType)
+    return filename[:cutoff]
