@@ -7,7 +7,10 @@
 ################################################################################
 
 if [[ ! -f "$1" ]]; then
-  echo "${0:t}: ${1:A}: No such file" >&2
+  echo "${0:t}: ${1:P}: Not a file" >&2
+  exit 1
+elif [[ "${1:e}" != 'py' ]]; then
+  echo "${0:t}: ${1:P}: Not a Python file" >&2
   exit 1
 fi;
 
@@ -17,7 +20,7 @@ if [[ "${parentDir}" != 'rec' ]]; then
   exit 1
 fi;
 
-origScript="$(cat << EOF
+readonly origScript="$(cat << EOF
 from ${parentDir}.${1:t:r} import main
 
 main()
@@ -25,7 +28,7 @@ EOF
 )"
 
 trap 'rm "${tempScript}"' EXIT INT
-tempScript="$(mktemp -t 'rec')"
+readonly tempScript="$(mktemp -t 'rec')"
 
 echo "${origScript}" > "${tempScript}"
 nc -U "/tmp/vscodeToMaya" < "${tempScript}"
