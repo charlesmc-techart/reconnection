@@ -4,13 +4,15 @@
 # Sync the scripts to the specified directory
 ################################################################################
 
-source "${0:h}/directories.zsh"
+source "${0:h}/errorMessage.zsh"
 
 declare -a NAMES_TO_EXCLUDE args
 readonly NAMES_TO_EXCLUDE=('.DS_Store' '__pycache__' 'logs/')
 
 args=(--archive)
-if [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
+if (( "$#" > 1 )) && ! [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
+  errorMessage "${0:t}: Only valid optional flag is '-n' or '--dry-run'"
+else
   args+=(--dry-run --verbose)
 elif [[ -n "$1" ]]; then
   echo "${0:t}: Only valid flag is '-n' or '--dry-run'" >&2

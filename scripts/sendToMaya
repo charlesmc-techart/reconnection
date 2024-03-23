@@ -6,18 +6,19 @@
 # The script must be under src/rec/, and the socket must be /tmp/vscodeToMaya
 ################################################################################
 
+source "${0:h}/errorMessage.zsh"
+
+readonly SOCKET='/tmp/vscodeToMaya'
+
 if [[ ! -f "$1" ]]; then
-  echo "${0:t}: ${1:P}: Not a file" >&2
-  exit 1
+  errorMessage "${0:t}: ${1:P}: Not a file"
 elif [[ "${1:e}" != 'py' ]]; then
-  echo "${0:t}: ${1:P}: Not a Python file" >&2
-  exit 1
+  errorMessage "${0:t}: ${1:P}: Not a Python file"
 fi;
 
 readonly parentDir="${1:h:t}"
 if [[ "${parentDir}" != 'rec' ]]; then
-  echo "${0:t}: Script must be from src/rec/" >&2
-  exit 1
+  errorMessage "${0:t}: Script must be from src/rec/"
 fi;
 
 readonly origScript="$(cat << EOF
@@ -33,6 +34,5 @@ readonly tempScript="$(mktemp -t 'rec')"
 echo "${origScript}" > "${tempScript}"
 nc -U "/tmp/vscodeToMaya" < "${tempScript}"
 if (( "$?" > 0 )); then
-  echo "${0:t}: Socket /tmp/vscodeToMaya is not open" >&2
-  exit 1
+  errorMessage "${0:t}: Socket ${SOCKET} is not open"
 fi

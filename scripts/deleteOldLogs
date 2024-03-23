@@ -4,11 +4,11 @@
 # Delete logs older than two weeks
 ################################################################################
 
-source "${0:h}/directories.zsh"
+source "${0:h}/errorMessage.zsh"
 
-deleteOldLogs() {
-  find "$1" -type f -name '*.log' -Btime +2w -delete 2>/dev/null
-}
+if (( "$#" < 1 )); then
+  errorMessage "${0:t}: No directories given"
+fi
 
 for dir in "$@"; do
   if [[ ! -d "$d" ]]; then
