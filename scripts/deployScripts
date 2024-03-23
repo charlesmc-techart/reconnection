@@ -14,13 +14,17 @@ if (( "$#" > 1 )) && ! [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
   errorMessage "${0:t}: Only valid optional flag is '-n' or '--dry-run'"
 else
   args+=(--dry-run --verbose)
-elif [[ -n "$1" ]]; then
-  echo "${0:t}: Only valid flag is '-n' or '--dry-run'" >&2
-  exit 1
+  shift
 fi
 
-for name in "${NAMES_TO_EXCLUDE[@]}"; do
-  args+=(--exclude="${name}")
+if [[ -z "$1" ]]; then
+  errorMessage "${0:t}: No target directory given"
+elif [[ ! -d "$1" ]]; then
+  errorMessage "${0:t}: ${1:P}: Not a directory"
+fi
+
+for n in "${NAMES_TO_EXCLUDE[@]}"; do
+  args+=(--exclude="${n}")
 done
 
 rsync "${args[@]}" "${0:h:h}/src/" "$1"
