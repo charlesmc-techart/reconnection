@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 ################################################################################
-# Delete local and Google Drive log files older than two weeks
+# Delete logs older than two weeks
 ################################################################################
 
 source "${0:h}/directories.zsh"
@@ -10,5 +10,9 @@ deleteOldLogs() {
   find "$1" -type f -name '*.log' -Btime +2w -delete 2>/dev/null
 }
 
-deleteOldLogs "${localScriptsDir}"
-deleteOldLogs "${gDriveScriptsDir}"
+for dir in "$@"; do
+  if [[ ! -d "$d" ]]; then
+    continue
+  fi
+  find "$dir" -type f -name '*.log' -Btime +2w -delete
+done

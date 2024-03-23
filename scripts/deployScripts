@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 ################################################################################
-# Sync the scripts to the Google shared drive
+# Sync the scripts to the specified directory
 ################################################################################
 
 source "${0:h}/directories.zsh"
@@ -21,4 +21,4 @@ for name in "${NAMES_TO_EXCLUDE[@]}"; do
   args+=(--exclude="${name}")
 done
 
-rsync "${args[@]}" "${localScriptsDir}/" "${gDriveScriptsDir}"
+rsync "${args[@]}" "${0:h:h}/src/" "$1"
