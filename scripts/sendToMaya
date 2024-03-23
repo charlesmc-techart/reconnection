@@ -1,0 +1,20 @@
+#!/bin/zsh
+
+################################################################################
+# Send a Python script to Maya via a socket opened by `commandPort`
+#
+# The script must be under the 'rec' package to work properly
+################################################################################
+
+origScript="$(cat << EOF
+from ${1:h:t}.${1:t:r} import main
+
+main()
+EOF
+)"
+
+trap 'rm "${tempScript}"' EXIT INT
+tempScript="$(mktemp -t 'rec')"
+
+echo "${origScript}" > "${tempScript}"
+nc -U "/tmp/vscodeToMaya" < "${tempScript}"
