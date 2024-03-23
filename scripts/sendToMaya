@@ -21,18 +21,12 @@ if [[ "${parentDir}" != 'rec' ]]; then
   errorMessage "${0:t}: Script must be from src/rec/"
 fi;
 
-readonly origScript="$(cat << EOF
+cat << EOF | nc -U "${SOCKET}"
 from ${parentDir}.${1:t:r} import main
 
 main()
 EOF
-)"
 
-trap 'rm "${tempScript}"' EXIT INT
-readonly tempScript="$(mktemp -t 'rec')"
-
-echo "${origScript}" > "${tempScript}"
-nc -U "/tmp/vscodeToMaya" < "${tempScript}"
 if (( "$?" > 0 )); then
   errorMessage "${0:t}: Socket ${SOCKET} is not open"
 fi
