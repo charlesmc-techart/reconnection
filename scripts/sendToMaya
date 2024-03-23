@@ -3,11 +3,22 @@
 ################################################################################
 # Send a Python script to Maya via a socket opened by `commandPort`
 #
-# The script must be under the 'rec' package to work properly
+# The script must be under /src/rec/, and the socket must be /tmp/vscodeToMaya
 ################################################################################
 
+if [[ ! -f "$1" ]]; then
+  echo "${0:t}: ${1:A}: No such file" >&2
+  exit 1
+fi;
+
+readonly parentDir="${1:h:t}"
+if [[ "${parentDir}" != 'rec' ]]; then
+  echo "${0:t}: Script must be from src/rec/" >&2
+  exit 1
+fi;
+
 origScript="$(cat << EOF
-from ${1:h:t}.${1:t:r} import main
+from ${parentDir}.${1:t:r} import main
 
 main()
 EOF
@@ -18,3 +29,7 @@ tempScript="$(mktemp -t 'rec')"
 
 echo "${origScript}" > "${tempScript}"
 nc -U "/tmp/vscodeToMaya" < "${tempScript}"
+if (( "$?" > 0 )); then
+  echo "${0:t}: Socket /tmp/vscodeToMaya is not open" >&2
+  exit 1
+fi
