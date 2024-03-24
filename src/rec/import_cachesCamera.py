@@ -8,13 +8,14 @@ import maya.api.OpenMaya as om
 import maya.cmds as cmds
 import maya.mel as mel
 
-import rec.import_geometryCache as igcs
+import rec.import_geometryCache as igc
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
 import rec.modules.maya.ui as mui
-import rec.reference_asset as iras
+import rec.reference_asset as ras
+import rec.unload_reference as urf
 
 
 def getLatestVersionAsset(
@@ -56,7 +57,7 @@ def referenceCharacter(
     characterGrp: mobj.TopLevelGroup,
 ) -> None:
     """Reference a or a component of a character"""
-    iras.reference(filePath, namespace=namespace)
+    ras.reference(filePath, namespace=namespace)
 
     with mobj.TemporarySelection(geometry):
         mel.eval("UnlockNormals")
@@ -65,18 +66,17 @@ def referenceCharacter(
 
 
 # TODO: Python warning or something more meaningful?
-def unloadReference(assetName: fname.AssetName) -> None:
+def unloadCharacterReference(assetName: fname.AssetName) -> None:
     """Unload a referenced asset"""
     try:
-        referenceNode = iras.getReferenceNode(
+        referenceNode = ras.getReferenceNode(
             f"{assetName}_{fname.AssetType.RIG}"
         )
     except IndexError as e:
         cmds.warning(e)
         return
 
-    filePath = Path(cmds.referenceQuery(referenceNode, filename=True))
-    cmds.file(filePath.as_posix(), unloadReference=referenceNode)
+    urf.unloadReference(referenceNode)
 
 
 def importGeometryCache(
@@ -96,7 +96,7 @@ def importGeometryCache(
     with mobj.TemporarySelection(geometry):
         mel.eval(doImportCacheFileCmd)
 
-    igcs.assetize(assetName, namespace=namespace)
+    igc.assetize(assetName, namespace=namespace)
 
 
 def replaceRigWithCachedModel(
@@ -107,7 +107,7 @@ def replaceRigWithCachedModel(
     characterGrp: mobj.TopLevelGroup,
 ) -> None:
     """Unload a referenced rig, reference just the model, then apply a cache"""
-    unloadReference(assetName)
+    unloadCharacterReference(assetName)
     namespace = mobj.constructNamespace(
         cacheFilePath.stem, fname.AssetType.CACHE
     )
@@ -222,7 +222,7 @@ def main() -> None:
         cameraNamespace = mobj.constructNamespace(
             cameraFile.stem, assetType=fname.AssetType.CAMERA
         )
-        iras.reference(filePath=cameraFile, namespace=cameraNamespace)
+        ras.reference(filePath=cameraFile, namespace=cameraNamespace)
 
         cameras = cmds.ls(cameraNamespace + ":*", transforms=True, long=True)
         for c in (c for c in cameras if c.count("|") == 1):
