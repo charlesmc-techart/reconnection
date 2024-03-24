@@ -26,7 +26,7 @@ global proc shelf_reconnection () {
         -flipY 0
         -useAlpha 1
         -font "plainLabelFont"
-        -imageOverlayLabel "o gcs"
+        -imageOverlayLabel "e gc"
         -overlayLabelColor 1 0 0
         -overlayLabelBackColor 0 0 0 1
         -image "commandButton.png"
@@ -61,7 +61,7 @@ global proc shelf_reconnection () {
         -flipY 0
         -useAlpha 1
         -font "plainLabelFont"
-        -imageOverlayLabel "o c&c"
+        -imageOverlayLabel "e cc"
         -overlayLabelColor 1 0 0
         -overlayLabelBackColor 0 0 0 1
         -image "commandButton.png"
@@ -84,7 +84,7 @@ global proc shelf_reconnection () {
         -manage 1
         -visible 1
         -preventOverride 0
-        -annotation "Open the ASSETS folder in the REC Google Shared Drive"
+        -annotation "Reference assets from REC/02_ASSETS/"
         -enableBackground 0
         -backgroundColor 0 0 0
         -highlightColor 0.321569 0.521569 0.65098
@@ -96,7 +96,7 @@ global proc shelf_reconnection () {
         -flipY 0
         -useAlpha 1
         -font "plainLabelFont"
-        -imageOverlayLabel "i ras"
+        -imageOverlayLabel "r as"
         -overlayLabelColor 0 0.5 1
         -overlayLabelBackColor 0 0 0 1
         -image "commandButton.png"
@@ -105,6 +105,111 @@ global proc shelf_reconnection () {
         -marginWidth 0
         -marginHeight 1
         -command "import rec.reference_asset as reference_asset\n\nreference_asset.main()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Reference Mechanic model"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Reference Mechanic Model"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "r mm"
+        -overlayLabelColor 0 0.5 1
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.reference_character as reference_character\n\nreference_character.referenceMechanicModel()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Reference Robot model"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Reference Robot Model"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "r rm"
+        -overlayLabelColor 0 0.5 1
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.reference_character as reference_character\n\nreference_character.referenceRobotModel()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Reference Mechanic and Robot models"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Reference Mechanic & Robot Model"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "r cm"
+        -overlayLabelColor 0 0.5 1
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.reference_character as reference_character\n\nreference_character.main()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
@@ -131,7 +236,7 @@ global proc shelf_reconnection () {
         -flipY 0
         -useAlpha 1
         -font "plainLabelFont"
-        -imageOverlayLabel "i gcs"
+        -imageOverlayLabel "i gc"
         -overlayLabelColor 0 0.5 1
         -overlayLabelBackColor 0 0 0 1
         -image "commandButton.png"
@@ -166,7 +271,7 @@ global proc shelf_reconnection () {
         -flipY 0
         -useAlpha 1
         -font "plainLabelFont"
-        -imageOverlayLabel "i c&c"
+        -imageOverlayLabel "i cc"
         -overlayLabelColor 0 0.5 1
         -overlayLabelBackColor 0 0 0 1
         -image "commandButton.png"
@@ -214,7 +319,7 @@ global proc shelf_reconnection () {
         -flipY 0
         -useAlpha 1
         -font "plainLabelFont"
-        -imageOverlayLabel "i hrl"
+        -imageOverlayLabel "i hl"
         -overlayLabelColor 0 0.5 1
         -overlayLabelBackColor 0 0 0 1
         -image "commandButton.png"
@@ -262,7 +367,7 @@ global proc shelf_reconnection () {
         -flipY 0
         -useAlpha 1
         -font "plainLabelFont"
-        -imageOverlayLabel "u rpm"
+        -imageOverlayLabel "u pm"
         -overlayLabelColor 0 1 0
         -overlayLabelBackColor 0 0 0 1
         -image "commandButton.png"

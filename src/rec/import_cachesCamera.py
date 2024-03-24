@@ -15,6 +15,7 @@ import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
 import rec.modules.maya.ui as mui
 import rec.reference_asset as ras
+import rec.reference_character as rch
 import rec.unload_reference as urf
 
 
@@ -35,34 +36,6 @@ def getLatestVersionAsset(
         assetValidator,
         files=fpath.filterShotFiles(shot, dir=dir),
     )
-
-
-def parent(
-    node: mobj.DAGNode, parent: mobj.DAGNode | mobj.TopLevelGroup
-) -> None:
-    """Parent a node if it isn't parented to anything"""
-    if mobj.getParent(node):
-        return
-
-    try:
-        cmds.parent(node, parent)
-    except ValueError as e:
-        cmds.warning(e)
-
-
-def referenceCharacter(
-    filePath: Path,
-    namespace: str,
-    geometry: mobj.DAGNode,
-    characterGrp: mobj.TopLevelGroup,
-) -> None:
-    """Reference a or a component of a character"""
-    ras.reference(filePath, namespace=namespace)
-
-    with mobj.TemporarySelection(geometry):
-        mel.eval("UnlockNormals")
-
-    parent(geometry, parent=characterGrp)
 
 
 # TODO: Python warning or something more meaningful?
@@ -104,18 +77,16 @@ def replaceRigWithCachedModel(
     modelFilePath: Path,
     cacheFilePath: Path,
     geometryGrp: mobj.DAGNode,
-    characterGrp: mobj.TopLevelGroup,
 ) -> None:
     """Unload a referenced rig, reference just the model, then apply a cache"""
     unloadCharacterReference(assetName)
     namespace = mobj.constructNamespace(
         cacheFilePath.stem, fname.AssetType.CACHE
     )
-    referenceCharacter(
+    ras.referenceCharacter(
         modelFilePath,
         namespace=namespace,
         geometry=geometryGrp,
-        characterGrp=characterGrp,
     )
 
     try:
@@ -164,24 +135,15 @@ def main() -> None:
         getLatestVersionAsset, shotCachesDirPath, shot=shot
     )
 
-    characterGrp = mobj.TopLevelGroup.CHARACTER
-    gDriveAssetsDirPath = fpath.getSharedDrive(dir="REC/02_ASSETS")
-    replaceRigWithCachedModelCmd = partial(
-        replaceRigWithCachedModel, characterGrp=characterGrp
-    )
-
     ui = buildWindow(shotCachesDirPath).show()
 
     mechanicName = fname.AssetName.MECHANIC
     if mechanicCache := getLatestVersionAssetCmd(
         assetName=mechanicName, assetType=fname.AssetType.CACHE
     ):
-        mechanicModel = fpath.getModelPath(
-            mechanicName, parentDir=gDriveAssetsDirPath
-        )
-        replaceRigWithCachedModelCmd(
+        replaceRigWithCachedModel(
             mechanicName,
-            modelFilePath=mechanicModel,
+            modelFilePath=ras.getModelPathCmd(mechanicName),
             cacheFilePath=mechanicCache,
             geometryGrp=mobj.MECHANIC_MODEL_GEO_GRP,
         )
@@ -191,12 +153,9 @@ def main() -> None:
     if robotCache := getLatestVersionAssetCmd(
         assetName=robotName, assetType=fname.AssetType.CACHE
     ):
-        robotModel = fpath.getModelPath(
-            robotName, parentDir=gDriveAssetsDirPath
-        )
-        replaceRigWithCachedModelCmd(
+        replaceRigWithCachedModel(
             robotName,
-            modelFilePath=robotModel,
+            modelFilePath=rch.getModelPathCmd(robotName),
             cacheFilePath=robotCache,
             geometryGrp=mobj.ROBOT_MODEL_GEO_GRP,
         )
@@ -210,11 +169,10 @@ def main() -> None:
         robotFaceNamespace = mobj.constructNamespace(
             robotFaceCache.stem, assetType=fname.AssetType.CACHE
         )
-        referenceCharacter(
+        rch.referenceCharacter(
             robotFaceCache,
             namespace=robotFaceNamespace,
             geometry=mobj.ROBOT_FACE_MODEL_GEO,
-            characterGrp=characterGrp,
         )
     ui.update()
 
@@ -226,5 +184,5 @@ def main() -> None:
 
         cameras = cmds.ls(cameraNamespace + ":*", transforms=True, long=True)
         for c in (c for c in cameras if c.count("|") == 1):
-            parent(c, mobj.TopLevelGroup.CAMERA)
+            rch.parent(c, mobj.TopLevelGroup.CAMERA)
     ui.update().close()

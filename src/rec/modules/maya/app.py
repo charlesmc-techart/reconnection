@@ -1,6 +1,7 @@
 import traceback
 from collections.abc import Callable
 from contextlib import ContextDecorator
+from functools import partial
 from pathlib import Path
 from typing import Any
 
@@ -61,29 +62,37 @@ def logScriptEditorOutput(
     else:
         moduleName = module.rsplit(".", 1)[-1]
     funcName = func.__name__
-    fullFuncName = f"{moduleName}.{funcName}"
+    fullFuncName = f"{module}.{funcName}"
 
     date = cmds.date(format="YYMMDD.hhmmss")
-    logFilenameBase = f"{date}.{fullFuncName}.{sceneFilename}"
+    logFilenameBase = f"{date}.{moduleName}.{funcName}.{sceneFilename}"
     logFilePath = dir / (logFilenameBase + ".log")
     info = (
         f"Date: {cmds.date()}",
         f"Project: {projectPath}",
         f"Scene: {scenePath}",
-        f"Called: {module}.{funcName}",
+        f"Called: {fullFuncName}",
     )
 
-    def funcWithLogging() -> None:
-        fileDescriptor = cmds.cmdFileOutput(open=logFilePath.as_posix())
+    printCmd = partial(print, sep="\n")
+    divider = "", "#" * 80, ""
+    printCmd(*info, *divider)
 
-        print(*info, "", sep="\n")
+    def funcWithLogging() -> None:
+        fd = cmds.cmdFileOutput(open=logFilePath.as_posix())
+
         try:
             func()
         except:
             traceback.print_exc()
+            printCmd(*divider, f"{fullFuncName} executed unsuccessfully")
             raise
+        else:
+            printCmd(
+                *divider,
+                f"{fullFuncName} executed successfully",
+            )
         finally:
-            print(f"{fullFuncName} executed successfully")
-            cmds.cmdFileOutput(close=fileDescriptor)
+            cmds.cmdFileOutput(close=fd)
 
     return funcWithLogging

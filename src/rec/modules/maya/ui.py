@@ -80,7 +80,7 @@ class ProgressWindow:
 
     def update(self) -> ProgressWindow:
         def update(currentTask: str) -> None:
-            print(currentTask)
+            print(currentTask, end="\n")
             cmds.text(self.text, edit=True, label=currentTask)
             cmds.progressBar(
                 self.progressBar, edit=True, progress=self.tasksDone

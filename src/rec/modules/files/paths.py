@@ -8,8 +8,8 @@ from typing import NoReturn, Optional
 import rec.modules.files.names as fname
 
 _DRIVE = "G"
+ASSETS_DIR = "REC/02_ASSETS"
 _POST_PRODUCTION_DIR = "REC_POST"
-ASSETS_DIR = "REC_ASSETS"
 CACHE_DIR = Path("LIGHT", "cache")
 
 
