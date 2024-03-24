@@ -1,14 +1,15 @@
 # main
-?archive
+.archive
 *.log
 *helloWorld.*
 misc
 tests
 
 # caches
+.cache/
 *.zwc
 __pycache__
 
 # misc
 .DS_Store
-.vscode
+.vscode/

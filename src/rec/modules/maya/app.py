@@ -53,7 +53,7 @@ def logScriptEditorOutput(
     """Decorator for writing the script editor's output to a text file"""
     projectPath = Path(cmds.workspace(query=True, fullName=True)).resolve()
     scenePath = getScenePath()
-    sceneFilename = scenePath.stem or "untitled"
+    sceneFilename = scenePath.stem
 
     module = func.__module__
     if module == "__main__":
