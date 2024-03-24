@@ -130,4 +130,4 @@ def main() -> None:
         assetType=fname.AssetType.CACHE,
     )
     exportGeometryCache(geometry, dir=shotCachesDirPath, filename=filename)
-    ui.close()
+    ui.update().close()

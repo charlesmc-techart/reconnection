@@ -186,4 +186,4 @@ def main() -> None:
             filePath=shotCachesDirPath
             / (cameraFilename + fname.FileExt.MAYA_BINARY),
         )
-    ui.close()
+    ui.update().close()

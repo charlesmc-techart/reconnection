@@ -253,4 +253,4 @@ def main() -> None:
         cameras = cmds.ls(cameraNamespace + ":*", transforms=True, long=True)
         for c in (c for c in cameras if c.count("|") == 1):
             parent(c, mobj.TopLevelGroup.CAMERA)
-    ui.close()
+    ui.update().close()
