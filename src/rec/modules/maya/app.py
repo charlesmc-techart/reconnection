@@ -1,6 +1,7 @@
 import traceback
 from collections.abc import Callable
 from contextlib import ContextDecorator
+from functools import partial
 from pathlib import Path
 from typing import Any
 
@@ -76,14 +77,20 @@ def logScriptEditorOutput(
     def funcWithLogging() -> None:
         fd = cmds.cmdFileOutput(open=logFilePath.as_posix())
 
-        print(*info, "", sep="\n")
+        printCmd = partial(print, sep="\n")
+        divider = "", "#" * 80, ""
+        printCmd(*info, *divider)
         try:
             func()
         except:
             traceback.print_exc()
+            printCmd(*divider, f"{fullFuncName} executed unsuccessfully")
             raise
         else:
-            print("", f"{fullFuncName} executed successfully", sep="\n")
+            printCmd(
+                *divider,
+                f"{fullFuncName} executed successfully",
+            )
         finally:
             cmds.cmdFileOutput(close=fd)
 
