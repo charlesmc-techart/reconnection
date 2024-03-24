@@ -83,7 +83,7 @@ def replaceRigWithCachedModel(
     namespace = mobj.constructNamespace(
         cacheFilePath.stem, fname.AssetType.CACHE
     )
-    ras.referenceCharacter(
+    rch.referenceCharacter(
         modelFilePath,
         namespace=namespace,
         geometry=geometryGrp,
@@ -143,7 +143,7 @@ def main() -> None:
     ):
         replaceRigWithCachedModel(
             mechanicName,
-            modelFilePath=ras.getModelPathCmd(mechanicName),
+            modelFilePath=rch.getModelPathCmd(mechanicName),
             cacheFilePath=mechanicCache,
             geometryGrp=mobj.MECHANIC_MODEL_GEO_GRP,
         )
