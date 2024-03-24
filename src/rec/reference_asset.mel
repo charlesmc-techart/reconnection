@@ -1,4 +1,0 @@
-proc referenceAsset(string $filePath, string $callbackFunc) {
-    $gDefaultFileBrowserDir = $filePath;
-    fileBrowser $callbackFunc "Reference re:connection Asset" "Maya Scene" 0;
-}

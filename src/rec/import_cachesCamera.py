@@ -14,6 +14,7 @@ import rec.modules.files.paths as fpath
 import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
 import rec.modules.maya.ui as mui
+import rec.reference_asset as iras
 
 
 def getLatestVersionAsset(
@@ -55,7 +56,7 @@ def referenceCharacter(
     characterGrp: mobj.TopLevelGroup,
 ) -> None:
     """Reference a or a component of a character"""
-    reference(filePath=filePath, namespace=namespace)
+    iras.reference(filePath, namespace=namespace)
 
     with mobj.TemporarySelection(geometry):
         mel.eval("UnlockNormals")
@@ -67,7 +68,9 @@ def referenceCharacter(
 def unloadReference(assetName: fname.AssetName) -> None:
     """Unload a referenced asset"""
     try:
-        referenceNode = getReferenceNode(f"{assetName}_{fname.AssetType.RIG}")
+        referenceNode = iras.getReferenceNode(
+            f"{assetName}_{fname.AssetType.RIG}"
+        )
     except IndexError as e:
         cmds.warning(e)
         return
@@ -219,7 +222,7 @@ def main() -> None:
         cameraNamespace = mobj.constructNamespace(
             cameraFile.stem, assetType=fname.AssetType.CAMERA
         )
-        reference(filePath=cameraFile, namespace=cameraNamespace)
+        iras.reference(filePath=cameraFile, namespace=cameraNamespace)
 
         cameras = cmds.ls(cameraNamespace + ":*", transforms=True, long=True)
         for c in (c for c in cameras if c.count("|") == 1):
