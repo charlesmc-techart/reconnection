@@ -6,6 +6,8 @@
 
 source "${0:h}/errorMessage.zsh"
 
+readonly FILE_AGE=+2w
+
 if (( "$#" < 1 )); then
   errorMessage "${0:t}: No directories given"
 fi
@@ -14,5 +16,5 @@ for dir in "$@"; do
   if [[ ! -d "$d" ]]; then
     continue
   fi
-  find "$dir" -type f -name '*.log' -Btime +2w -delete
+  find "$dir" -type f -name '*.log' -Btime "${FILE_AGE}" -delete
 done
