@@ -14,13 +14,13 @@ if [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
   args+=(--dry-run --verbose)
   shift
 elif (( "$#" > 1 )); then
-  errorMessage "${0:t}: Only valid optional flag is '-n' or '--dry-run'"
+  err "${0:t}: Only valid optional flag is '-n' or '--dry-run'"
 fi
 
 if [[ -z "$1" ]]; then
-  errorMessage "${0:t}: No target directory given"
+  err "${0:t}: No target directory given"
 elif [[ ! -d "$1" ]]; then
-  errorMessage "${0:t}: ${1:P}: Not a directory"
+  err "${0:t}: ${1:P}: Not a directory"
 fi
 
 for n in "${NAMES_TO_EXCLUDE[@]}"; do
