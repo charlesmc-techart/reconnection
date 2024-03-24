@@ -15,6 +15,8 @@ def main() -> None:
         sys.path.insert(0, f"{scriptsDir}")
 
     shelfFile = scriptsDir / _SHELF_DIR
+    if cmds.shelfLayout(_SHELF_NAME, exists=True):
+        mel.eval(f'deleteShelfTab "{_SHELF_NAME}"')
     mel.eval(f'loadNewShelf "{shelfFile.as_posix()}"')
 
     mayaVersion = cmds.about(version=True)

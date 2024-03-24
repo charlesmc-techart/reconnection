@@ -14,76 +14,6 @@ global proc shelf_reconnection () {
         -manage 1
         -visible 1
         -preventOverride 0
-        -annotation "Export a geometry cache for each selected object"
-        -enableBackground 0
-        -backgroundColor 0 0 0
-        -highlightColor 0.321569 0.521569 0.65098
-        -align "center"
-        -label "Export Geometry Cache"
-        -labelOffset 0
-        -rotation 0
-        -flipX 0
-        -flipY 0
-        -useAlpha 1
-        -font "plainLabelFont"
-        -imageOverlayLabel "e gc"
-        -overlayLabelColor 1 0 0
-        -overlayLabelBackColor 0 0 0 1
-        -image "commandButton.png"
-        -image1 "commandButton.png"
-        -style "iconOnly"
-        -marginWidth 0
-        -marginHeight 1
-        -command "import rec.export_geometryCache as export_geometryCache\n\nexport_geometryCache.main()"
-        -sourceType "python"
-        -commandRepeatable 1
-        -flat 1
-    ;
-    shelfButton
-        -enableCommandRepeat 1
-        -flexibleWidthType 3
-        -flexibleWidthValue 64
-        -enable 1
-        -width 35
-        -height 34
-        -manage 1
-        -visible 1
-        -preventOverride 0
-        -annotation "Export character geometry caches, Robot face Alembic cache, and shot camera"
-        -enableBackground 0
-        -backgroundColor 0 0 0
-        -highlightColor 0.321569 0.521569 0.65098
-        -align "center"
-        -label "Export Caches & Camera"
-        -labelOffset 0
-        -rotation 0
-        -flipX 0
-        -flipY 0
-        -useAlpha 1
-        -font "plainLabelFont"
-        -imageOverlayLabel "e cc"
-        -overlayLabelColor 1 0 0
-        -overlayLabelBackColor 0 0 0 1
-        -image "commandButton.png"
-        -image1 "commandButton.png"
-        -style "iconOnly"
-        -marginWidth 0
-        -marginHeight 1
-        -command "import rec.export_cachesCamera as export_cachesCamera\n\nexport_cachesCamera.main()"
-        -sourceType "python"
-        -commandRepeatable 1
-        -flat 1
-    ;
-    shelfButton
-        -enableCommandRepeat 1
-        -flexibleWidthType 3
-        -flexibleWidthValue 64
-        -enable 1
-        -width 35
-        -height 34
-        -manage 1
-        -visible 1
-        -preventOverride 0
         -annotation "Reference assets from REC/02_ASSETS/"
         -enableBackground 0
         -backgroundColor 0 0 0
@@ -108,6 +38,54 @@ global proc shelf_reconnection () {
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Unload selected referenced assets"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Unload Referenced Assets"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "u rf"
+        -overlayLabelColor 0 1 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.unload_reference as unload_reference\n\nunload_reference.main()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    separator
+        -enable 1
+        -width 34
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -style "shelf"
+        -horizontal 0
     ;
     shelfButton
         -enableCommandRepeat 1
@@ -214,6 +192,54 @@ global proc shelf_reconnection () {
         -commandRepeatable 1
         -flat 1
     ;
+    separator
+        -enable 1
+        -width 34
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -style "shelf"
+        -horizontal 0
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Export a geometry cache for selected objects"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Export Geometry Cache"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "e gc"
+        -overlayLabelColor 1 0 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.export_geometryCache as export_geometryCache\n\nexport_geometryCache.main()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
     shelfButton
         -enableCommandRepeat 1
         -flexibleWidthType 3
@@ -245,6 +271,54 @@ global proc shelf_reconnection () {
         -marginWidth 0
         -marginHeight 1
         -command "import rec.import_geometryCache as import_geometryCache\n\nimport_geometryCache.main()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    separator
+        -enable 1
+        -width 34
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -style "shelf"
+        -horizontal 0
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Export character geometry caches, Robot face Alembic cache, and shot camera"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Export Caches & Camera"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "e cc"
+        -overlayLabelColor 1 0 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.export_cachesCamera as export_cachesCamera\n\nexport_cachesCamera.main()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
@@ -344,6 +418,41 @@ global proc shelf_reconnection () {
         -highlightColor 0.321569 0.521569 0.65098
         -style "shelf"
         -horizontal 0
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Add re:connection scripts to PATH"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Add to PATH"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "a sp"
+        -overlayLabelColor 0 1 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import os\nimport sys\n\n\ndef main():\n    if sys.platform != \"win32\":\n        return\n\n    _scriptsDir = os.path.join(\n        \"G:\", \"Shared drives\", \"REC_POST\", \"REC_SCRIPTS.lnk\"\n    )\n    if not os.path.exists(_scriptsDir):\n        raise FileNotFoundError(f\"Direcotry {_scriptsDir} does not exist\")\n    elif _scriptsDir not in sys.path:\n        sys.path.insert(0, _scriptsDir)\n\n\nif __name__ == \"__main__\":\n    main()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
     ;
     shelfButton
         -enableCommandRepeat 1
