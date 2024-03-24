@@ -10,11 +10,11 @@ declare -a NAMES_TO_EXCLUDE args
 readonly NAMES_TO_EXCLUDE=('.DS_Store' '__pycache__' 'logs/')
 
 args=(--archive)
-if (( "$#" > 1 )) && ! [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
-  errorMessage "${0:t}: Only valid optional flag is '-n' or '--dry-run'"
-else
+if [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
   args+=(--dry-run --verbose)
   shift
+elif (( "$#" > 1 )); then
+  errorMessage "${0:t}: Only valid optional flag is '-n' or '--dry-run'"
 fi
 
 if [[ -z "$1" ]]; then
