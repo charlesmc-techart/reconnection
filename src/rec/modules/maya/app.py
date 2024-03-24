@@ -61,9 +61,10 @@ def logScriptEditorOutput(
     else:
         moduleName = module.rsplit(".", 1)[-1]
     funcName = func.__name__
+    fullFuncName = f"{moduleName}.{funcName}"
 
     date = cmds.date(format="YYMMDD.hhmmss")
-    logFilenameBase = f"{date}.{moduleName}.{funcName}.{sceneFilename}"
+    logFilenameBase = f"{date}.{fullFuncName}.{sceneFilename}"
     logFilePath = dir / (logFilenameBase + ".log")
     info = (
         f"Date: {cmds.date()}",
@@ -82,6 +83,7 @@ def logScriptEditorOutput(
             traceback.print_exc()
             raise
         finally:
+            print(f"{fullFuncName} executed successfully")
             cmds.cmdFileOutput(close=fileDescriptor)
 
     return funcWithLogging
