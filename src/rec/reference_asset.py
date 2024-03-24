@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from pathlib import Path
+from typing import NoReturn
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -40,16 +43,20 @@ def reference(filePath: Path, namespace: str) -> None:
 
 assignAssetFilePathToGlobalVarProc = """
 proc assignAssetFilePathToGlobalVar(string $filePath, string $_) {
-    global string $passToPython;
-    $passToPython = $filePath;
+    global string $_passToPython = "";
+    $_passToPython = $filePath;
 }
 """
 
 
-@mapp.logScriptEditorOutput
-def main() -> None:
-    gDriveAssetsDirPath = fpath.getSharedDrive(dir="REC/02_ASSETS")
+class NoFileSelectedError(Exception):
+    def __init__(self) -> None:
+        super().__init__("No file was selected")
 
+
+@mapp.logScriptEditorOutput
+def main() -> None | NoReturn:
+    gDriveAssetsDirPath = fpath.getSharedDrive(dir="REC/02_ASSETS")
 
     mel.eval(
         f'$gDefaultFileBrowserDir = "{gDriveAssetsDirPath.as_posix()}";'
@@ -58,7 +65,12 @@ def main() -> None:
         'fileBrowser "assignAssetFilePathToGlobalVar" '
         '"Reference re:connection Asset" "Maya Scene" 0'
     )
-    assetFilePath = Path(mel.eval("$passToPython = $passToPython"))
+
+    assetFilePath = mel.eval("$_passToPython = $_passToPython")
+    if not assetFilePath:
+        raise NoFileSelectedError
+
+    assetFilePath = Path(assetFilePath)
     assetType = assetFilePath.stem.rsplit("rec", 1)[-1].split("_")[3]
     namespace = mobj.constructNamespace(assetFilePath.stem, assetType=assetType)
     reference(assetFilePath, namespace=namespace)
