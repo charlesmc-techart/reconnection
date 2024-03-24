@@ -11,14 +11,14 @@ source "${0:h}/errorMessage.zsh"
 readonly SOCKET='/tmp/vscodeToMaya'
 
 if [[ ! -f "$1" ]]; then
-  errorMessage "${0:t}: ${1:P}: Not a file"
+  err "${0:t}: ${1:P}: Not a file"
 elif [[ "${1:e}" != 'py' ]]; then
-  errorMessage "${0:t}: ${1:P}: Not a Python file"
+  err "${0:t}: ${1:P}: Not a Python file"
 fi;
 
 readonly parentDir="${1:h:t}"
 if [[ "${parentDir}" != 'rec' ]]; then
-  errorMessage "${0:t}: Script must be from src/rec/"
+  err "${0:t}: Script must be from src/rec/"
 fi;
 
 cat << EOF | nc -U "${SOCKET}"
@@ -28,5 +28,5 @@ main()
 EOF
 
 if (( "$?" > 0 )); then
-  errorMessage "${0:t}: Socket ${SOCKET} is not open"
+  err "${0:t}: Socket ${SOCKET} is not open"
 fi

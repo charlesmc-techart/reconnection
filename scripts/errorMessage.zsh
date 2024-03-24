@@ -1,4 +1,4 @@
-function errorMessage () {
-  echo "$1" >&2
+err() {
+  echo "[$(date '+%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
   exit 1
 }

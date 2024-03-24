@@ -9,7 +9,7 @@ source "${0:h}/errorMessage.zsh"
 readonly FILE_AGE=+2w
 
 if (( "$#" < 1 )); then
-  errorMessage "${0:t}: No directories given"
+  err "${0:t}: No directories given"
 fi
 
 for dir in "$@"; do
