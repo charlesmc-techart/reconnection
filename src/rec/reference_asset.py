@@ -1,6 +1,4 @@
-from collections.abc import Callable
 from pathlib import Path
-from typing import Any
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -39,27 +37,11 @@ def reference(filePath: Path, namespace: str) -> None:
             type=fileType,
         )
 
-def wrapAsRunTimeCommand(func: Callable[[Any], Any]) -> None:
-    
 
-melProcedures = """
-proc referenceAssetCallback(string $filePath, string $fileType) {
-    string $getAssetTypeCmd, $constructNamespaceCmd, $namespace;
-
-    $getAssetTypeCmd = ".rsplit('/', 1)[-1].split('rec')[-1].split('_', 4)[3]";
-    $fileType = `python ("'" + $filePath + "'" + $getAssetTypeCmd)`;
-
-    $constructNamespaceCmd = "mobj.constructNamespace";
-    $constructNamespaceCmd += "(Path('" + $filePath + "').stem, '" + $fileType + "')";
-    $namespace = `python $constructNamespaceCmd`;
-
-    python ("reference(Path('" + $filePath + "'), '" + $namespace + "')");
-}
-
-
-proc referenceAsset(string $dir, string $func) {
-    $gDefaultFileBrowserDir = $dir;
-    fileBrowser $func "Reference re:connection Asset" "Maya Scene" 0;
+assignAssetFilePathToGlobalVarProc = """
+proc assignAssetFilePathToGlobalVar(string $filePath, string $_) {
+    global string $passToPython;
+    $passToPython = $filePath;
 }
 """
 
@@ -68,7 +50,15 @@ proc referenceAsset(string $dir, string $func) {
 def main() -> None:
     gDriveAssetsDirPath = fpath.getSharedDrive(dir="REC/02_ASSETS")
 
-    mel.eval(melProcedures)
+
     mel.eval(
-        f'referenceAsset "{gDriveAssetsDirPath.as_posix()}" "referenceAssetCallback"'
+        f'$gDefaultFileBrowserDir = "{gDriveAssetsDirPath.as_posix()}";'
+        f"{assignAssetFilePathToGlobalVarProc};"
+        ""
+        'fileBrowser "assignAssetFilePathToGlobalVar" '
+        '"Reference re:connection Asset" "Maya Scene" 0'
     )
+    assetFilePath = Path(mel.eval("$passToPython = $passToPython"))
+    assetType = assetFilePath.stem.rsplit("rec", 1)[-1].split("_")[3]
+    namespace = mobj.constructNamespace(assetFilePath.stem, assetType=assetType)
+    reference(assetFilePath, namespace=namespace)
