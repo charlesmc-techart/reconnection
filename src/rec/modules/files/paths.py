@@ -43,7 +43,7 @@ class DirecetoryNotFoundOnGoogleSharedDriveError(FileNotFoundError):
 
     def __init__(self, dir: Path | str) -> None:
         super().__init__(
-            f"The directory, {dir}, could not be found on a Google Shared Drive"
+            f"The directory, {dir}, could not be found on a Google shared drive"
         )
 
 
@@ -83,7 +83,9 @@ def getShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:
         for d in parentDir.iterdir():
             if d.is_dir() and d.stem.endswith(identifier):
                 return d
-        raise DirecetoryNotFoundOnGoogleSharedDriveError(parentDir)
+        raise DirecetoryNotFoundOnGoogleSharedDriveError(
+            parentDir / ("*" + identifier)
+        )
 
     sequenceDir = findDir(shot.sequence.upper(), parentDir)
     return findDir(shot.number, sequenceDir)
