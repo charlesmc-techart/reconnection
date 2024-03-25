@@ -10,8 +10,6 @@ import rec.modules.stringEnum as strEnum
 SHOW = "rec"
 SHOW_FULL_TITLE = "re:connection"
 
-_VERSION_INDICATOR = "v"
-
 
 class ReConnectionFilenameError(Exception):
     """File does not adhere to re:connection's filename protocol"""
@@ -49,8 +47,7 @@ class ShotID:
         return f"{self.__class__.__name__}({self.name!r})"
 
     @classmethod
-    def getFromFilename(cls, filename: str) -> ShotID:
-        affix = SHOW + "_"
+    def getFromFilename(cls, filename: str, affix: str = SHOW + "_") -> ShotID:
         if affix not in filename:
             raise ReConnectionFilenameError(filename)
         name = filename.split(affix, 1)[-1][:6]
@@ -140,7 +137,7 @@ def constructAssetValidator(
 def constructVersionSuffix(
     assetValidator: AssetValidator,
     files: Iterable[Path],
-    versionIndicator: str = _VERSION_INDICATOR,
+    versionIndicator: str = "v",
 ) -> str:
     """Construct a filename version, formatted 'v###'"""
     filenames = {f.stem for f in files if assetValidator(f)}
