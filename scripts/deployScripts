@@ -13,7 +13,7 @@ args=(--archive)
 if [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
   args+=(--dry-run --verbose)
   shift
-elif (( "$#" > 1 )); then
+elif (( $# > 1 )); then
   err "${0:t}: Only valid optional flag is '-n' or '--dry-run'"
 fi
 

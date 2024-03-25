@@ -8,7 +8,7 @@ source "${0:h}/errorMessage.zsh"
 
 readonly FILE_AGE=+2w
 
-if (( "$#" < 1 )); then
+if (( $# < 1 )); then
   err "${0:t}: No directories given"
 fi
 

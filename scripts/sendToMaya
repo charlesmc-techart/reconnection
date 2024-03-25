@@ -8,7 +8,7 @@
 
 source "${0:h}/errorMessage.zsh"
 
-readonly SOCKET='/tmp/vscodeToMaya'
+readonly SOCKET=/tmp/vscodeToMaya
 
 if [[ ! -f "$1" ]]; then
   err "${0:t}: ${1:P}: Not a file"
@@ -21,12 +21,12 @@ if [[ "${parentDir}" != 'rec' ]]; then
   err "${0:t}: Script must be from src/rec/"
 fi;
 
-cat << EOF | nc -U "${SOCKET}"
+cat << END | nc -U "${SOCKET}"
 from ${parentDir}.${1:t:r} import main
 
 main()
-EOF
+END
 
-if (( "$?" > 0 )); then
+if (( $? > 0 )); then
   err "${0:t}: Socket ${SOCKET} is not open"
 fi
