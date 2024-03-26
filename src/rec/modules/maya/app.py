@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import Any
 
 import maya.cmds as cmds
-import maya.mel as mel
 
+import rec.modules.files.paths as fpath
 import rec.modules.stringEnum as strEnum
 
 _LOGS_PATH = Path(__file__).parents[3] / "logs"
@@ -19,19 +19,6 @@ class FileType(strEnum.StringEnum):
     ASCII = "mayaAscii"
     BINARY = "mayaBinary"
     ALEMBIC = "Alembic"
-
-
-def getScenePath() -> Path:
-    """Get the path to the current scene
-
-    If the scene is blank and unsaved, it gets the path to the current project,
-    including the untitled file.
-    """
-    if path := cmds.file(query=True, sceneName=True):
-        path = Path(path)
-    else:
-        path = Path(cmds.workspace(query=True, fullName=True), "untitled")
-    return path.resolve()
 
 
 def loadPlugin(pluginName: str) -> None:
@@ -53,8 +40,8 @@ def logScriptEditorOutput(
     func: Callable[[], Any], *, dir: Path = _LOGS_PATH
 ) -> Callable[[], None]:
     """Decorator for writing the script editor's output to a text file"""
-    projectPath = Path(cmds.workspace(query=True, fullName=True)).resolve()
-    scenePath = getScenePath()
+    projectPath = fpath.getProjectPath()
+    scenePath = fpath.getScenePath()
     sceneFilename = scenePath.stem
 
     module = func.__module__

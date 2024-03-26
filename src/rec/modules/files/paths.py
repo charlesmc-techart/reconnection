@@ -5,12 +5,32 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import NoReturn, Optional
 
+import maya.cmds as cmds
+
 import rec.modules.files.names as fname
 
 _DRIVE = "G"
 ASSETS_DIR = "REC/02_ASSETS"
 _POST_PRODUCTION_DIR = "REC_POST"
 CACHES_DIR = Path("LIGHT", "cache")
+
+
+def getProjectPath() -> Path:
+    """Get the path to the current project"""
+    return Path(cmds.workspace(query=True, fullname=True))
+
+
+def getScenePath() -> Path:
+    """Get the path to the current scene
+
+    If the scene is blank and unsaved, it gets the path to the current project,
+    including the untitled file.
+    """
+    if path := cmds.file(query=True, sceneName=True):
+        path = Path(path)
+    else:
+        path = getProjectPath() / "untitled"
+    return path.resolve()
 
 
 def findShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
