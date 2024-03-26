@@ -85,7 +85,7 @@ def main() -> None:
         assetName=fname.AssetName.ARNOLD,
         assetType=fname.AssetType.LIGHTS,
     )
-    shot = fname.ShotID.getFromFilename(sceneName)
+    shot = fname.ShotID.fromFilename(sceneName)
     recAssetsInScenesFolder = fpath.filterShotFiles(shot, dir=scene.parent)
     versionSuffix = fname.constructVersionSuffix(
         assetValidator, files=recAssetsInScenesFolder
