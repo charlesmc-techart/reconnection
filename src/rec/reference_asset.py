@@ -12,7 +12,7 @@ import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
 
 
-def getReferenceNode(identifier: fname.RecIdentifier) -> mobj.ReferenceNode:
+def getReferenceNode(identifier: fname.Identifier) -> mobj.ReferenceNode:
     """Get an asset's reference node"""
     return mobj.lsWithWildcard(identifier, type="reference")[0]
 

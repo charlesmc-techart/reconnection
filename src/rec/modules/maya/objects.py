@@ -98,7 +98,7 @@ def export(
 
 
 def lsWithWildcard(
-    identifier: fname.RecIdentifier, **kwargs: Optional[Any]
+    identifier: fname.Identifier, **kwargs: Optional[Any]
 ) -> list[mobj.DGNode]:
     """Find a node using wildcards"""
     return cmds.ls(f"*{identifier}*", **kwargs)

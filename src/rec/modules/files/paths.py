@@ -65,7 +65,7 @@ def findSharedDrive(
         raise DirectoryNotFoundError(f"~/{macGDrivePathPattern}/{dir}")
 
 
-def findModelPath(assetName: fname.AssetName, parentDir: Path) -> Path:
+def findModelPath(assetName: fname.NameIdentifier, parentDir: Path) -> Path:
     """Get the path to the model's master file"""
     assetType = fname.AssetType.MODEL
     filenamePattern = f"rec_asset_{assetName}_{assetType}_*.*_MASTER.m?"

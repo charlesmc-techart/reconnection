@@ -44,7 +44,7 @@ class GeometryCacheComponents:
     def meshPart(self) -> str:
         return self.mesh.rsplit(":", 1)[-1].rsplit("_", 1)[0]
 
-    def rename(self, identifier: fname.RecIdentifier) -> None:
+    def rename(self, identifier: fname.Identifier) -> None:
         nameBase = f"{identifier}_{self.meshPart}"
         self.cacheFile = cmds.rename(self.cacheFile, nameBase + "_cache")
         cmds.rename(self.historySwitch, nameBase + "_historySwitch")

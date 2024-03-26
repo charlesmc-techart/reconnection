@@ -11,7 +11,7 @@ SHOW = "rec"
 SHOW_FULL_TITLE = "re:connection"
 
 
-class InvalidFilenameError(Exception):
+class InvalidFilenameError(ValueError):
     """File does not adhere to re:connection's filename protocol"""
 
 
@@ -68,8 +68,11 @@ class AssetType(strEnum.StringEnum):
     CAMERA = "cam"
 
 
+NameIdentifier = Union[AssetName, str]
+
+
 def constructFilenameBase(
-    shotName: ShotID, assetName: Optional[AssetName | str], assetType: AssetType
+    shot: ShotID, assetName: Optional[NameIdentifier], assetType: AssetType
 ) -> str:
     """Construct a filename base, formatted 'rec_seq###_name_type'"""
     if assetName:
@@ -89,10 +92,10 @@ class FileExt(strEnum.StringEnum):
     PYTHON = ".py"
 
 
-RecIdentifier = Union[ShotID, AssetName, AssetType, str]
+Identifier = Union[ShotID, AssetName, NameIdentifier]
 
 
-def inFilename(identifier: RecIdentifier, file: Path) -> bool:
+def inFilename(identifier: Identifier, file: Path) -> bool:
     """Check if an identifier is the filename"""
     return f"{identifier}" in file.stem
 
@@ -101,10 +104,8 @@ AssetValidator = Callable[[Path], bool]
 
 
 def constructValidator(
-    filenameBase: str,
-    assetName: Optional[AssetName | str],
-    assetType: AssetType,
-) -> AssetValidator:
+    filenameBase: str, assetName: Optional[NameIdentifier], assetType: AssetType
+) -> Validator:
     """Construct a validator used for filtering assets"""
 
     def hasExtension(file: Path, fileExt: FileExt) -> bool:
