@@ -10,6 +10,7 @@ import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
+import rec.modules.maya.ui as mui
 
 
 def getReferenceNode(identifier: fname.Identifier) -> mobj.ReferenceNode:
@@ -53,7 +54,7 @@ proc assignAssetFilePathToGlobalVar(string $filePath, string $_) {
 def main() -> None | NoReturn:
     assetsDir = fpath.findSharedDrive(dir="REC/02_ASSETS")
 
-    mapp.setDefaultFileBrowserDir(assetsDir)
+    mui.setDefaultFileBrowserDir(assetsDir)
     mel.eval(
         f"{assignAssetFilePathToGlobalVarProc};"
         'fileBrowser "assignAssetFilePathToGlobalVar" '
@@ -62,7 +63,7 @@ def main() -> None | NoReturn:
 
     filePath = mel.eval("$_passToPython = $_passToPython")
     if not filePath:
-        raise mapp.NoFileSelectedError
+        raise mui.NoFileSelectedError
 
     filePath = Path(filePath)
     # From: `rec_asset_name_type_v###.m?`

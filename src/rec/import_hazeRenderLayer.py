@@ -17,6 +17,7 @@ _ARNOLD_RENDER_OPTIONS = {
     "GIVolumeSamples": 1,
     "GIVolumeDepth": 1,
 }
+
 _TEMPLATE_DIR = Path(__file__).with_name("data")
 _TEMPLATE = _TEMPLATE_DIR / "renderLayer_haze.json"
 _LAYER_NAME = "HAZE"
@@ -69,7 +70,7 @@ def main() -> None:
 
     # Save scene as new file
     # Construct filename base
-    scene = mapp.getScenePath()
+    scene = fpath.getScenePath()
     sceneName = scene.stem
     if "arnold" in sceneName:
         filenameBase = sceneName.split("arnold")[0]

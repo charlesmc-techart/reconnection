@@ -10,6 +10,7 @@ import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
+import rec.modules.maya.ui as mui
 
 
 class GeometryCacheComponents:
@@ -87,13 +88,13 @@ def main() -> None:
     if not mobj.lsSelectedGeometry():
         raise mobj.NoGeometrySelectedError
 
-    shot = fname.ShotID.fromFilename(mapp.getScenePath().stem)
+    shot = fname.ShotID.fromFilename(fpath.getScenePath().stem)
     shotPath = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
     cachesDir = shotPath / fpath.CACHES_DIR
     # cachesDir = mapp.getScenePath().parents[1] / "cache"
 
     cmds.workspace(fileRule=("cacheFile", cachesDir))
-    mapp.setDefaultFileBrowserDir(cachesDir)
+    mui.setDefaultFileBrowserDir(cachesDir)
 
     # global proc doImportCacheArgList( int $version, string $args[] )
     #    $version == 0:
@@ -106,7 +107,7 @@ def main() -> None:
     try:
         cacheFileNode = cmds.ls(assetNamePattern + "Cache1")[0]
     except IndexError:
-        raise mapp.NoFileSelectedError
+        raise mui.NoFileSelectedError
     cacheFilename = cmds.getAttr(cacheFileNode + ".cacheName")
     assetize(
         cacheFilename.split("_", 3)[2],  # From: `rec_seq###_name_cache_v###`

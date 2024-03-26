@@ -122,7 +122,7 @@ def buildWindow(outputPath: Path) -> mui.ProgressWindow:
 @mapp.SuspendedRedraw()
 @mapp.logScriptEditorOutput
 def main() -> None:
-    shot = fname.ShotID.fromFilename(mapp.getScenePath().stem)
+    shot = fname.ShotID.fromFilename(fpath.getScenePath().stem)
     shotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
     cachesDir = shotDir / fpath.CACHES_DIR
     # cachesDir = mapp.getScenePath().parents[1] / "cache"
