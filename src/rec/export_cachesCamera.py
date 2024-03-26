@@ -75,6 +75,8 @@ def getCameraComponents(
     return lookAt, xform, camera, locator, locatorShape
 
 
+# TODO: check if TemporaryDirectories have methods similar to TemporaryFiles
+# TODO: use maya.cmds module to get MAYA_LOCATION instead of os.environ?
 def exportMayaAsciiThenBinary(
     nodes: Sequence[mobj.DGNode], filePath: Path
 ) -> None:
