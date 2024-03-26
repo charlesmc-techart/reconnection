@@ -18,7 +18,8 @@ import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
 import rec.modules.maya.ui as mui
 
-_EXPORT_MAYA_BINARY_SCRIPT = "export_mayaBinary.py"
+_SUBPROCESS_SCRIPT_FILENAME = "export_mayaBinary.py"
+_SUBPROCESS_SCRIPT_PATH = Path(__file__).with_name(_SUBPROCESS_SCRIPT_FILENAME)
 
 
 def exportGeometryCache(
@@ -97,7 +98,7 @@ def exportMayaAsciiThenBinary(
         scriptPath = scriptPath.with_name(_EXPORT_MAYA_BINARY_SCRIPT)
 
         results = subprocess.run(
-            ("mayapy", scriptPath, tempFilePath, filePath, *nodes),
+            ("mayapy", _SUBPROCESS_SCRIPT_PATH, tempFile, filePath, *nodes),
             capture_output=True,
             text=True,
         )
