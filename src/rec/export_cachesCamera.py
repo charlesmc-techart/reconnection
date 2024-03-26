@@ -135,7 +135,7 @@ def buildWindow(outputPath: Path) -> mui.ProgressWindow:
 def main() -> None:
     shot = fname.ShotID.fromFilename(mapp.getScenePath().stem)
     shotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
-    cachesDir = shotDir / fpath.CACHE_DIR
+    cachesDir = shotDir / fpath.CACHES_DIR
     # cachesDir = mapp.getScenePath().parents[1] / "cache"
 
     constructFilenameCmd = partial(

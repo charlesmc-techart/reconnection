@@ -10,7 +10,7 @@ import rec.modules.files.names as fname
 _DRIVE = "G"
 ASSETS_DIR = "REC/02_ASSETS"
 _POST_PRODUCTION_DIR = "REC_POST"
-CACHE_DIR = Path("LIGHT", "cache")
+CACHES_DIR = Path("LIGHT", "cache")
 
 
 def findShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
