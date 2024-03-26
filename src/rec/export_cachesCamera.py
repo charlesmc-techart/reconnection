@@ -85,17 +85,13 @@ def exportMayaAsciiThenBinary(
     """
     prefix = fname.SHOW + "_"
     with TemporaryDirectory(prefix=prefix) as tempDir:
-        tempFilePath = Path(tempDir) / f"{prefix}temp{fname.FileExt.MAYA_ASCII}"
+        tempFile = Path(tempDir) / f"{prefix}temp{fname.FileExt.MAYA_ASCII}"
 
-        mobj.exportNodes(
-            nodes, filePath=tempFilePath, fileType=mapp.FileType.ASCII
-        )
+        mobj.export(nodes, filePath=tempFile, fileType=mapp.FileType.ASCII)
 
-        mayaBinPath = os.path.join(os.environ["MAYA_LOCATION"], "bin")
-        if mayaBinPath not in sys.path:
-            sys.path.append(mayaBinPath)
-        scriptPath = Path(__file__).resolve()
-        scriptPath = scriptPath.with_name(_EXPORT_MAYA_BINARY_SCRIPT)
+        mayaPath = os.path.join(os.environ["MAYA_LOCATION"], "bin")
+        if mayaPath not in sys.path:
+            sys.path.append(mayaPath)
 
         results = subprocess.run(
             ("mayapy", _SUBPROCESS_SCRIPT_PATH, tempFile, filePath, *nodes),
@@ -110,7 +106,7 @@ def exportCamera(cameraNodes: Sequence[mobj.DAGNode], filePath: Path) -> None:
     if mobj.lsUnknown():
         exportMayaAsciiThenBinary(cameraNodes, filePath=filePath)
     else:
-        mobj.exportNodes(
+        mobj.export(
             cameraNodes, filePath=filePath, fileType=mapp.FileType.BINARY
         )
 
@@ -136,18 +132,18 @@ def buildWindow(outputPath: Path) -> mui.ProgressWindow:
 @mapp.logScriptEditorOutput
 def main() -> None:
     shot = fname.ShotID.fromFilename(mapp.getScenePath().stem)
-    gDriveShotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
-    shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
-    # shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
+    shotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
+    cachesDir = shotDir / fpath.CACHE_DIR
+    # cachesDir = mapp.getScenePath().parents[1] / "cache"
 
     constructFilenameCmd = partial(
         ogc.constructFilename,
-        dir=shotCachesDirPath,
+        dir=cachesDir,
         shot=shot,
     )
-    exportGeometryCacheCmd = partial(exportGeometryCache, dir=shotCachesDirPath)
+    exportGeometryCacheCmd = partial(exportGeometryCache, dir=cachesDir)
 
-    ui = buildWindow(shotCachesDirPath).show()
+    ui = buildWindow(cachesDir).show()
 
     mechanicRigGeoGrp = mobj.MECHANIC_RIG_GEO_GRP
     if cmds.objExists(mechanicRigGeoGrp):
@@ -175,8 +171,7 @@ def main() -> None:
         )
         exportAlembicCache(
             robotFaceRigGeoGrp,
-            filePath=shotCachesDirPath
-            / (robotFaceFilename + fname.FileExt.ALEMBIC),
+            filePath=cachesDir / (robotFaceFilename + fname.FileExt.ALEMBIC),
         )
     ui.update()
 
@@ -184,7 +179,6 @@ def main() -> None:
         cameraFilename = constructFilenameCmd(assetType=fname.AssetType.CAMERA)
         exportCamera(
             cameraNodes,
-            filePath=shotCachesDirPath
-            / (cameraFilename + fname.FileExt.MAYA_BINARY),
+            filePath=cachesDir / (cameraFilename + fname.FileExt.MAYA_BINARY),
         )
     ui.update().close()

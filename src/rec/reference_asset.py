@@ -17,12 +17,12 @@ def getReferenceNode(identifier: fname.RecIdentifier) -> mobj.ReferenceNode:
     return mobj.lsWithWildcard(identifier, type="reference")[0]
 
 
-def reference(filePath: Path, namespace: str) -> None:
+def reference(file: Path, namespace: str) -> None:
     """Reference an asset into the scene if it isn't yet"""
     try:
         getReferenceNode(namespace)
     except IndexError:
-        fileExt = filePath.suffix
+        fileExt = file.suffix
         if fileExt == fname.FileExt.MAYA_BINARY:
             fileType = mapp.FileType.BINARY
         elif fileExt == fname.FileExt.MAYA_ASCII:
@@ -31,7 +31,7 @@ def reference(filePath: Path, namespace: str) -> None:
             fileType = mapp.FileType.ALEMBIC
 
         cmds.file(
-            filePath.as_posix(),
+            file.as_posix(),
             ignoreVersion=True,
             loadReferenceDepth="all",
             mergeNamespacesOnClash=True,
@@ -56,7 +56,7 @@ class NoFileSelectedError(Exception):
 
 @mapp.logScriptEditorOutput
 def main() -> None | NoReturn:
-    gDriveAssetsDirPath = fpath.findSharedDrive(dir="REC/02_ASSETS")
+    assetsDir = fpath.findSharedDrive(dir="REC/02_ASSETS")
 
     mel.eval(
         f'$gDefaultFileBrowserDir = "{gDriveAssetsDirPath.as_posix()}";'
@@ -66,9 +66,9 @@ def main() -> None | NoReturn:
         '"Reference re:connection Asset" "Maya Scene" 0'
     )
 
-    assetFilePath = mel.eval("$_passToPython = $_passToPython")
-    if not assetFilePath:
-        raise NoFileSelectedError
+    filePath = mel.eval("$_passToPython = $_passToPython")
+    if not filePath:
+        raise mapp.NoFileSelectedError
 
     assetFilePath = Path(assetFilePath)
     assetType = assetFilePath.stem.rsplit("rec", 1)[-1].split("_")[3]

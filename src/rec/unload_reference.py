@@ -5,12 +5,12 @@ import maya.cmds as cmds
 
 class NoReferenceNodeSelectedError(Exception):
     def __init__(self) -> None:
-        super().__init__("No reference node is selected")
+        super().__init__("No reference node selected")
 
 
 def unloadReference(referenceNode) -> None:
-    filePath = Path(cmds.referenceQuery(referenceNode, filename=True))
-    cmds.file(filePath.as_posix(), unloadReference=referenceNode)
+    file = Path(cmds.referenceQuery(referenceNode, filename=True))
+    cmds.file(file.as_posix(), unloadReference=referenceNode)
 
 
 def main() -> None:

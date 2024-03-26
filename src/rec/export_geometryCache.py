@@ -24,11 +24,11 @@ def constructFilename(
     filenameBase = fname.constructFilenameBase(
         shot, assetName=assetName, assetType=assetType
     )
-    assetValidator = fname.constructValidator(
+    validator = fname.constructValidator(
         filenameBase, assetName=assetName, assetType=assetType
     )
     versionSuffix = fname.constructVersionSuffix(
-        assetValidator,
+        validator,
         files=fpath.findShotFiles(shot, dir=dir),
     )
     return f"{filenameBase}_{versionSuffix}"
@@ -116,18 +116,18 @@ def main() -> None:
         raise mobj.NoGeometrySelectedError
 
     shot = fname.ShotID.fromFilename(mapp.getScenePath().stem)
-    gDriveShotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
-    shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
-    # shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
+    shotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
+    cachesDir = shotDir / fpath.CACHE_DIR
+    # cachesDir = mapp.getScenePath().parents[1] / "cache"
 
-    ui = buildWindow(*geometry, outputPath=shotCachesDirPath).show()
+    ui = buildWindow(*geometry, outputPath=cachesDir).show()
 
-    nameBase = getNodeNameBase(geometry[0])
+    assetName = getNodeNameBase(geometry[0])
     filename = constructFilename(
-        shotCachesDirPath,
+        cachesDir,
         shot=shot,
-        assetName=nameBase,
+        assetName=assetName,
         assetType=fname.AssetType.CACHE,
     )
-    export(geometry, dir=shotCachesDirPath, filename=filename)
+    export(geometry, dir=cachesDir, filename=filename)
     ui.update().close()

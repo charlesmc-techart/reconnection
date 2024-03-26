@@ -80,16 +80,14 @@ def main() -> None:
         filenameBase += f".{artistLastName}_arnold"
 
     # Construct version suffix
-    assetValidator = fname.constructValidator(
+    validator = fname.constructValidator(
         filenameBase,
         assetName=fname.AssetName.ARNOLD,
         assetType=fname.AssetType.LIGHTS,
     )
     shot = fname.ShotID.fromFilename(sceneName)
-    recAssetsInScenesFolder = fpath.findShotFiles(shot, dir=scene.parent)
-    versionSuffix = fname.constructVersionSuffix(
-        assetValidator, files=recAssetsInScenesFolder
-    )
+    sceneFiles = fpath.findShotFiles(shot, dir=scene.parent)
+    versionSuffix = fname.constructVersionSuffix(validator, files=sceneFiles)
 
     if mobj.lsUnknown():
         fileExt = scene.suffix

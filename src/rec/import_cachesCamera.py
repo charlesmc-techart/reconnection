@@ -19,7 +19,7 @@ import rec.reference_character as rch
 import rec.unload_reference as urf
 
 
-def getLatestVersionAsset(
+def findLatestVersionFile(
     dir: Path,
     shot: fname.ShotID,
     assetType: fname.AssetType,
@@ -29,17 +29,17 @@ def getLatestVersionAsset(
     filenameBase = fname.constructFilenameBase(
         shot, assetName=assetName, assetType=assetType
     )
-    assetValidator = fname.constructValidator(
+    validator = fname.constructValidator(
         filenameBase, assetName=assetName, assetType=assetType
     )
     return fpath.findLatestVersionAsset(
-        assetValidator,
+        validator,
         files=fpath.findShotFiles(shot, dir=dir),
     )
 
 
 # TODO: Python warning or something more meaningful?
-def unloadCharacterReference(assetName: fname.AssetName) -> None:
+def unloadReferencedCharacter(assetName: fname.AssetName) -> None:
     """Unload a referenced asset"""
     try:
         referenceNode = ras.getReferenceNode(
@@ -54,18 +54,16 @@ def unloadCharacterReference(assetName: fname.AssetName) -> None:
 
 def importGeometryCache(
     geometryGrp: mobj.DAGNode,
-    filePath: Path,
+    file: Path,
     assetName: fname.AssetName,
     namespace: str,
 ) -> None:
     """Call the MEL procedure for importing a geometry cache"""
     geometry = mobj.lsChildren(geometryGrp)
 
-    cmds.workspace(fileRule=("fileCache", filePath.parent.as_posix()))
+    cmds.workspace(fileRule=("fileCache", file.parent.as_posix()))
 
-    doImportCacheFileCmd = (
-        f'doImportCacheFile "{filePath.as_posix()}" "" {{}} {{}}'
-    )
+    doImportCacheFileCmd = f'doImportCacheFile "{file.as_posix()}" "" {{}} {{}}'
     with mobj.TemporarySelection(geometry):
         mel.eval(doImportCacheFileCmd)
 
@@ -74,17 +72,15 @@ def importGeometryCache(
 
 def replaceRigWithCachedModel(
     assetName: fname.AssetName,
-    modelFilePath: Path,
-    cacheFilePath: Path,
+    model: Path,
+    cache: Path,
     geometryGrp: mobj.DAGNode,
 ) -> None:
     """Unload a referenced rig, reference just the model, then apply a cache"""
-    unloadCharacterReference(assetName)
-    namespace = mobj.constructNamespace(
-        cacheFilePath.stem, fname.AssetType.CACHE
-    )
+    unloadReferencedCharacter(assetName)
+    namespace = mobj.constructNamespace(cache.stem, fname.AssetType.CACHE)
     rch.referenceCharacter(
-        modelFilePath,
+        model,
         namespace=namespace,
         geometry=geometryGrp,
     )
@@ -95,11 +91,11 @@ def replaceRigWithCachedModel(
         importGeometryCache(
             geometryGrp,
             assetName=assetName,
-            filePath=cacheFilePath,
+            file=cache,
             namespace=namespace,
         )
     else:
-        cmds.setAttr(container + ".filename", cacheFilePath.stem, type="string")
+        cmds.setAttr(container + ".filename", cache.stem, type="string")
 
     # The cache saved world space positions, so get rid of geometry's xforms
     for c in mobj.lsChildren(geometryGrp):
@@ -127,41 +123,41 @@ def buildWindow(outputPath: Path) -> mui.ProgressWindow:
 @mapp.logScriptEditorOutput
 def main() -> None:
     shot = fname.ShotID.fromFilename(mapp.getScenePath().stem)
-    gDriveShotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
-    shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
-    # shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
+    shotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
+    cachesDir = shotDir / fpath.CACHE_DIR
+    # cachesDir = mapp.getScenePath().parents[1] / "cache"
 
-    getLatestVersionAssetCmd = partial(
-        getLatestVersionAsset, shotCachesDirPath, shot=shot
+    findLatestVersionFileCmd = partial(
+        findLatestVersionFile, cachesDir, shot=shot
     )
 
-    ui = buildWindow(shotCachesDirPath).show()
+    ui = buildWindow(cachesDir).show()
 
     mechanicName = fname.AssetName.MECHANIC
-    if mechanicCache := getLatestVersionAssetCmd(
+    if mechanicCache := findLatestVersionFileCmd(
         assetName=mechanicName, assetType=fname.AssetType.CACHE
     ):
         replaceRigWithCachedModel(
             mechanicName,
-            modelFilePath=rch.getModelPathCmd(mechanicName),
-            cacheFilePath=mechanicCache,
+            model=rch.getModelPathCmd(mechanicName),
+            cache=mechanicCache,
             geometryGrp=mobj.MECHANIC_MODEL_GEO_GRP,
         )
     ui.update()
 
     robotName = fname.AssetName.ROBOT
-    if robotCache := getLatestVersionAssetCmd(
+    if robotCache := findLatestVersionFileCmd(
         assetName=robotName, assetType=fname.AssetType.CACHE
     ):
         replaceRigWithCachedModel(
             robotName,
-            modelFilePath=rch.getModelPathCmd(robotName),
-            cacheFilePath=robotCache,
+            model=rch.getModelPathCmd(robotName),
+            cache=robotCache,
             geometryGrp=mobj.ROBOT_MODEL_GEO_GRP,
         )
     ui.update()
 
-    if robotFaceCache := getLatestVersionAssetCmd(
+    if robotFaceCache := findLatestVersionFileCmd(
         assetName=fname.AssetName.ROBOT_FACE,
         assetType=fname.AssetType.CACHE,
     ):
@@ -176,11 +172,11 @@ def main() -> None:
         )
     ui.update()
 
-    if cameraFile := getLatestVersionAssetCmd(assetType=fname.AssetType.CAMERA):
+    if cameraFile := findLatestVersionFileCmd(assetType=fname.AssetType.CAMERA):
         cameraNamespace = mobj.constructNamespace(
             cameraFile.stem, assetType=fname.AssetType.CAMERA
         )
-        ras.reference(filePath=cameraFile, namespace=cameraNamespace)
+        ras.reference(file=cameraFile, namespace=cameraNamespace)
 
         cameras = cmds.ls(cameraNamespace + ":*", transforms=True, long=True)
         for c in (c for c in cameras if c.count("|") == 1):

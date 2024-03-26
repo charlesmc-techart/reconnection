@@ -15,7 +15,7 @@ def main(maPath: Path, mbPath: Path, nodes: Sequence[mobj.DGNode]) -> None:
     maya.standalone.initialize()
 
     cmds.file(maPath.as_posix(), open=True)
-    mobj.exportNodes(nodes, filePath=mbPath, fileType=mapp.FileType.BINARY)
+    mobj.export(nodes, filePath=mbPath, fileType=mapp.FileType.BINARY)
 
     maya.standalone.uninitialize()
 

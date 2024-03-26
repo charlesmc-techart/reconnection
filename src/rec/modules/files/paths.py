@@ -29,11 +29,11 @@ def findShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
 
 
 def findLatestVersionAsset(
-    assetValidator: fname.AssetValidator, files: Iterable[Path]
+    validator: fname.AssetValidator, files: Iterable[Path]
 ) -> Optional[Path]:
     """Get the file path to the asset's latest version"""
     file = None
-    for file in filter(assetValidator, files):
+    for file in filter(validator, files):
         continue
     return file
 

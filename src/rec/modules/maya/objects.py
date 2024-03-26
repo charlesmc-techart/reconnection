@@ -84,7 +84,7 @@ def lsUnknown() -> list[DGNode]:
     return cmds.ls(type="unknown")
 
 
-def exportNodes(
+def export(
     nodes: Sequence[DGNode], filePath: Path, fileType: mapp.FileType
 ) -> None:
     with mobj.TemporarySelection(nodes):

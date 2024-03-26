@@ -15,19 +15,19 @@ import rec.modules.maya.objects as mobj
 class GeometryCacheComponents:
     """Group of nodes that comprise a geometry cache"""
 
-    __slots__ = ("_origCacheFile", "cacheFile")
+    __slots__ = "_origCacheFile", "cacheFile"
 
     def __new__(
-        cls, cacheFileNode: mobj.DGNode
+        cls, cacheFile: mobj.DGNode
     ) -> GeometryCacheComponents | NoReturn:
         """Don't create an instance if not provided a cacheFile node"""
-        if cmds.objectType(cacheFileNode, isType="cacheFile"):
+        if cmds.objectType(cacheFile, isType="cacheFile"):
             return super().__new__(cls)
-        raise TypeError(f"{cacheFileNode} must be a cacheFile node")
+        raise TypeError(f"{cacheFile} must be a cacheFile node")
 
-    def __init__(self, cacheFileNode: mobj.DGNode) -> None:
-        self._origCacheFile = cacheFileNode
-        self.cacheFile = cacheFileNode
+    def __init__(self, cacheFile: mobj.DGNode) -> None:
+        self._origCacheFile = cacheFile
+        self.cacheFile = cacheFile
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._origCacheFile!r})"
@@ -64,12 +64,12 @@ def assetize(assetName: fname.AssetName, namespace: str) -> None:
         cacheFileNodes[i] = components.cacheFile
         componentNodes.extend((components.cacheFile, components.historySwitch))
 
-    asset = cmds.createNode("container", name=namespace + "_container")
-    containerCmd = partial(cmds.container, asset, edit=True)
+    container = cmds.createNode("container", name=namespace + "_container")
+    containerCmd = partial(cmds.container, container, edit=True)
 
     containerCmd(addNode=componentNodes, force=True)
-    cmds.setAttr(asset + ".blackBox", True)
-    cmds.setAttr(asset + ".viewMode", 0)
+    cmds.setAttr(container + ".blackBox", True)
+    cmds.setAttr(container + ".viewMode", 0)
 
     cacheFileNode0, *cacheFileNodes = cacheFileNodes
     containerCmd(publishAndBind=(cacheFileNode0 + ".cachePath", "folder"))

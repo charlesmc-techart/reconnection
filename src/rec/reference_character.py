@@ -13,26 +13,26 @@ import rec.reference_asset as iras
 
 
 def parent(
-    node: mobj.DAGNode, parent: mobj.DAGNode | mobj.TopLevelGroup
+    child: mobj.DAGNode, parent: mobj.DAGNode | mobj.TopLevelGroup
 ) -> None:
     """Parent a node if it isn't parented to anything"""
-    if mobj.getParent(node):
+    if mobj.getParent(child):
         return
 
     try:
-        cmds.parent(node, parent)
+        cmds.parent(child, parent)
     except ValueError as e:
         cmds.warning(e)
 
 
 def referenceCharacter(
-    filePath: Path,
+    file: Path,
     namespace: str,
     geometry: mobj.DAGNode,
     characterGrp: mobj.TopLevelGroup = mobj.TopLevelGroup.CHARACTER,
 ) -> None:
     """Reference a or a component of a character"""
-    iras.reference(filePath, namespace=namespace)
+    iras.reference(file, namespace=namespace)
 
     with mobj.TemporarySelection(geometry):
         mel.eval("UnlockNormals")
@@ -49,20 +49,20 @@ constructNamespaceCmd = partial(
 
 
 def referenceMechanicModel() -> None:
-    modelFilePath = getModelPathCmd(fname.AssetName.MECHANIC)
-    namespace = constructNamespaceCmd(modelFilePath.stem)
+    file = getModelPathCmd(fname.AssetName.MECHANIC)
+    namespace = constructNamespaceCmd(file.stem)
     referenceCharacter(
-        modelFilePath,
+        file,
         namespace=namespace,
         geometry=mobj.MECHANIC_MODEL_GEO_GRP,
     )
 
 
 def referenceRobotModel() -> None:
-    modelFilePath = getModelPathCmd(fname.AssetName.ROBOT)
-    namespace = constructNamespaceCmd(modelFilePath.stem)
+    file = getModelPathCmd(fname.AssetName.ROBOT)
+    namespace = constructNamespaceCmd(file.stem)
     referenceCharacter(
-        modelFilePath,
+        file,
         namespace=namespace,
         geometry=mobj.MECHANIC_MODEL_GEO_GRP,
     )
