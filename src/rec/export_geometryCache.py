@@ -29,7 +29,7 @@ def constructFilename(
     )
     versionSuffix = fname.constructVersionSuffix(
         assetValidator,
-        files=fpath.filterShotFiles(shot, dir=dir),
+        files=fpath.findShotFiles(shot, dir=dir),
     )
     return f"{filenameBase}_{versionSuffix}"
 

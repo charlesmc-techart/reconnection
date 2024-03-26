@@ -34,7 +34,7 @@ def getLatestVersionAsset(
     )
     return fpath.findLatestVersionAsset(
         assetValidator,
-        files=fpath.filterShotFiles(shot, dir=dir),
+        files=fpath.findShotFiles(shot, dir=dir),
     )
 
 

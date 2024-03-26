@@ -13,7 +13,7 @@ _POST_PRODUCTION_DIR = "REC_POST"
 CACHE_DIR = Path("LIGHT", "cache")
 
 
-def filterShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
+def findShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
     """Filter shot files in the provided directory
 
     The internal list is sorted so the last item is the latest version,
