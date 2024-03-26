@@ -106,7 +106,7 @@ def main() -> None:
     try:
         cacheFileNode = cmds.ls(assetNamePattern + "Cache1")[0]
     except IndexError:
-        raise fpath.NoFileSelectedError
+        raise mapp.NoFileSelectedError
     cacheFilename = cmds.getAttr(cacheFileNode + ".cacheName")
     assetize(
         cacheFilename.split("_", 3)[2],  # From: `rec_seq###_name_cache_v###`
