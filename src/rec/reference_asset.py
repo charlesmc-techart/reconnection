@@ -64,7 +64,8 @@ def main() -> None | NoReturn:
     if not filePath:
         raise mapp.NoFileSelectedError
 
-    assetFilePath = Path(assetFilePath)
-    assetType = assetFilePath.stem.rsplit("rec", 1)[-1].split("_")[3]
-    namespace = mobj.constructNamespace(assetFilePath.stem, assetType=assetType)
-    reference(assetFilePath, namespace=namespace)
+    filePath = Path(filePath)
+    # From: `rec_asset_name_type_v###.m?`
+    assetType = filePath.stem.rsplit("rec", 1)[-1].split("_")[3]
+    namespace = mobj.constructNamespace(filePath.stem, assetType=assetType)
+    reference(filePath, namespace=namespace)
