@@ -5,19 +5,18 @@ from pathlib import Path
 import maya.cmds as cmds
 import maya.mel as mel
 
+_SCRIPTS_DIR = Path(__file__).parents[1]
 _SHELF_NAME = "reconnection"
-_SHELF_DIR = f"data/shelf_{_SHELF_NAME}.mel"
+_SHELF_FILE = _SCRIPTS_DIR.joinpath("rec", "data", f"shelf_{_SHELF_NAME}.mel")
 
 
 def main() -> None:
-    scriptsDir = Path(__file__).resolve().parent
-    if f"{scriptsDir}" not in sys.path:
-        sys.path.insert(0, f"{scriptsDir}")
+    if f"{_SCRIPTS_DIR}" not in sys.path:
+        sys.path.insert(0, f"{_SCRIPTS_DIR}")
 
-    shelfFile = scriptsDir / _SHELF_DIR
     if cmds.shelfLayout(_SHELF_NAME, exists=True):
         mel.eval(f'deleteShelfTab "{_SHELF_NAME}"')
-    mel.eval(f'loadNewShelf "{shelfFile.as_posix()}"')
+    mel.eval(f'loadNewShelf "{_SHELF_FILE.as_posix()}"')
 
     mayaVersion = cmds.about(version=True)
     envDir = Path(os.environ["MAYA_APP_DIR"], mayaVersion, "Maya.env")
@@ -25,13 +24,13 @@ def main() -> None:
     try:
         file = envDir.open("r+", encoding="utf-8")
     except FileNotFoundError:
-        envDir.write_text(f"PYTHONPATH={scriptsDir}", encoding="utf-8")
+        envDir.write_text(f"PYTHONPATH={_SCRIPTS_DIR}", encoding="utf-8")
         return
     for line in file:
-        if f"{scriptsDir}" in line:
+        if f"{_SCRIPTS_DIR}" in line:
             return
         elif line.startswith("PYTHONPATH"):
-            file.write(f"{pathSeparator}{scriptsDir}")
+            file.write(f"{pathSeparator}{_SCRIPTS_DIR}")
             return
-    file.write(f"\nPYTHONPATH={scriptsDir}")
+    file.write(f"\nPYTHONPATH={_SCRIPTS_DIR}")
     file.close()

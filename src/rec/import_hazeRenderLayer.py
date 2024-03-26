@@ -17,8 +17,9 @@ _ARNOLD_RENDER_OPTIONS = {
     "GIVolumeSamples": 1,
     "GIVolumeDepth": 1,
 }
-_TEMPLATE_DIR = "data/renderLayer_haze.json"
-_HAZE_LAYER_NAME = "HAZE"
+_TEMPLATE_DIR = Path(__file__).with_name("data")
+_TEMPLATE = _TEMPLATE_DIR / "renderLayer_haze.json"
+_LAYER_NAME = "HAZE"
 
 
 def createAiNode(node: mobj.DGNode) -> mobj.DGNode:
@@ -60,10 +61,9 @@ def main() -> None:
         cmds.setAttr("defaultRenderGlobals.endFrame", endFrame)
 
     # Import HAZE render layer
-    templatePath = Path(__file__).resolve().parent / _TEMPLATE_DIR
     rs = renderSetup.instance()
-    rs.importAllFromFile(templatePath, renderSetup.DECODE_AND_MERGE, None)
-    layer = rs.getRenderLayer(_HAZE_LAYER_NAME)
+    rs.importAllFromFile(_TEMPLATE, renderSetup.DECODE_AND_MERGE, None)
+    layer = rs.getRenderLayer(_LAYER_NAME)
     rs.switchToLayer(layer)
     cmds.setAttr("defaultRenderLayer.renderable", False)
 
