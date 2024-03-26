@@ -34,7 +34,7 @@ def constructFilename(
     return f"{filenameBase}_{versionSuffix}"
 
 
-def exportGeometryCache(
+def export(
     geometry: mobj.DAGNode | Sequence[mobj.DAGNode], dir: Path, filename: str
 ) -> None:
     """Call the MEL procedure for exporting a geometry cache"""
@@ -129,5 +129,5 @@ def main() -> None:
         assetName=nameBase,
         assetType=fname.AssetType.CACHE,
     )
-    exportGeometryCache(geometry, dir=shotCachesDirPath, filename=filename)
+    export(geometry, dir=shotCachesDirPath, filename=filename)
     ui.update().close()

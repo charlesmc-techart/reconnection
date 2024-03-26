@@ -26,7 +26,7 @@ def exportGeometryCache(
 ) -> None:
     """Export a geometry cache for all geometry under a group"""
     geometry = mobj.lsChildren(geometryGrp)
-    ogc.exportGeometryCache(geometry, dir=dir, filename=filename)
+    ogc.export(geometry, dir=dir, filename=filename)
 
 
 def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
