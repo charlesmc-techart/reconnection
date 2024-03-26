@@ -107,25 +107,25 @@ def constructAssetValidator(
 ) -> AssetValidator:
     """Construct a validator used for filtering assets"""
 
-    def isFileWithExt(file: Path, fileExt: FileExt) -> bool:
+    def hasExtension(file: Path, fileExt: FileExt) -> bool:
         return file.suffix == f"{fileExt}"
 
-    def isFileWithExts(file: Path, fileExts: Iterable[FileExt]) -> bool:
-        isFileWithExtsCmd = partial(isFileWithExt, file)
+    def hasAnyEtension(file: Path, fileExts: Iterable[FileExt]) -> bool:
+        isFileWithExtsCmd = partial(hasExtension, file)
         return any(map(isFileWithExtsCmd, fileExts))
 
     if assetType != AssetType.CACHE:
         fileExtValidator = partial(
-            isFileWithExts,
+            hasAnyEtension,
             fileExts=(FileExt.MAYA_BINARY, FileExt.MAYA_ASCII),
         )
     elif assetName != AssetName.ROBOT_FACE:
         fileExtValidator = partial(
-            isFileWithExts,
+            hasAnyEtension,
             fileExts=(FileExt.MAYA_CACHE, FileExt.XML),
         )
     else:
-        fileExtValidator = partial(isFileWithExt, fileExt=FileExt.ALEMBIC)
+        fileExtValidator = partial(hasExtension, fileExt=FileExt.ALEMBIC)
     return lambda f: inFilename(filenameBase, file=f) and fileExtValidator(f)
 
 
