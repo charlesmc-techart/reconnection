@@ -29,7 +29,7 @@ def findShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
 
 
 def findLatestVersionAsset(
-    validator: fname.AssetValidator, files: Iterable[Path]
+    validator: fname.Validator, files: Iterable[Path]
 ) -> Optional[Path]:
     """Get the file path to the asset's latest version"""
     file = None
@@ -58,11 +58,11 @@ def findSharedDrive(
             return path.resolve()
         raise DirectoryNotFoundError(path)
     else:
-        macGDrivePathPattern = "Library/CloudStorage/GoogleDrive*/Shared drives"
-        for path in Path.home().glob(f"{macGDrivePathPattern}/{dir}"):
+        pathPattern = "Library/CloudStorage/GoogleDrive*/Shared drives"
+        for path in Path.home().glob(f"{pathPattern}/{dir}"):
             if path.is_dir():
                 return path.resolve()
-        raise DirectoryNotFoundError(f"~/{macGDrivePathPattern}/{dir}")
+        raise DirectoryNotFoundError(f"~/{pathPattern}/{dir}")
 
 
 def findModelPath(assetName: fname.NameIdentifier, parentDir: Path) -> Path:

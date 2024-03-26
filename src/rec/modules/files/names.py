@@ -76,9 +76,9 @@ def constructFilenameBase(
 ) -> str:
     """Construct a filename base, formatted 'rec_seq###_name_type'"""
     if assetName:
-        return f"{shotName.full}_{assetName}_{assetType}"
+        return f"{shot.full}_{assetName}_{assetType}"
     else:
-        return f"{shotName.full}_{assetType}"
+        return f"{shot.full}_{assetType}"
 
 
 class FileExt(strEnum.StringEnum):
@@ -100,7 +100,7 @@ def inFilename(identifier: Identifier, file: Path) -> bool:
     return f"{identifier}" in file.stem
 
 
-AssetValidator = Callable[[Path], bool]
+Validator = Callable[[Path], bool]
 
 
 def constructValidator(
@@ -112,8 +112,8 @@ def constructValidator(
         return file.suffix == f"{fileExt}"
 
     def hasAnyEtension(file: Path, fileExts: Iterable[FileExt]) -> bool:
-        isFileWithExtsCmd = partial(hasExtension, file)
-        return any(map(isFileWithExtsCmd, fileExts))
+        hasExtensionCmd = partial(hasExtension, file)
+        return any(map(hasExtensionCmd, fileExts))
 
     if assetType != AssetType.CACHE:
         fileExtValidator = partial(
@@ -131,12 +131,10 @@ def constructValidator(
 
 
 def constructVersionSuffix(
-    assetValidator: AssetValidator,
-    files: Iterable[Path],
-    versionIndicator: str = "v",
+    validator: Validator, files: Iterable[Path], versionIndicator: str = "v"
 ) -> str:
     """Construct a filename version, formatted 'v###'"""
-    filenames = {f.stem for f in files if assetValidator(f)}
+    filenames = {f.stem for f in files if validator(f)}
     try:
         filename = sorted(filenames)[-1]
     except IndexError:
