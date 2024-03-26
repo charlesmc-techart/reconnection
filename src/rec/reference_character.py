@@ -41,7 +41,7 @@ def referenceCharacter(
 
 
 getModelPathCmd = partial(
-    fpath.getModelPath, parentDir=fpath.getSharedDrive(dir=fpath.ASSETS_DIR)
+    fpath.findModelPath, parentDir=fpath.findSharedDrive(dir=fpath.ASSETS_DIR)
 )
 constructNamespaceCmd = partial(
     mobj.constructNamespace, assetType=fname.AssetType.MODEL

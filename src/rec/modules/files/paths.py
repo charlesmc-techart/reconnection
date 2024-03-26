@@ -28,7 +28,7 @@ def filterShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
     return tuple(files)
 
 
-def getLatestVersionAsset(
+def findLatestVersionAsset(
     assetValidator: fname.AssetValidator, files: Iterable[Path]
 ) -> Optional[Path]:
     """Get the file path to the asset's latest version"""
@@ -47,7 +47,7 @@ class DirecetoryNotFoundOnGoogleSharedDriveError(FileNotFoundError):
         )
 
 
-def getSharedDrive(
+def findSharedDrive(
     *, drive: str = _DRIVE, dir: str = _POST_PRODUCTION_DIR
 ) -> Path | NoReturn:
     """Get the path to re:connection's Google shared drive
@@ -67,7 +67,7 @@ def getSharedDrive(
         raise DirecetoryNotFoundOnGoogleSharedDriveError(dir)
 
 
-def getModelPath(assetName: fname.AssetName, parentDir: Path) -> Path:
+def findModelPath(assetName: fname.AssetName, parentDir: Path) -> Path:
     """Get the path to the model's master file"""
     assetType = fname.AssetType.MODEL
     filenamePattern = f"rec_asset_{assetName}_{assetType}_*.*_MASTER.m?"
@@ -76,7 +76,7 @@ def getModelPath(assetName: fname.AssetName, parentDir: Path) -> Path:
     return next(dir.glob(filenamePattern)).resolve()
 
 
-def getShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:
+def findShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:
     """Get the path to the specific shot directory"""
 
     def findDir(identifier: str, parentDir: Path) -> Path:

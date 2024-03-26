@@ -32,7 +32,7 @@ def getLatestVersionAsset(
     assetValidator = fname.constructAssetValidator(
         filenameBase, assetName=assetName, assetType=assetType
     )
-    return fpath.getLatestVersionAsset(
+    return fpath.findLatestVersionAsset(
         assetValidator,
         files=fpath.filterShotFiles(shot, dir=dir),
     )
@@ -127,7 +127,7 @@ def buildWindow(outputPath: Path) -> mui.ProgressWindow:
 @mapp.logScriptEditorOutput
 def main() -> None:
     shot = fname.ShotID.fromFilename(mapp.getScenePath().stem)
-    gDriveShotDir = fpath.getShotPath(shot, parentDir=fpath.getSharedDrive())
+    gDriveShotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
     shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
     # shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
 

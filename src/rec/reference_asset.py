@@ -56,7 +56,7 @@ class NoFileSelectedError(Exception):
 
 @mapp.logScriptEditorOutput
 def main() -> None | NoReturn:
-    gDriveAssetsDirPath = fpath.getSharedDrive(dir="REC/02_ASSETS")
+    gDriveAssetsDirPath = fpath.findSharedDrive(dir="REC/02_ASSETS")
 
     mel.eval(
         f'$gDefaultFileBrowserDir = "{gDriveAssetsDirPath.as_posix()}";'
