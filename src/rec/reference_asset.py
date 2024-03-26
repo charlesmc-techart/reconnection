@@ -49,19 +49,13 @@ proc assignAssetFilePathToGlobalVar(string $filePath, string $_) {
 """
 
 
-class NoFileSelectedError(Exception):
-    def __init__(self) -> None:
-        super().__init__("No file was selected")
-
-
 @mapp.logScriptEditorOutput
 def main() -> None | NoReturn:
     assetsDir = fpath.findSharedDrive(dir="REC/02_ASSETS")
 
+    mapp.setDefaultFileBrowserDir(assetsDir)
     mel.eval(
-        f'$gDefaultFileBrowserDir = "{gDriveAssetsDirPath.as_posix()}";'
         f"{assignAssetFilePathToGlobalVarProc};"
-        ""
         'fileBrowser "assignAssetFilePathToGlobalVar" '
         '"Reference re:connection Asset" "Maya Scene" 0'
     )

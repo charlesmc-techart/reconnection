@@ -92,13 +92,13 @@ def main() -> None:
     cachesDir = shotPath / fpath.CACHE_DIR
     # cachesDir = mapp.getScenePath().parents[1] / "cache"
 
-    cmds.workspace(fileRule=("cacheFile", shotCachesDirPath))
+    cmds.workspace(fileRule=("cacheFile", cachesDir))
+    mapp.setDefaultFileBrowserDir(cachesDir)
 
     # global proc doImportCacheArgList( int $version, string $args[] )
     #    $version == 0:
     #        $args[] = none
-    doImportCacheArgListCmd = "doImportCacheArgList 0 {}"
-    mel.eval(doImportCacheArgListCmd)
+    mel.eval("doImportCacheArgList 0 {}")
 
     # Assetize network
     assetType = fname.AssetType.CACHE
