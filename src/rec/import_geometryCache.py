@@ -88,9 +88,9 @@ def main() -> None:
         raise mobj.NoGeometrySelectedError
 
     shot = fname.ShotID.fromFilename(mapp.getScenePath().stem)
-    gDriveShotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
-    shotCachesDirPath = gDriveShotDir / fpath.CACHE_DIR
-    # shotCachesDirPath = mapp.getScenePath().parents[1] / "cache"
+    shotPath = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
+    cachesDir = shotPath / fpath.CACHE_DIR
+    # cachesDir = mapp.getScenePath().parents[1] / "cache"
 
     cmds.workspace(fileRule=("cacheFile", shotCachesDirPath))
 
