@@ -11,15 +11,8 @@ SHOW = "rec"
 SHOW_FULL_TITLE = "re:connection"
 
 
-class ReConnectionFilenameError(Exception):
+class InvalidFilenameError(Exception):
     """File does not adhere to re:connection's filename protocol"""
-
-    def __init__(self, filename: str) -> None:
-        message = (
-            f"The scene's filename, {filename}, must contain "
-            "'rec_seq###' for the script to work properly."
-        )
-        super().__init__(message)
 
 
 class ShotID:
@@ -31,7 +24,8 @@ class ShotID:
         try:
             int(name[3:])
         except ValueError as e:
-            raise ValueError(f"{name} must follow 'seq###'") from e
+            message = f"Name {name!r} must match pattern: 'seq###'"
+            raise InvalidFilenameError(message) from e
         return super().__new__(cls)
 
     def __init__(self, name: str) -> None:
@@ -49,7 +43,8 @@ class ShotID:
     @classmethod
     def fromFilename(cls, filename: str, affix: str = SHOW + "_") -> ShotID:
         if affix not in filename:
-            raise ReConnectionFilenameError(filename)
+            message = f"Filename {filename!r} must match pattern: 'rec_seq###'"
+            raise InvalidFilenameError(message)
         name = filename.split(affix, 1)[-1][:6]
         return cls(name)
 
