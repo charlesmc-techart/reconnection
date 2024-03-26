@@ -1,10 +1,24 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+from pathlib import Path
 
 import maya.cmds as cmds
+import maya.mel as mel
 
 import rec.modules.files.names as fname
+
+
+def setDefaultFileBrowserDir(dir: Path) -> None:
+    """The Maya file browser will open to this directory"""
+    mel.eval(f'$gDefaultFileBrowserDir = "{dir.as_posix()}"')
+
+
+class NoFileSelectedError(Exception):
+    """No file was chosen from the Maya file browser"""
+
+    def __init__(self) -> None:
+        super().__init__("No file was selected")
 
 
 class ProgressWindow:

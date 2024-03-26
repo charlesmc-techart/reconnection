@@ -84,12 +84,3 @@ def logScriptEditorOutput(
             cmds.cmdFileOutput(close=fd)
 
     return funcWithLogging
-
-
-class NoFileSelectedError(Exception):
-    def __init__(self) -> None:
-        super().__init__("No file was selected")
-
-
-def setDefaultFileBrowserDir(dir: Path) -> None:
-    mel.eval(f'$gDefaultFileBrowserDir = "{dir.as_posix()}"')
