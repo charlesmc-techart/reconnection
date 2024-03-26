@@ -38,13 +38,11 @@ def findLatestVersionAsset(
     return file
 
 
-class DirecetoryNotFoundOnGoogleSharedDriveError(FileNotFoundError):
+class DirectoryNotFoundError(FileNotFoundError):
     """Provided directory could not be found on the Google shared drive"""
 
     def __init__(self, dir: Path | str) -> None:
-        super().__init__(
-            f"The directory, {dir}, could not be found on a Google shared drive"
-        )
+        super().__init__(f"Directory not found: '{dir}'")
 
 
 def findSharedDrive(
@@ -58,13 +56,13 @@ def findSharedDrive(
         path = Path(f"{drive}:", "Shared drives", dir)
         if path.is_dir():
             return path.resolve()
-        raise DirecetoryNotFoundOnGoogleSharedDriveError(dir)
+        raise DirectoryNotFoundError(path)
     else:
         macGDrivePathPattern = "Library/CloudStorage/GoogleDrive*/Shared drives"
         for path in Path.home().glob(f"{macGDrivePathPattern}/{dir}"):
             if path.is_dir():
                 return path.resolve()
-        raise DirecetoryNotFoundOnGoogleSharedDriveError(dir)
+        raise DirectoryNotFoundError(f"~/{macGDrivePathPattern}/{dir}")
 
 
 def findModelPath(assetName: fname.AssetName, parentDir: Path) -> Path:
@@ -83,9 +81,7 @@ def findShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:
         for d in parentDir.iterdir():
             if d.is_dir() and d.stem.endswith(identifier):
                 return d
-        raise DirecetoryNotFoundOnGoogleSharedDriveError(
-            parentDir / ("*" + identifier)
-        )
+        raise DirectoryNotFoundError(parentDir / ("*" + identifier))
 
     sequenceDir = findDir(shot.sequence.upper(), parentDir)
     return findDir(shot.number, sequenceDir)
