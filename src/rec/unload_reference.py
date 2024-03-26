@@ -2,13 +2,15 @@ from pathlib import Path
 
 import maya.cmds as cmds
 
+import rec.modules.maya.objects as mobj
+
 
 class NoReferenceNodeSelectedError(Exception):
     def __init__(self) -> None:
         super().__init__("No reference node selected")
 
 
-def unloadReference(referenceNode) -> None:
+def unloadReference(referenceNode: mobj.ReferenceNode) -> None:
     file = Path(cmds.referenceQuery(referenceNode, filename=True))
     cmds.file(file.as_posix(), unloadReference=referenceNode)
 
