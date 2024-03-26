@@ -100,7 +100,7 @@ def inFilename(identifier: RecIdentifier, file: Path) -> bool:
 AssetValidator = Callable[[Path], bool]
 
 
-def constructAssetValidator(
+def constructValidator(
     filenameBase: str,
     assetName: Optional[AssetName | str],
     assetType: AssetType,

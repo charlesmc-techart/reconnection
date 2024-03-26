@@ -24,7 +24,7 @@ def constructFilename(
     filenameBase = fname.constructFilenameBase(
         shot, assetName=assetName, assetType=assetType
     )
-    assetValidator = fname.constructAssetValidator(
+    assetValidator = fname.constructValidator(
         filenameBase, assetName=assetName, assetType=assetType
     )
     versionSuffix = fname.constructVersionSuffix(

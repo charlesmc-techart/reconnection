@@ -80,7 +80,7 @@ def main() -> None:
         filenameBase += f".{artistLastName}_arnold"
 
     # Construct version suffix
-    assetValidator = fname.constructAssetValidator(
+    assetValidator = fname.constructValidator(
         filenameBase,
         assetName=fname.AssetName.ARNOLD,
         assetType=fname.AssetType.LIGHTS,

@@ -29,7 +29,7 @@ def getLatestVersionAsset(
     filenameBase = fname.constructFilenameBase(
         shot, assetName=assetName, assetType=assetType
     )
-    assetValidator = fname.constructAssetValidator(
+    assetValidator = fname.constructValidator(
         filenameBase, assetName=assetName, assetType=assetType
     )
     return fpath.findLatestVersionAsset(
