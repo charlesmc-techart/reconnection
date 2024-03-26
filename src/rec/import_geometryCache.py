@@ -102,11 +102,13 @@ def main() -> None:
 
     # Assetize network
     assetType = fname.AssetType.CACHE
-    cacheFileNodeNamePattern = f"{shot.full}_*_{assetType}_v???"
-    cacheFilename = cmds.getAttr(
-        cmds.ls(cacheFileNodeNamePattern + "Cache1")[0] + ".cacheName"
-    )
+    assetNamePattern = f"{shot.full}_*_{assetType}_v???"
+    try:
+        cacheFileNode = cmds.ls(assetNamePattern + "Cache1")[0]
+    except IndexError:
+        raise fpath.NoFileSelectedError
+    cacheFilename = cmds.getAttr(cacheFileNode + ".cacheName")
     assetize(
-        cacheFilename.split("_", 3)[2],
+        cacheFilename.split("_", 3)[2],  # From: `rec_seq###_name_cache_v###`
         mobj.constructNamespace(cacheFilename, assetType=assetType),
     )
