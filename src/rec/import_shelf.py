@@ -4,10 +4,13 @@ from pathlib import Path
 
 import maya.cmds as cmds
 import maya.mel as mel
+
 import rec.modules.maya.app as mapp
+
 _SCRIPTS_DIR = Path(__file__).parents[1]
 _SHELF_NAME = "reconnection"
 _SHELF_FILE = _SCRIPTS_DIR.joinpath("rec", "data", f"shelf_{_SHELF_NAME}.mel")
+
 
 @mapp.logScriptEditorOutput
 def main() -> None:

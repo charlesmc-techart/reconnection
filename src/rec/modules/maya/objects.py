@@ -24,7 +24,7 @@ class TopLevelGroup(strEnum.StringEnum):
 
 class TopLevelGroupDoesNotExistError(Exception):
     def __init__(self, groupName: DAGNode) -> None:
-        super().__init__(f"The top-level group, {groupName}, does not exist")
+        super().__init__(f"Top-level group does not exist: '{groupName}'")
 
 
 MECHANIC_MODEL_GEO_GRP = "::mechanic_grp"
@@ -54,17 +54,17 @@ class TemporarySelection:
         cmds.undoInfo(stateWithoutFlush=True)
 
 
-class NoGeometrySelectedError(Exception):
-    def __init__(self) -> None:
-        super().__init__("No geometry is selected")
-
-
 def lsSelectedGeometry() -> list[DAGNode]:
     return [
         s
         for s in cmds.ls(selection=True, transforms=True)
         if cmds.listRelatives(s, shapes=True, noIntermediate=True, type="mesh")
     ]
+
+
+class NoGeometrySelectedError(Exception):
+    def __init__(self) -> None:
+        super().__init__("No geometry selected")
 
 
 def lsChildren(
