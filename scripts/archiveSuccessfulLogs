@@ -1,0 +1,25 @@
+#!/usr/bin/python3
+
+"""Move logs of successful scripts into the 'success/' directory"""
+
+from argparse import ArgumentParser
+from pathlib import Path
+
+
+def main(dir: Path) -> None:
+    for log in (f for f in dir.iterdir() if f.suffix == ".log"):
+        with log.open("r", encoding="utf-8") as f:
+            for line in f:
+                if "Traceback" in line:
+                    break
+            else:
+                log.rename(f"{dir}/success/{log.name}")
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser(
+        prog="Successful Logs Archiver", description=__doc__
+    )
+    parser.add_argument("dir", type=Path, help="Directory containing log files")
+    args = parser.parse_args()
+    main(args.dir)
