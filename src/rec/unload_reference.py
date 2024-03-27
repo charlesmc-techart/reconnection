@@ -2,6 +2,7 @@ from pathlib import Path
 
 import maya.cmds as cmds
 
+import rec.modules.maya.app as mapp
 import rec.modules.maya.objects as mobj
 
 
@@ -15,6 +16,7 @@ def unloadReference(referenceNode: mobj.ReferenceNode) -> None:
     cmds.file(file.as_posix(), unloadReference=referenceNode)
 
 
+@mapp.logScriptEditorOutput
 def main() -> None:
     selection = cmds.ls(selection=True, type="reference")
     if not selection:

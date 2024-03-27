@@ -10,6 +10,7 @@ import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.objects as mobj
 import rec.reference_asset as iras
+import rec.modules.maya.app as mapp
 
 
 def parent(child: mobj.DAGNode, parent: mobj.DAGNode) -> None:
@@ -45,7 +46,7 @@ constructNamespaceCmd = partial(
     mobj.constructNamespace, assetType=fname.AssetType.MODEL
 )
 
-
+@mapp.logScriptEditorOutput
 def referenceMechanicModel() -> None:
     file = getModelPathCmd(fname.AssetName.MECHANIC)
     namespace = constructNamespaceCmd(file.stem)
@@ -55,7 +56,7 @@ def referenceMechanicModel() -> None:
         geometry=mobj.MECHANIC_MODEL_GEO_GRP,
     )
 
-
+@mapp.logScriptEditorOutput
 def referenceRobotModel() -> None:
     file = getModelPathCmd(fname.AssetName.ROBOT)
     namespace = constructNamespaceCmd(file.stem)

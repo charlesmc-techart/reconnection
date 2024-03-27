@@ -64,11 +64,11 @@ def logScriptEditorOutput(
 
     printCmd = partial(print, sep="\n")
     divider = "", "#" * 80, ""
-    printCmd(*info, *divider)
 
     def funcWithLogging() -> None:
         fd = cmds.cmdFileOutput(open=logFilePath.as_posix())
 
+        printCmd(*info, *divider)
         try:
             func()
         except:
