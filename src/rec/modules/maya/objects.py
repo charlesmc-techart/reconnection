@@ -23,7 +23,7 @@ class TopLevelGroup(strEnum.StringEnum):
 
 
 class TopLevelGroupDoesNotExistError(Exception):
-    def __init__(self, groupName: TopLevelGroup | DAGNode) -> None:
+    def __init__(self, groupName: DAGNode) -> None:
         super().__init__(f"The top-level group, {groupName}, does not exist")
 
 
@@ -106,5 +106,5 @@ def lsWithWildcard(
 
 def constructNamespace(filename: str, assetType: fname.TypeIdentifier) -> str:
     """Construct a namespace based an asset's filename and type"""
-    cutoff = filename.index(f"{assetType}") + len(assetType)
+    cutoff = filename.index(assetType) + len(assetType)
     return filename[:cutoff]
