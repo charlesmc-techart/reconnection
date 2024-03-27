@@ -87,16 +87,23 @@ def exportMayaAsciiThenBinary(
     """
     prefix = fname.SHOW + "_"
     with TemporaryDirectory(prefix=prefix) as tempDir:
-        tempFile = Path(tempDir) / f"{prefix}temp{fname.FileExt.MAYA_ASCII}"
+        asciiFilename = f"{prefix}temp{fname.FileExt.MAYA_ASCII}"
+        asciiFilePath = Path(tempDir) / asciiFilename
 
-        mobj.export(nodes, filePath=tempFile, fileType=mapp.FileType.ASCII)
+        mobj.export(nodes, filePath=asciiFilePath, fileType=mapp.FileType.ASCII)
 
         mayaPath = os.path.join(os.environ["MAYA_LOCATION"], "bin")
         if mayaPath not in sys.path:
             sys.path.append(mayaPath)
 
         results = subprocess.run(
-            ("mayapy", _SUBPROCESS_SCRIPT_PATH, tempFile, filePath, *nodes),
+            (
+                "mayapy",
+                _SUBPROCESS_SCRIPT_PATH,
+                asciiFilePath,
+                filePath,
+                *nodes,
+            ),
             capture_output=True,
             text=True,
         )
