@@ -22,8 +22,8 @@ import rec.unload_reference as urf
 def findLatestVersionFile(
     dir: Path,
     shot: fname.ShotID,
-    assetType: fname.AssetType,
-    assetName: Optional[fname.AssetName] = None,
+    assetType: fname.TypeIdentifier,
+    assetName: Optional[fname.NameIdentifier] = None,
 ) -> Optional[Path]:
     """Get the file path to the asset's latest version"""
     filenameBase = fname.constructFilenameBase(
@@ -39,7 +39,7 @@ def findLatestVersionFile(
 
 
 # TODO: Python warning or something more meaningful?
-def unloadReferencedCharacter(assetName: fname.AssetName) -> None:
+def unloadReferencedCharacter(assetName: fname.NameIdentifier) -> None:
     """Unload a referenced asset"""
     try:
         referenceNode = ras.getReferenceNode(
@@ -55,7 +55,7 @@ def unloadReferencedCharacter(assetName: fname.AssetName) -> None:
 def importGeometryCache(
     geometryGrp: mobj.DAGNode,
     file: Path,
-    assetName: fname.AssetName,
+    assetName: fname.NameIdentifier,
     namespace: str,
 ) -> None:
     """Call the MEL procedure for importing a geometry cache"""
@@ -71,7 +71,7 @@ def importGeometryCache(
 
 
 def replaceRigWithCachedModel(
-    assetName: fname.AssetName,
+    assetName: fname.NameIdentifier,
     model: Path,
     cache: Path,
     geometryGrp: mobj.DAGNode,

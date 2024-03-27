@@ -69,10 +69,11 @@ class AssetType(strEnum.StringEnum):
 
 
 NameIdentifier = Union[AssetName, str]
+TypeIdentifier = Union[AssetType, str]
 
 
 def constructFilenameBase(
-    shot: ShotID, assetName: Optional[NameIdentifier], assetType: AssetType
+    shot: ShotID, assetName: Optional[NameIdentifier], assetType: TypeIdentifier
 ) -> str:
     """Construct a filename base, formatted 'rec_seq###_name_type'"""
     if assetName:
@@ -92,7 +93,7 @@ class FileExt(strEnum.StringEnum):
     PYTHON = ".py"
 
 
-Identifier = Union[ShotID, AssetName, NameIdentifier]
+Identifier = Union[ShotID, NameIdentifier, TypeIdentifier]
 
 
 def inFilename(identifier: Identifier, file: Path) -> bool:
@@ -104,7 +105,9 @@ Validator = Callable[[Path], bool]
 
 
 def constructValidator(
-    filenameBase: str, assetName: Optional[NameIdentifier], assetType: AssetType
+    filenameBase: str,
+    assetName: Optional[NameIdentifier],
+    assetType: TypeIdentifier,
 ) -> Validator:
     """Construct a validator used for filtering assets"""
 

@@ -17,8 +17,8 @@ import rec.modules.maya.ui as mui
 def constructFilename(
     dir: Path,
     shot: fname.ShotID,
-    assetType: fname.AssetType,
-    assetName: Optional[fname.AssetName | str] = None,
+    assetType: fname.TypeIdentifier,
+    assetName: Optional[fname.NameIdentifier] = None,
 ) -> str:
     """Construct a filename, formatted 'rec_seq###_name_type_v###"""
     filenameBase = fname.constructFilenameBase(

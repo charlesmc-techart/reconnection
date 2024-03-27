@@ -104,7 +104,7 @@ def lsWithWildcard(
     return cmds.ls(f"*{identifier}*", **kwargs)
 
 
-def constructNamespace(filename: str, assetType: fname.AssetType) -> str:
+def constructNamespace(filename: str, assetType: fname.TypeIdentifier) -> str:
     """Construct a namespace based an asset's filename and type"""
     cutoff = filename.index(f"{assetType}") + len(assetType)
     return filename[:cutoff]

@@ -51,7 +51,7 @@ class GeometryCacheComponents:
         cmds.rename(self.historySwitch, nameBase + "_historySwitch")
 
 
-def assetize(assetName: fname.AssetName, namespace: str) -> None:
+def assetize(assetName: fname.NameIdentifier, namespace: str) -> None:
     """Contain the geometry cache network in an asset
 
     Also, expose the cacheFile node's cache directory and filename attributes.
