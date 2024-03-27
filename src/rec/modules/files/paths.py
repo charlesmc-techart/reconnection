@@ -17,7 +17,7 @@ CACHES_DIR = Path("LIGHT", "cache")
 
 def getProjectPath() -> Path:
     """Get the path to the current project"""
-    return Path(cmds.workspace(query=True, fullname=True))
+    return Path(cmds.workspace(query=True, fullName=True))
 
 
 def getScenePath() -> Path:
