@@ -42,14 +42,14 @@ def referenceCharacter(
 getModelPathCmd = partial(
     fpath.findModelPath, parentDir=fpath.findSharedDrive(dir=fpath.ASSETS_DIR)
 )
-constructNamespaceCmd = partial(
+_constructNamespaceCmd = partial(
     mobj.constructNamespace, assetType=fname.AssetType.MODEL
 )
 
 @mapp.logScriptEditorOutput
 def referenceMechanicModel() -> None:
     file = getModelPathCmd(fname.AssetName.MECHANIC)
-    namespace = constructNamespaceCmd(file.stem)
+    namespace = _constructNamespaceCmd(file.stem)
     referenceCharacter(
         file,
         namespace=namespace,
@@ -59,7 +59,7 @@ def referenceMechanicModel() -> None:
 @mapp.logScriptEditorOutput
 def referenceRobotModel() -> None:
     file = getModelPathCmd(fname.AssetName.ROBOT)
-    namespace = constructNamespaceCmd(file.stem)
+    namespace = _constructNamespaceCmd(file.stem)
     referenceCharacter(
         file,
         namespace=namespace,
