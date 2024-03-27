@@ -30,7 +30,7 @@ def getScenePath() -> Path:
         path = Path(path)
     else:
         path = getProjectPath() / "untitled"
-    return path.resolve()
+    return path
 
 
 def findShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
@@ -75,13 +75,13 @@ def findSharedDrive(
     if sys.platform == "win32":
         path = Path(f"{drive}:", "Shared drives", dir)
         if path.is_dir():
-            return path.resolve()
+            return path
         raise DirectoryNotFoundError(path)
     else:
         pathPattern = "Library/CloudStorage/GoogleDrive*/Shared drives"
         for path in Path.home().glob(f"{pathPattern}/{dir}"):
             if path.is_dir():
-                return path.resolve()
+                return path
         raise DirectoryNotFoundError(f"~/{pathPattern}/{dir}")
 
 
@@ -91,7 +91,7 @@ def findModelPath(assetName: fname.NameIdentifier, parentDir: Path) -> Path:
     filenamePattern = f"rec_asset_{assetName}_{assetType}_*.*_MASTER.m?"
     dir = Path(parentDir, f"{assetName}".upper(), f"{assetType}".upper())
     dir = next(dir.glob("*.*")).joinpath("MAYA", "scenes")
-    return next(dir.glob(filenamePattern)).resolve()
+    return next(dir.glob(filenamePattern))
 
 
 def findShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:
