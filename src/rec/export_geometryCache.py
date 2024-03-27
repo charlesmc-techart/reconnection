@@ -118,7 +118,7 @@ def main() -> None:
     shot = fname.ShotID.fromFilename(fpath.getScenePath().stem)
     shotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
     cachesDir = shotDir / fpath.CACHES_DIR
-    # cachesDir = mapp.getScenePath().parents[1] / "cache"
+    # cachesDir = fpath.getScenePath().parents[1] / "cache"
 
     ui = buildWindow(*geometry, outputPath=cachesDir).show()
 
