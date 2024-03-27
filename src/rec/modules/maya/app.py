@@ -42,7 +42,6 @@ def logScriptEditorOutput(
     """Decorator for writing the script editor's output to a text file"""
     projectPath = fpath.getProjectPath()
     scenePath = fpath.getScenePath()
-    sceneFilename = scenePath.stem
 
     module = func.__module__
     if module == "__main__":
@@ -52,9 +51,9 @@ def logScriptEditorOutput(
     funcName = func.__name__
     fullFuncName = f"{module}.{funcName}"
 
-    date = cmds.date(format="YYMMDD.hhmmss")
-    logFilenameBase = f"{date}.{moduleName}.{funcName}.{sceneFilename}"
-    logFilePath = dir / (logFilenameBase + ".log")
+    filenameDate = cmds.date(format="YY-MM-DD_hh-mm-ss")
+    logFilename = f"{filenameDate}.{moduleName}.log"
+    logFilePath = dir / logFilename
     info = (
         f"Date: {cmds.date()}",
         f"Project: {projectPath}",
@@ -73,13 +72,14 @@ def logScriptEditorOutput(
             func()
         except:
             traceback.print_exc()
-            printCmd(*divider, f"{fullFuncName} executed unsuccessfully")
+            printCmd(*divider, f"{fullFuncName} raised an error")
             raise
         else:
             printCmd(
                 *divider,
-                f"{fullFuncName} executed successfully",
+                f"{fullFuncName} completed",
             )
+            logFilePath.rename(f"{dir}/success/{logFilename}")
         finally:
             cmds.cmdFileOutput(close=fd)
 
