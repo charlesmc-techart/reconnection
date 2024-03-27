@@ -13,6 +13,7 @@ import rec.modules.maya.objects as mobj
 import rec.reference_asset as iras
 
 
+# TODO: something more useful than a warming?
 def parent(child: mobj.DAGNode, parent: mobj.DAGNode) -> None:
     """Parent a node if it isn't parented to anything"""
     if mobj.getParent(child):

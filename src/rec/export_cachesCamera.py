@@ -44,7 +44,6 @@ def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
     cmds.AbcExport(jobArg=args)
 
 
-# TODO: fix type annotation
 def getCameraComponents(
     cameraGrp: mobj.TopLevelGroup,
 ) -> Optional[tuple[mobj.DAGNode, ...]] | NoReturn:
@@ -75,6 +74,7 @@ def getCameraComponents(
     return lookAt, xform, camera, locator, locatorShape
 
 
+# TODO: do I need a subprocess at all? Check other maya executables in bin
 # TODO: check if TemporaryDirectories have methods similar to TemporaryFiles
 # TODO: use maya.cmds module to get MAYA_LOCATION instead of os.environ?
 def exportMayaAsciiThenBinary(
