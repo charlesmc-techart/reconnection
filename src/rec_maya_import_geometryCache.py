@@ -1,5 +1,5 @@
-import rec.import_geometryCache as import_geometryCache
+import rec.import_geometryCache
 
 
 def onMayaDroppedPythonFile(_) -> None:
-    import_geometryCache.main()
+    rec.import_geometryCache.main()

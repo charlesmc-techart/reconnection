@@ -1,5 +1,5 @@
-import rec.import_shelf as import_shelf
+import rec.import_shelf
 
 
 def onMayaDroppedPythonFile(_) -> None:
-    import_shelf.main()
+    rec.import_shelf.main()

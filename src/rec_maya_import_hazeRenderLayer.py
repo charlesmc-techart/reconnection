@@ -1,5 +1,5 @@
-import rec.import_hazeRenderLayer as import_hazeRenderLayer
+import rec.import_hazeRenderLayer
 
 
 def onMayaDroppedPythonFile(_) -> None:
-    import_hazeRenderLayer.main()
+    rec.import_hazeRenderLayer.main()

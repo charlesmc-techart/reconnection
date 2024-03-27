@@ -1,5 +1,5 @@
-import rec.import_cachesCamera as import_cachesCamera
+import rec.import_cachesCamera
 
 
 def onMayaDroppedPythonFile(_) -> None:
-    import_cachesCamera.main()
+    rec.import_cachesCamera.main()
