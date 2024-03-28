@@ -10,7 +10,7 @@ def main() -> None:
     while True:
         try:
             for m in sys.modules:
-                if m.startswith(module) or m.startswith("_" + module):
+                if m.startswith(module) or m.startswith(f"_{module}"):
                     del sys.modules[m]
         except RuntimeError:
             continue

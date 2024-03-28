@@ -55,11 +55,11 @@ def main() -> None:
     except IndexError:
         pass  # Don't set the frame range
     else:
-        startFrame = cmds.getAttr(cache + ".originalStart")
+        startFrame = cmds.getAttr(f"{cache}.originalStart")
         cmds.playbackOptions(minTime=startFrame, animationStartTime=startFrame)
         cmds.setAttr("defaultRenderGlobals.startFrame", startFrame)
 
-        endFrame = cmds.getAttr(cache + ".originalEnd")
+        endFrame = cmds.getAttr(f"{cache}.originalEnd")
         cmds.playbackOptions(maxTime=endFrame, animationEndTime=endFrame)
         cmds.setAttr("defaultRenderGlobals.endFrame", endFrame)
 

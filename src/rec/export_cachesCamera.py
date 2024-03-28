@@ -62,7 +62,7 @@ def getCameraComponents(
     except TypeError:
         return None
 
-    cmds.setAttr(camera + ".renderable", True)
+    cmds.setAttr(f"{camera}.renderable", True)
     xform = mobj.getParent(camera)
 
     try:
@@ -70,7 +70,7 @@ def getCameraComponents(
     except TypeError:
         return xform, camera
 
-    target = lookAt + ".target[0].targetParentMatrix"
+    target = f"{lookAt}.target[0].targetParentMatrix"
     locator = cmds.listConnections(target)[0]
     locatorShape = mobj.lsChildren(locator, shapes=True)[0]
     return lookAt, xform, camera, locator, locatorShape
@@ -80,14 +80,14 @@ def getCameraComponents(
 # TODO: check if TemporaryDirectories have methods similar to TemporaryFiles
 # TODO: use maya.cmds module to get MAYA_LOCATION instead of os.environ?
 def exportMayaAsciiThenBinary(
-    nodes: Sequence[mobj.DGNode], filePath: Path
+    nodes: Sequence[mobj.DGNode], binaryFilePath: Path
 ) -> None:
     """Export the nodes to a temporary ASCII file before a binary one
 
     The nodes exported to an ASCII file in a temporary directory. Then, another
     instance of Maya is opened to export the nodes into a binary file.
     """
-    prefix = fname.SHOW + "_"
+    prefix = f"{fname.SHOW}_"
     asciiFilename = f"{prefix}temp{fname.FileExt.MAYA_ASCII}"
     with TemporaryDirectory(prefix=prefix) as tempDir:
         asciiFilePath = Path(tempDir) / asciiFilename
@@ -98,26 +98,37 @@ def exportMayaAsciiThenBinary(
         if mayaPath not in sys.path:
             sys.path.append(mayaPath)
 
-        results = subprocess.run(
-            (
-                "mayapy",
-                _SUBPROCESS_SCRIPT_PATH,
-                asciiFilePath,
-                filePath,
-                *nodes,
-            ),
-            capture_output=True,
-            text=True,
+        melCmds = (
+            f"select -replace {{{nodes}}};"
+            f'file -filePath "{binaryFilePath.as_posix()}"'
+            '-exportSelectedStrict -force -options "v=0"'
+            f'-type "{mapp.FileType.BINARY}";'
         )
+        mayaArgs = (
+            "maya",
+            "-batch",
+            "-file",
+            asciiFilePath,
+            "-command",
+            melCmds,
+        )
+
+        args = (
+            "mayapy",
+            _SUBPROCESS_SCRIPT_PATH,
+            asciiFilePath,
+            binaryFilePath,
+            *nodes,
+        )
+        results = subprocess.run(args, capture_output=True, text=True)
     print(results.stderr)
 
 
 def exportCamera(cameraNodes: Sequence[mobj.DAGNode], filePath: Path) -> None:
     """If unknown nodes are present, temporarily export to an ASCII file"""
     if mobj.lsUnknown():
-        exportMayaAsciiThenBinary(cameraNodes, filePath=filePath)
+        exportMayaAsciiThenBinary(cameraNodes, binaryFilePath=filePath)
         return
-
     mobj.export(cameraNodes, filePath=filePath, fileType=mapp.FileType.BINARY)
 
 
@@ -181,7 +192,7 @@ def main() -> None:
         )
         exportAlembicCache(
             robotFaceRigGeoGrp,
-            filePath=cachesDir / (robotFaceFilename + fname.FileExt.ALEMBIC),
+            filePath=cachesDir / f"{robotFaceFilename}{fname.FileExt.ALEMBIC}",
         )
     ui.update()
 
@@ -189,6 +200,6 @@ def main() -> None:
         cameraFilename = constructFilenameCmd(assetType=fname.AssetType.CAMERA)
         exportCamera(
             cameraNodes,
-            filePath=cachesDir / (cameraFilename + fname.FileExt.MAYA_BINARY),
+            filePath=cachesDir / f"{cameraFilename}{fname.FileExt.MAYA_BINARY}",
         )
     ui.update().close()

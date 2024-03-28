@@ -41,7 +41,7 @@ class ShotID:
         return f"{self.__class__.__name__}({self.name!r})"
 
     @classmethod
-    def fromFilename(cls, filename: str, affix: str = SHOW + "_") -> ShotID:
+    def fromFilename(cls, filename: str, affix: str = f"{SHOW}_") -> ShotID:
         if affix not in filename:
             message = f"Filename {filename!r} must match pattern: 'rec_seq###'"
             raise InvalidFilenameError(message)
@@ -112,7 +112,7 @@ def constructValidator(
     """Construct a validator used for filtering assets"""
 
     def hasExtension(file: Path, fileExt: FileExt) -> bool:
-        return file.suffix == f"{fileExt}"
+        return file.suffix == fileExt
 
     def hasAnyEtension(file: Path, fileExts: Iterable[FileExt]) -> bool:
         hasExtensionCmd = partial(hasExtension, file)
@@ -144,5 +144,4 @@ def constructVersionSuffix(
         version = 0
     else:
         version = int(filename.rsplit(versionIndicator, 1)[-1])
-
-    return versionIndicator + f"{version + 1}".zfill(3)
+    return f"{versionIndicator}{f'{version + 1}'.zfill(3)}"

@@ -102,7 +102,7 @@ def findShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:
         for d in parentDir.iterdir():
             if d.is_dir() and d.stem.endswith(identifier):
                 return d
-        raise DirectoryNotFoundError(parentDir / ("*" + identifier))
+        raise DirectoryNotFoundError(parentDir / f"*{identifier}")
 
     sequenceDir = findDir(shot.sequence.upper(), parentDir)
     return findDir(shot.number, sequenceDir)

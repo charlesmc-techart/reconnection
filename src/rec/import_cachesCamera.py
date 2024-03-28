@@ -97,7 +97,7 @@ def replaceRigWithCachedModel(
             namespace=namespace,
         )
     else:
-        cmds.setAttr(container + ".filename", cache.stem, type="string")
+        cmds.setAttr(f"{container}.filename", cache.stem, type="string")
 
     # The cache saved world space positions, so get rid of geometry's xforms
     for c in mobj.lsChildren(geometryGrp):
@@ -180,7 +180,7 @@ def main() -> None:
         )
         ras.reference(file=cameraFile, namespace=cameraNamespace)
 
-        cameras = cmds.ls(cameraNamespace + ":*", transforms=True, long=True)
+        cameras = cmds.ls(f"{cameraNamespace}:*", transforms=True, long=True)
         for c in (c for c in cameras if c.count("|") == 1):
             rch.parent(c, mobj.TopLevelGroup.CAMERA)
     ui.update().close()

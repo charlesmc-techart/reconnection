@@ -49,8 +49,8 @@ class GeometryCacheComponents:
 
     def rename(self, identifier: fname.Identifier) -> None:
         nameBase = f"{identifier}_{self.meshPart}"
-        self.cacheFile = cmds.rename(self.cacheFile, nameBase + "_cache")
-        cmds.rename(self.historySwitch, nameBase + "_historySwitch")
+        self.cacheFile = cmds.rename(self.cacheFile, f"{nameBase}_cache")
+        cmds.rename(self.historySwitch, f"{nameBase}_historySwitch")
 
 
 def assetize(assetName: fname.NameIdentifier, namespace: str) -> None:
@@ -67,20 +67,20 @@ def assetize(assetName: fname.NameIdentifier, namespace: str) -> None:
         cacheFileNodes[i] = components.cacheFile
         componentNodes += components.cacheFile, components.historySwitch
 
-    container = cmds.createNode("container", name=namespace + "_container")
+    container = cmds.createNode("container", name=f"{namespace}_container")
     containerCmd = partial(cmds.container, container, edit=True)
 
     containerCmd(addNode=componentNodes, force=True)
-    cmds.setAttr(container + ".blackBox", True)
-    cmds.setAttr(container + ".viewMode", 0)
+    cmds.setAttr(f"{container}.blackBox", True)
+    cmds.setAttr(f"{container}.viewMode", 0)
 
     cacheFileNode0, *cacheFileNodes = cacheFileNodes
-    containerCmd(publishAndBind=(cacheFileNode0 + ".cachePath", "folder"))
-    containerCmd(publishAndBind=(cacheFileNode0 + ".cacheName", "filename"))
+    containerCmd(publishAndBind=(f"{cacheFileNode0}.cachePath", "folder"))
+    containerCmd(publishAndBind=(f"{cacheFileNode0}.cacheName", "filename"))
 
     for c in cacheFileNodes:
-        cmds.connectAttr(cacheFileNode0 + ".cachePath", c + ".cachePath")
-        cmds.connectAttr(cacheFileNode0 + ".cacheName", c + ".cacheName")
+        cmds.connectAttr(f"{cacheFileNode0}.cachePath", f"{c}.cachePath")
+        cmds.connectAttr(f"{cacheFileNode0}.cacheName", f"{c}.cacheName")
 
 
 # FIXME: make importing from test folder separate from main
@@ -106,11 +106,12 @@ def main() -> None:
     assetType = fname.AssetType.CACHE
     assetNamePattern = f"{shot.full}_*_{assetType}_v???"
     try:
-        cacheFileNode = cmds.ls(assetNamePattern + "Cache1")[0]
+        cacheFileNode = cmds.ls(f"{assetNamePattern}Cache1")[0]
     except IndexError:
         raise mui.NoFileSelectedError
-    cacheFilename = cmds.getAttr(cacheFileNode + ".cacheName")
+    cacheFilename = cmds.getAttr(f"{cacheFileNode}.cacheName")
     assetize(
-        cacheFilename.split("_", 3)[2],  # Formatted: 'rec_seq###_name_cache_v###'
+        # Formatted: 'rec_seq###_name_cache_v###'
+        cacheFilename.split("_", 3)[2],
         mobj.constructNamespace(cacheFilename, assetType=assetType),
     )
