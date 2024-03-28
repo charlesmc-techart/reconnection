@@ -1,3 +1,5 @@
+"""Import the haze render layer template"""
+
 from pathlib import Path
 
 import maya.app.renderSetup.model.renderSetup as renderSetup

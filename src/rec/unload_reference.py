@@ -1,3 +1,5 @@
+"""Unload the selected referenced assets"""
+
 from pathlib import Path
 
 import maya.cmds as cmds
@@ -12,6 +14,7 @@ class NoReferenceNodeSelectedError(Exception):
 
 
 def unloadReference(referenceNode: mobj.ReferenceNode) -> None:
+    """Unload a reference"""
     file = Path(cmds.referenceQuery(referenceNode, filename=True))
     cmds.file(file.as_posix(), unloadReference=referenceNode)
 

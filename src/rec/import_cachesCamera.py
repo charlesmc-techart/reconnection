@@ -1,3 +1,5 @@
+"""Reference the character 3D models, geometry and Alembic caches, and camera"""
+
 from __future__ import annotations
 
 from functools import partial

@@ -1,3 +1,5 @@
+"""Reference a 3D asset from the ASSETS directory"""
+
 from __future__ import annotations
 
 from pathlib import Path

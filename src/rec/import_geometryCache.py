@@ -1,3 +1,5 @@
+"""Import a geometry cache and apply it to the selected geometry"""
+
 from __future__ import annotations
 
 from functools import partial
@@ -84,7 +86,6 @@ def assetize(assetName: fname.NameIdentifier, namespace: str) -> None:
 # FIXME: make importing from test folder separate from main
 @mapp.logScriptEditorOutput
 def main() -> None:
-    """Call the MEL procedure that opens the UI for importing a geometry cache"""
     if not mobj.lsSelectedGeometry():
         raise mobj.NoGeometrySelectedError
 

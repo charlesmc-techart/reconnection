@@ -1,3 +1,5 @@
+"""Export a geometry cache for the selected objects"""
+
 from __future__ import annotations
 
 from collections.abc import Sequence

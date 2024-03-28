@@ -1,3 +1,5 @@
+"""Reference the Mechanic, Robot, or both 3D models"""
+
 from __future__ import annotations
 
 from functools import partial

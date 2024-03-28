@@ -1,3 +1,5 @@
+"""Unload the re:connection Python modules"""
+
 import sys
 
 import rec.modules.files.names as fname

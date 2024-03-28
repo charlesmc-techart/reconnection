@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 """Move logs of successful scripts into the 'success/' directory"""
 
 from argparse import ArgumentParser

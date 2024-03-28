@@ -1,3 +1,5 @@
+"""Import or update the re:connection custom shelf"""
+
 import os
 import sys
 from pathlib import Path
