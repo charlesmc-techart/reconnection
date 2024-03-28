@@ -6,7 +6,9 @@ source "${0:h}/errorMessage.zsh"
 
 readonly SOCKET=/tmp/vscodeToMaya
 
-if [[ ! -f "$1" ]]; then
+if [[ ! -S "${SOCKET}" ]]; then
+  err "${0:t}: ${SOCKET}: Not a socket"
+elif [[ ! -f "$1" ]]; then
   err "${0:t}: ${1:P}: Not a file"
 elif [[ "${1:e}" != 'py' ]]; then
   err "${0:t}: ${1:P}: Not a Python file"
@@ -22,7 +24,3 @@ from ${parentDir}.${1:t:r} import main
 
 main()
 END
-
-if (( $? > 0 )); then
-  err "${0:t}: Socket ${SOCKET} is not open"
-fi
