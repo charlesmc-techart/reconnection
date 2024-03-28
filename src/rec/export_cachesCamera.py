@@ -86,8 +86,8 @@ def exportMayaAsciiThenBinary(
     instance of Maya is opened to export the nodes into a binary file.
     """
     prefix = fname.SHOW + "_"
+    asciiFilename = f"{prefix}temp{fname.FileExt.MAYA_ASCII}"
     with TemporaryDirectory(prefix=prefix) as tempDir:
-        asciiFilename = f"{prefix}temp{fname.FileExt.MAYA_ASCII}"
         asciiFilePath = Path(tempDir) / asciiFilename
 
         mobj.export(nodes, filePath=asciiFilePath, fileType=mapp.FileType.ASCII)
@@ -107,17 +107,16 @@ def exportMayaAsciiThenBinary(
             capture_output=True,
             text=True,
         )
-        print(results.stderr)
+    print(results.stderr)
 
 
 def exportCamera(cameraNodes: Sequence[mobj.DAGNode], filePath: Path) -> None:
     """If unknown nodes are present, temporarily export to an ASCII file"""
     if mobj.lsUnknown():
         exportMayaAsciiThenBinary(cameraNodes, filePath=filePath)
-    else:
-        mobj.export(
-            cameraNodes, filePath=filePath, fileType=mapp.FileType.BINARY
-        )
+        return
+
+    mobj.export(cameraNodes, filePath=filePath, fileType=mapp.FileType.BINARY)
 
 
 def buildWindow(outputPath: Path) -> mui.ProgressWindow:
