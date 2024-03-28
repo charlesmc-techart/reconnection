@@ -63,7 +63,7 @@ def assetize(assetName: fname.NameIdentifier, namespace: str) -> None:
         components.rename(assetName)
 
         cacheFileNodes[i] = components.cacheFile
-        componentNodes.extend((components.cacheFile, components.historySwitch))
+        componentNodes += components.cacheFile, components.historySwitch
 
     container = cmds.createNode("container", name=namespace + "_container")
     containerCmd = partial(cmds.container, container, edit=True)
