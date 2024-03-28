@@ -42,6 +42,7 @@ def reference(file: Path, namespace: str) -> None:
         )
 
 
+# Assign the file path returned by 'fileBrowser' to a MEL global variable
 assignAssetFilePathToGlobalVarProc = """
 proc assignAssetFilePathToGlobalVar(string $filePath, string $_) {
     global string $_passToPython = "";
@@ -66,7 +67,7 @@ def main() -> None | NoReturn:
         raise mui.NoFileSelectedError
 
     filePath = Path(filePath)
-    # From: `rec_asset_name_type_v###.m?`
-    assetType = filePath.stem.rsplit("rec", 1)[-1].split("_")[3]
-    namespace = mobj.constructNamespace(filePath.stem, assetType=assetType)
+    filename = filePath.stem  # Formatted: 'rec_asset_name_type_v###'
+    assetType = filename.rsplit("rec", 1)[-1].split("_")[3]
+    namespace = mobj.constructNamespace(filename, assetType=assetType)
     reference(filePath, namespace=namespace)

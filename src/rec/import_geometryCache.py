@@ -110,6 +110,6 @@ def main() -> None:
         raise mui.NoFileSelectedError
     cacheFilename = cmds.getAttr(cacheFileNode + ".cacheName")
     assetize(
-        cacheFilename.split("_", 3)[2],  # From: `rec_seq###_name_cache_v###`
+        cacheFilename.split("_", 3)[2],  # Formatted: 'rec_seq###_name_cache_v###'
         mobj.constructNamespace(cacheFilename, assetType=assetType),
     )
