@@ -7,7 +7,7 @@ import maya.cmds as cmds
 import maya.standalone
 
 sys.path.append(f"{Path(__file__).parents[1]}")
-import rec.modules.maya.app as mapp
+import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj
 
 

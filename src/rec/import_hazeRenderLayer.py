@@ -5,7 +5,7 @@ import maya.cmds as cmds
 
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
-import rec.modules.maya.app as mapp
+import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj
 
 _ARNOLD_RENDER_OPTIONS = {

@@ -85,6 +85,7 @@ def findSharedDrive(
         raise DirectoryNotFoundError(f"~/{pathPattern}/{dir}")
 
 
+# TODO: cleaner way to do this?
 def findModelPath(assetName: fname.NameIdentifier, parentDir: Path) -> Path:
     """Get the path to the model's master file"""
     assetType = fname.AssetType.MODEL

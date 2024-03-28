@@ -2,7 +2,7 @@ from pathlib import Path
 
 import maya.cmds as cmds
 
-import rec.modules.maya.app as mapp
+import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj
 
 

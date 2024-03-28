@@ -5,7 +5,7 @@ from pathlib import Path
 import maya.cmds as cmds
 import maya.mel as mel
 
-import rec.modules.maya.app as mapp
+import rec.modules.maya as mapp
 
 _SCRIPTS_DIR = Path(__file__).parents[1]
 _SHELF_NAME = "reconnection"
