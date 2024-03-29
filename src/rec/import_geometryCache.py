@@ -92,7 +92,7 @@ def main() -> None:
     shot = fname.ShotID.fromFilename(fpath.getScenePath().stem)
     shotPath = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
     cachesDir = shotPath / fpath.CACHES_DIR
-    # cachesDir = mapp.getScenePath().parents[1] / "cache"
+    # cachesDir = fpath.getScenePath().parents[1] / "cache"
 
     cmds.workspace(fileRule=("cacheFile", cachesDir))
     mui.setDefaultFileBrowserDir(cachesDir)
