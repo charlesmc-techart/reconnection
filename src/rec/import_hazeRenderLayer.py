@@ -1,5 +1,6 @@
 """Import the haze render layer template"""
 
+from functools import partial
 from pathlib import Path
 
 import maya.app.renderSetup.model.renderSetup as renderSetup
@@ -10,46 +11,47 @@ import rec.modules.files.paths as fpath
 import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj
 
-_ARNOLD_RENDER_OPTIONS = {
-    "AASamples": 1,
-    "GIDiffuseSamples": 1,
-    "GISpecularSamples": 0,
-    "GITransmissionSamples": 0,
-    "GISssSamples": 0,
-    "GIVolumeSamples": 1,
-    "GIVolumeDepth": 1,
-}
-
 _TEMPLATE_DIR = Path(__file__).with_name("data")
 _TEMPLATE = _TEMPLATE_DIR / "renderLayer_haze.json"
 _LAYER_NAME = "HAZE"
 
 
-def createAiNode(node: mobj.DGNode) -> mobj.DGNode:
-    if not (
-        cmds.objExists(f"::{node}")
-        and cmds.objectType(f"::{node}", isType=node)
-    ):
-        node = cmds.shadingNode(node, asShader=True, name=node)
-    return node
-
-
 @mapp.logScriptEditorOutput
 def main() -> None:
-    # Create aiLambert and aiAtmosphereVolume
     mapp.loadPlugin("mtoa")
+
+    def createAiNode(node: mobj.DGNode) -> mobj.DGNode:
+        if not (
+            cmds.objExists(f"::{node}")
+            and cmds.objectType(f"::{node}", isType=node)
+        ):
+            node = cmds.shadingNode(node, asShader=True, name=node)
+        return node
+
+    # Create aiLambert and aiAtmosphereVolume
     createAiNode("aiLambert")
     atmosphere = createAiNode("aiAtmosphereVolume")
-    cmds.connectAttr(
-        f"{atmosphere}.message",
-        "defaultArnoldRenderOptions.atmosphere",
-        force=True,
-    )
+    cmds.setAttr(f"{atmosphere}.density", 0.1)
+    cmds.setAttr(f"{atmosphere}.samples", 10)
 
-    # Set Arnold settings
-    for k, v in _ARNOLD_RENDER_OPTIONS.items():
-        cmds.setAttr(f"defaultArnoldRenderOptions.{k}", v)
+    # Import HAZE render layer
+    rs = renderSetup.instance()
+    rs.importAllFromFile(_TEMPLATE, renderSetup.DECODE_AND_MERGE, None)
+    layer = rs.getRenderLayer(_LAYER_NAME)
+    rs.switchToLayer(layer)
 
+    scene = fpath.getScenePath()
+    sceneName = scene.stem
+    shot = fname.ShotID.fromFilename(sceneName)
+
+    # Set render settings
+    drg = "defaultRenderGlobals"
+    setStrAttr = partial(cmds.setAttr, type="string")
+    setStrAttr(f"{drg}.currentRenderer", "arnold")
+    setStrAttr(f"{drg}.imageFilePrefix", f"{shot.name}.{_LAYER_NAME}".upper())
+    cmds.setAttr(f"{drg}.animation", True)
+    cmds.setAttr(f"{drg}.putFrameBeforeExt", True)
+    cmds.setAttr(f"{drg}.periodInExt", 1)
     try:
         cache = cmds.ls(type="cacheFile")[0]
     except IndexError:
@@ -57,23 +59,29 @@ def main() -> None:
     else:
         startFrame = cmds.getAttr(f"{cache}.originalStart")
         cmds.playbackOptions(minTime=startFrame, animationStartTime=startFrame)
-        cmds.setAttr("defaultRenderGlobals.startFrame", startFrame)
+        cmds.setAttr(f"{drg}.startFrame", startFrame)
 
         endFrame = cmds.getAttr(f"{cache}.originalEnd")
         cmds.playbackOptions(maxTime=endFrame, animationEndTime=endFrame)
-        cmds.setAttr("defaultRenderGlobals.endFrame", endFrame)
-
-    # Import HAZE render layer
-    rs = renderSetup.instance()
-    rs.importAllFromFile(_TEMPLATE, renderSetup.DECODE_AND_MERGE, None)
-    layer = rs.getRenderLayer(_LAYER_NAME)
-    rs.switchToLayer(layer)
+        cmds.setAttr(f"{drg}.endFrame", endFrame)
     cmds.setAttr("defaultRenderLayer.renderable", False)
+
+    da = "defaultArnold"
+    setStrAttr(f"{da}Driver.aiTranslator", "exr")
+    cmds.setAttr(f"{da}Driver.mergeAOVs", True)
+    cmds.setAttr(f"{da}RenderOptions.AASamples", 1)
+    cmds.setAttr(f"{da}RenderOptions.GIDiffuseSamples", 1)
+    cmds.setAttr(f"{da}RenderOptions.GISpecularSamples", 0)
+    cmds.setAttr(f"{da}RenderOptions.GITransmissionSamples", 0)
+    cmds.setAttr(f"{da}RenderOptions.GISssSamples", 0)
+    cmds.setAttr(f"{da}RenderOptions.GIVolumeSamples", 1)
+    cmds.setAttr(f"{da}RenderOptions.GIVolumeDepth", 1)
+    cmds.connectAttr(
+        f"{atmosphere}.message", f"{da}RenderOptions.atmosphere", force=True
+    )
 
     # Save scene as new file
     # Construct filename base
-    scene = fpath.getScenePath()
-    sceneName = scene.stem
     if "arnold" in sceneName:
         filenameBase = sceneName.split("arnold")[0]
         filenameBase += "arnold"
@@ -88,7 +96,6 @@ def main() -> None:
         assetName=fname.AssetName.ARNOLD,
         assetType=fname.AssetType.LIGHTS,
     )
-    shot = fname.ShotID.fromFilename(sceneName)
     sceneFiles = fpath.findShotFiles(shot, dir=scene.parent)
     versionSuffix = fname.constructVersionSuffix(validator, files=sceneFiles)
 
