@@ -62,6 +62,7 @@ class ProgressWindow:
             cmds.deleteUI(self.name, window=True)
         window = cmds.window(
             self.name,
+            parent=mel.eval("$gMainWindow = $gMainWindow"),
             resizeToFitChildren=True,
             sizeable=False,
             title=self.title,
