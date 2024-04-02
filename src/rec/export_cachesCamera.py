@@ -76,9 +76,6 @@ def getCameraComponents(
     return lookAt, xform, camera, locator, locatorShape
 
 
-# TODO: do I need a subprocess at all? Check other maya executables in bin
-# TODO: check if TemporaryDirectories have methods similar to TemporaryFiles
-# TODO: use maya.cmds module to get MAYA_LOCATION instead of os.environ?
 def exportMayaAsciiThenBinary(
     nodes: Sequence[mobj.DGNode], binaryFilePath: Path
 ) -> None:
@@ -97,21 +94,6 @@ def exportMayaAsciiThenBinary(
         mayaPath = os.path.join(os.environ["MAYA_LOCATION"], "bin")
         if mayaPath not in sys.path:
             sys.path.append(mayaPath)
-
-        melCmds = (
-            f"select -replace {{{nodes}}};"
-            f'file -filePath "{binaryFilePath.as_posix()}"'
-            '-exportSelectedStrict -force -options "v=0"'
-            f'-type "{mapp.FileType.BINARY}";'
-        )
-        mayaArgs = (
-            "maya",
-            "-batch",
-            "-file",
-            asciiFilePath,
-            "-command",
-            melCmds,
-        )
 
         args = (
             "mayapy",
