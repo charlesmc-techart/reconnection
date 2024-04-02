@@ -16,6 +16,7 @@ _TEMPLATE = _TEMPLATE_DIR / "renderLayer_haze.json"
 _LAYER_NAME = "HAZE"
 
 
+@mapp.SuspendedRedraw()
 @mapp.logScriptEditorOutput
 def main() -> None:
     mapp.loadPlugin("mtoa")
