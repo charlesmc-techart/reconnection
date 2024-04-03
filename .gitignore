@@ -1,5 +1,6 @@
 # main
 .archive
+*.bak
 *.log
 *.txt
 *helloWorld.*
