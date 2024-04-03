@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 # Send a Python script to Maya via a socket opened by `commandPort`
 # The script must be under src/rec/, and the socket must be /tmp/vscodeToMaya
 
