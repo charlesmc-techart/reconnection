@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 # Sync the scripts to the specified directory
 
 source "${0:h}/errorMessage.zsh"
