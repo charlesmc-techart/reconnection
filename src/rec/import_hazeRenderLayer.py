@@ -35,6 +35,9 @@ def main() -> None:
     cmds.setAttr(f"{atmosphere}.density", 0.1)
     cmds.setAttr(f"{atmosphere}.samples", 10)
 
+    with mobj.TemporarySelection(cmds.ls(type="dagNode")):
+        cmds.hyperShade(assign="initialShadingGroup")
+
     # Import HAZE render layer
     rs = renderSetup.instance()
     rs.importAllFromFile(_TEMPLATE, renderSetup.DECODE_AND_MERGE, None)
