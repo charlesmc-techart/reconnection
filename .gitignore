@@ -1,7 +1,8 @@
 # main
-.archive
+archive
+*.bak
+*.txt
 *.log
-*helloWorld.*
 misc
 tests
 
