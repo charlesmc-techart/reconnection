@@ -1,6 +1,7 @@
 # main
 .archive
 *.log
+*.txt
 *helloWorld.*
 misc
 tests
