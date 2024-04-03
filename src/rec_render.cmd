@@ -1,0 +1,1 @@
+"C:\Program Files\Autodesk\Maya2023\bin\mayapy" "%~dp0\rec\render.py"
