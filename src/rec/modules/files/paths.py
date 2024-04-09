@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import sys
 from collections.abc import Iterable
 from pathlib import Path
@@ -89,10 +90,18 @@ def findSharedDrive(
 def findModelPath(assetName: fname.NameIdentifier, parentDir: Path) -> Path:
     """Get the path to the model's master file"""
     assetType = fname.AssetType.MODEL
-    filenamePattern = f"rec_asset_{assetName}_{assetType}_*.*_MASTER.m?"
-    dir = Path(parentDir, f"{assetName}".upper(), f"{assetType}".upper())
-    dir = next(dir.glob("*.*")).joinpath("MAYA", "scenes")
-    return next(dir.glob(filenamePattern))
+    filePathPattern = os.path.join(
+        f"{assetName}".upper(),
+        f"{assetType}".upper(),
+        "*.*",
+        "MAYA",
+        "scenes",
+        f"rec_asset_{assetName}_{assetType}_*.*_MASTER.m?",
+    )
+    for path in parentDir.glob(filePathPattern):
+        if path.is_file():
+            return path
+    raise FileNotFoundError(parentDir / filePathPattern)
 
 
 def findShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:
