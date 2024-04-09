@@ -6,7 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-import rec.modules.files.queue as fqueue
+import rec.modules.queue as mqueue
 
 _SCRIPTS_DIR = Path(__file__).parents[1]
 _RENDER_QUEUE = _SCRIPTS_DIR / "__render_queue.txt"
@@ -30,7 +30,7 @@ def main():
     # Backup the queue
     shutil.copy(_RENDER_QUEUE, f"{_RENDER_QUEUE}.bak")
 
-    queue = fqueue.readTxtQueue(_RENDER_QUEUE)
+    queue = mqueue.readTxtQueue(_RENDER_QUEUE)
 
     while queue:
         scene = queue.popleft()
@@ -38,7 +38,7 @@ def main():
         print(f"Rendering: {scene!r}")
         renderArnold(scene=scene)
 
-        fqueue.updateTxtQueue(_RENDER_QUEUE, queue=queue)
+        mqueue.updateTxtQueue(_RENDER_QUEUE, queue=queue)
 
 
 if __name__ == "__main__":

@@ -13,8 +13,8 @@ import rec.export_cachesCamera as ecc
 import rec.export_geometryCache as egc
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
-import rec.modules.files.queue as fqueue
 import rec.modules.maya.objects as mobj
+import rec.modules.queue as mqueue
 
 _SCRIPTS_DIR = Path(__file__).parents[1]
 _EXPORT_QUEUE = _SCRIPTS_DIR / "__cache_queue.txt"
@@ -24,7 +24,7 @@ def main() -> None:
     # Backup the queue
     shutil.copy(_EXPORT_QUEUE, f"{_EXPORT_QUEUE}.bak")
 
-    queue = fqueue.readTxtQueue(_EXPORT_QUEUE)
+    queue = mqueue.readTxtQueue(_EXPORT_QUEUE)
 
     while queue:
         scene = Path(queue.popleft())
@@ -55,7 +55,7 @@ def main() -> None:
             filename=mechanicFilename,
         )
 
-        fqueue.updateTxtQueue(_EXPORT_QUEUE, queue=queue)
+        mqueue.updateTxtQueue(_EXPORT_QUEUE, queue=queue)
 
 
 if __name__ == "__main__":
