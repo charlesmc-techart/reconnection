@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Iterable
 from pathlib import Path
-from typing import NoReturn, Optional
+from typing import NoReturn
 
 import maya.cmds as cmds
 
@@ -50,7 +50,7 @@ def findShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
 
 def findLatestVersionAsset(
     validator: fname.Validator, files: Iterable[Path]
-) -> Optional[Path]:
+) -> Path | None:
     """Get the file path to the asset's latest version"""
     file = None
     for file in filter(validator, files):

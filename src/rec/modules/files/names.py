@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable
 from functools import partial
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 
 import rec.modules.stringEnum as strEnum
 
@@ -73,7 +73,7 @@ TypeIdentifier = Union[AssetType, str]
 
 
 def constructFilenameBase(
-    shot: ShotID, assetName: Optional[NameIdentifier], assetType: TypeIdentifier
+    shot: ShotID, assetName: NameIdentifier | None, assetType: TypeIdentifier
 ) -> str:
     """Construct a filename base, formatted 'rec_seq###_name_type'"""
     if assetName:
@@ -106,7 +106,7 @@ Validator = Callable[[Path], bool]
 
 def constructValidator(
     filenameBase: str,
-    assetName: Optional[NameIdentifier],
+    assetName: NameIdentifier | None,
     assetType: TypeIdentifier,
 ) -> Validator:
     """Construct a validator used for filtering assets"""

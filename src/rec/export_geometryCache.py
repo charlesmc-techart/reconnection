@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Optional
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -20,7 +19,7 @@ def constructFilename(
     dir: Path,
     shot: fname.ShotID,
     assetType: fname.TypeIdentifier,
-    assetName: Optional[fname.NameIdentifier] = None,
+    assetName: fname.NameIdentifier | None = None,
 ) -> str:
     """Construct a filename, formatted 'rec_seq###_name_type_v###"""
     filenameBase = fname.constructFilenameBase(

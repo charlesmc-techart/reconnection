@@ -9,7 +9,7 @@ from collections.abc import Sequence
 from functools import partial
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import NoReturn, Optional
+from typing import NoReturn
 
 import maya.cmds as cmds
 
@@ -48,7 +48,7 @@ def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
 
 def getCameraComponents(
     cameraGrp: mobj.TopLevelGroup,
-) -> Optional[tuple[mobj.DAGNode, ...]] | NoReturn:
+) -> tuple[mobj.DAGNode, ...] | None | NoReturn:
     """Get all components of a shot camera: transform and shape nodes
 
     If the camera uses a camera and aim, get the lookAt and locator nodes, too.
@@ -63,7 +63,7 @@ def getCameraComponents(
         return None
 
     cmds.setAttr(f"{camera}.renderable", True)
-    xform = mobj.getParent(camera)
+    xform: mobj.DAGNode = mobj.getParent(camera)
 
     try:
         lookAt = cmds.listConnections(camera, type="lookAt")[0]

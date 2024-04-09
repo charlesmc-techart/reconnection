@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from functools import partial
 from pathlib import Path
-from typing import Optional
 
 import maya.api.OpenMaya as om
 import maya.cmds as cmds
@@ -25,8 +24,8 @@ def findLatestVersionFile(
     dir: Path,
     shot: fname.ShotID,
     assetType: fname.TypeIdentifier,
-    assetName: Optional[fname.NameIdentifier] = None,
-) -> Optional[Path]:
+    assetName: fname.NameIdentifier | None = None,
+) -> Path | None:
     """Get the file path to the asset's latest version"""
     filenameBase = fname.constructFilenameBase(
         shot, assetName=assetName, assetType=assetType

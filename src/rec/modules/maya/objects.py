@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Optional
 
 import maya.cmds as cmds
 
@@ -67,13 +66,11 @@ class NoGeometrySelectedError(Exception):
         super().__init__("No geometry selected")
 
 
-def lsChildren(
-    nodes: DAGNode | Sequence[DAGNode], **kwargs: Optional[Any]
-) -> list[DAGNode]:
+def lsChildren(nodes: DAGNode | Sequence[DAGNode], **kwargs) -> list[DAGNode]:
     return cmds.listRelatives(nodes, path=True, **kwargs)
 
 
-def getParent(node: DAGNode) -> Optional[DAGNode]:
+def getParent(node: DAGNode) -> DAGNode | None:
     try:
         return lsChildren(node, parent=True)[0]
     except TypeError:
@@ -97,9 +94,7 @@ def export(
         )
 
 
-def lsWithWildcard(
-    identifier: fname.Identifier, **kwargs: Optional[Any]
-) -> list[mobj.DGNode]:
+def lsWithWildcard(identifier: fname.Identifier, **kwargs) -> list[mobj.DGNode]:
     """Find a node using wildcards"""
     return cmds.ls(f"*{identifier}*", **kwargs)
 
