@@ -25,7 +25,6 @@ def main() -> None:
 
     mayaVersion = cmds.about(version=True)
     envDir = Path(os.environ["MAYA_APP_DIR"], mayaVersion, "Maya.env")
-    pathSeparator = ";" if cmds.about(ntOS=True) else ":"
     try:
         file = envDir.open("r+", encoding="utf-8")
     except FileNotFoundError:
@@ -35,7 +34,7 @@ def main() -> None:
         if f"{_SCRIPTS_DIR}" in line:
             return
         elif line.startswith("PYTHONPATH"):
-            file.write(f"{pathSeparator}{_SCRIPTS_DIR}")
+            file.write(f"{os.pathsep}{_SCRIPTS_DIR}")
             return
     file.write(f"\nPYTHONPATH={_SCRIPTS_DIR}")
     file.close()
