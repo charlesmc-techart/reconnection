@@ -73,16 +73,15 @@ def main() -> None:
     da = "defaultArnold"
     setStrAttr(f"{da}Driver.aiTranslator", "exr")
     cmds.setAttr(f"{da}Driver.mergeAOVs", True)
-    cmds.setAttr(f"{da}RenderOptions.AASamples", 1)
-    cmds.setAttr(f"{da}RenderOptions.GIDiffuseSamples", 1)
-    cmds.setAttr(f"{da}RenderOptions.GISpecularSamples", 0)
-    cmds.setAttr(f"{da}RenderOptions.GITransmissionSamples", 0)
-    cmds.setAttr(f"{da}RenderOptions.GISssSamples", 0)
-    cmds.setAttr(f"{da}RenderOptions.GIVolumeSamples", 1)
-    cmds.setAttr(f"{da}RenderOptions.GIVolumeDepth", 1)
-    cmds.connectAttr(
-        f"{atmosphere}.message", f"{da}RenderOptions.atmosphere", force=True
-    )
+    daro = f"{da}RenderOptions"
+    cmds.setAttr(f"{daro}.AASamples", 1)
+    cmds.setAttr(f"{daro}.GIDiffuseSamples", 1)
+    cmds.setAttr(f"{daro}.GISpecularSamples", 0)
+    cmds.setAttr(f"{daro}.GITransmissionSamples", 0)
+    cmds.setAttr(f"{daro}.GISssSamples", 0)
+    cmds.setAttr(f"{daro}.GIVolumeSamples", 1)
+    cmds.setAttr(f"{daro}.GIVolumeDepth", 1)
+    cmds.connectAttr(f"{atmosphere}.message", f"{daro}.atmosphere", force=True)
 
     # Save scene as new file
     # Construct filename base
