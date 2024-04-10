@@ -63,7 +63,7 @@ def getCameraComponents(
         return None
 
     cmds.setAttr(f"{camera}.renderable", True)
-    xform: mobj.DAGNode = mobj.getParent(camera)
+    xform: mobj.DAGNode = mobj.getParent(camera)  # type:ignore
 
     try:
         lookAt = cmds.listConnections(camera, type="lookAt")[0]
