@@ -381,6 +381,76 @@ global proc shelf_reconnection () {
         -manage 1
         -visible 1
         -preventOverride 0
+        -annotation "Set global render settings"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Set Global Render Settings"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "s gr"
+        -overlayLabelColor 0 1 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.set_renderSettings as set_renderSettings\n\nset_renderSettings.globals()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Set Flair render settings"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Set Flair Render Settings"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "s fr"
+        -overlayLabelColor 0 1 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.set_renderSettings as set_renderSettings\n\nset_renderSettings.flair()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
         -annotation "Import haze render layer"
         -enableBackground 0
         -backgroundColor 0 0 0
