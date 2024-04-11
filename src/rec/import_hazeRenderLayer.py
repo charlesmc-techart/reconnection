@@ -1,6 +1,5 @@
 """Import the haze render layer template"""
 
-from functools import partial
 from pathlib import Path
 
 import maya.app.renderSetup.model.renderSetup as renderSetup
@@ -10,6 +9,7 @@ import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj
+import rec.set_renderSettings as set_renderSettings
 
 _TEMPLATE_DIR = Path(__file__).with_name("data")
 _TEMPLATE = _TEMPLATE_DIR / "renderLayer_haze.json"
@@ -34,6 +34,11 @@ def main() -> None:
     atmosphere = createAiNode("aiAtmosphereVolume")
     cmds.setAttr(f"{atmosphere}.density", 0.1)
     cmds.setAttr(f"{atmosphere}.samples", 10)
+    cmds.connectAttr(
+        f"{atmosphere}.message",
+        f"defaultArnoldRenderOptions.atmosphere",
+        force=True,
+    )
 
     with mobj.TemporarySelection(cmds.ls(type="dagNode")):
         cmds.hyperShade(assign="initialShadingGroup")
@@ -43,45 +48,15 @@ def main() -> None:
     rs.importAllFromFile(_TEMPLATE, renderSetup.DECODE_AND_MERGE, None)
     layer = rs.getRenderLayer(_LAYER_NAME)
     rs.switchToLayer(layer)
+    cmds.setAttr("defaultRenderLayer.renderable", False)
 
     scene = fpath.getScenePath()
     sceneName = scene.stem
     shot = fname.ShotID.fromFilename(sceneName)
 
     # Set render settings
-    drg = "defaultRenderGlobals"
-    setStrAttr = partial(cmds.setAttr, type="string")
-    setStrAttr(f"{drg}.currentRenderer", "arnold")
-    setStrAttr(f"{drg}.imageFilePrefix", f"{shot.name}.{_LAYER_NAME}".upper())
-    cmds.setAttr(f"{drg}.animation", True)
-    cmds.setAttr(f"{drg}.putFrameBeforeExt", True)
-    cmds.setAttr(f"{drg}.periodInExt", 1)
-    try:
-        cache = cmds.ls(type="cacheFile")[0]
-    except IndexError:
-        pass  # Don't set the frame range
-    else:
-        startFrame = cmds.getAttr(f"{cache}.originalStart")
-        cmds.playbackOptions(minTime=startFrame, animationStartTime=startFrame)
-        cmds.setAttr(f"{drg}.startFrame", startFrame)
-
-        endFrame = cmds.getAttr(f"{cache}.originalEnd")
-        cmds.playbackOptions(maxTime=endFrame, animationEndTime=endFrame)
-        cmds.setAttr(f"{drg}.endFrame", endFrame)
-    cmds.setAttr("defaultRenderLayer.renderable", False)
-
-    da = "defaultArnold"
-    setStrAttr(f"{da}Driver.aiTranslator", "exr")
-    cmds.setAttr(f"{da}Driver.mergeAOVs", True)
-    daro = f"{da}RenderOptions"
-    cmds.setAttr(f"{daro}.AASamples", 1)
-    cmds.setAttr(f"{daro}.GIDiffuseSamples", 1)
-    cmds.setAttr(f"{daro}.GISpecularSamples", 0)
-    cmds.setAttr(f"{daro}.GITransmissionSamples", 0)
-    cmds.setAttr(f"{daro}.GISssSamples", 0)
-    cmds.setAttr(f"{daro}.GIVolumeSamples", 1)
-    cmds.setAttr(f"{daro}.GIVolumeDepth", 1)
-    cmds.connectAttr(f"{atmosphere}.message", f"{daro}.atmosphere", force=True)
+    set_renderSettings.global()
+    set_renderSettings.arnold(f"{shot.name}.{_LAYER_NAME}".upper())
 
     # Save scene as new file
     # Construct filename base
