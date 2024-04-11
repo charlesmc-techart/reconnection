@@ -8,6 +8,7 @@ import rec.modules.maya as mapp
 
 
 def globals() -> None:
+    """Set global render settings"""
     drg = "defaultRenderGlobals"
     for attribute, value in (
         ("animation", True),
@@ -31,6 +32,7 @@ def globals() -> None:
 
 @mapp.logScriptEditorOutput
 def flair() -> None:
+    """Set Flair render settings"""
     shot = fname.ShotID.fromFilename(fpath.getScenePath().stem)
 
     for attribute, value in (
@@ -61,6 +63,7 @@ def flair() -> None:
 
 
 def arnold(renderFilename: str) -> None:
+    """Set Arnold render settings"""
     setStrAttr = partial(cmds.setAttr, type="string")
     setStrAttr(f"defaultRenderGlobals.currentRenderer", "arnold")
     setStrAttr(f"defaultRenderGlobals.imageFilePrefix", renderFilename)
