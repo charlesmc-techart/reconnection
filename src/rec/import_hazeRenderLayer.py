@@ -55,7 +55,7 @@ def main() -> None:
     shot = fname.ShotID.fromFilename(sceneName)
 
     # Set render settings
-    set_renderSettings.global()
+    set_renderSettings.globals()
     set_renderSettings.arnold(f"{shot.name}.{_LAYER_NAME}".upper())
 
     # Save scene as new file
