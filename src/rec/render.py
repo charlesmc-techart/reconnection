@@ -28,7 +28,7 @@ def renderArnold(scene: str) -> None:
 # @mapp.logScriptEditorOutput
 def main():
     # Backup the queue
-    shutil.copy(_RENDER_QUEUE, f"{_RENDER_QUEUE}.bak")
+    shutil.copy(_RENDER_QUEUE, f"{_RENDER_QUEUE}~")
 
     queue = mqueue.readTxtQueue(_RENDER_QUEUE)
 
