@@ -57,6 +57,8 @@ def main():
             else:
                 renderFlair(scene=scene)
         except Exception as e:
+            traceback.print_exc()
+
             failedQueue.append((scene, f"{e}"))
             mqueue.updateCsvQueue(_FAILED_QUEUE, queue=failedQueue)  # type: ignore
 
