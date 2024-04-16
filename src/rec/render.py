@@ -3,6 +3,8 @@
 import os
 import shutil
 import subprocess
+import traceback
+from collections import deque
 from functools import partial
 from pathlib import Path
 
@@ -10,6 +12,7 @@ import rec.modules.queue as mqueue
 
 _SCRIPTS_DIR = Path(__file__).parents[1]
 _RENDER_QUEUE = _SCRIPTS_DIR / "__render_queue.txt"
+_FAILED_QUEUE = _SCRIPTS_DIR / "__render_queue_failed.csv"
 
 
 runCmd = partial(subprocess.run, capture_output=True, text=True)
@@ -42,16 +45,20 @@ def main():
     shutil.copy(_RENDER_QUEUE, f"{_RENDER_QUEUE}~")
 
     queue = mqueue.readTxtQueue(_RENDER_QUEUE)
+    failedQueue: deque[tuple[str, str]] = deque()
 
     while queue:
-        scene = queue.popleft()
+        scene = queue.popleft().strip()
 
         print(f"Rendering: {scene!r}")
-
-        if "arnold" in os.path.basename(scene):
-            renderArnold(scene=scene)
-        else:
-            renderFlair(scene=scene)
+        try:
+            if "arnold" in os.path.basename(scene):
+                renderArnold(scene=scene)
+            else:
+                renderFlair(scene=scene)
+        except Exception as e:
+            failedQueue.append((scene, f"{e}"))
+            mqueue.updateCsvQueue(_FAILED_QUEUE, queue=failedQueue)  # type: ignore
 
         mqueue.updateTxtQueue(_RENDER_QUEUE, queue=queue)
 

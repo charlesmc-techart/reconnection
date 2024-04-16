@@ -1,5 +1,6 @@
 import csv
 from collections import deque
+from collections.abc import Sequence
 from pathlib import Path
 
 
@@ -19,7 +20,7 @@ def readCsvQueue(file: Path) -> deque[list[str]]:
         return deque(reader)
 
 
-def updateCsvQueue(file: Path, queue: deque[list[str]]) -> None:
+def updateCsvQueue(file: Path, queue: deque[Sequence[str]]) -> None:
     with file.open("w", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerows(queue)
