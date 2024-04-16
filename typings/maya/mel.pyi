@@ -1,0 +1,3 @@
+from typing import Any
+
+def eval(arg: str) -> Any: ...

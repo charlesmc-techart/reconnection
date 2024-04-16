@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
+from typing import Any
 
 import maya.cmds as cmds
 
@@ -48,7 +49,7 @@ class TemporarySelection:
         cmds.undoInfo(stateWithoutFlush=False)
         cmds.select(self.selection, replace=True)
 
-    def __exit__(self, *args) -> None:
+    def __exit__(self, *args: Any) -> None:
         cmds.select(clear=True)
         cmds.undoInfo(stateWithoutFlush=True)
 
@@ -66,7 +67,9 @@ class NoGeometrySelectedError(Exception):
         super().__init__("No geometry selected")
 
 
-def lsChildren(nodes: DAGNode | Sequence[DAGNode], **kwargs) -> list[DAGNode]:
+def lsChildren(
+    nodes: DAGNode | Sequence[DAGNode], **kwargs: Any
+) -> list[DAGNode]:
     return cmds.listRelatives(nodes, path=True, **kwargs)
 
 
@@ -94,7 +97,9 @@ def export(
         )
 
 
-def lsWithWildcard(identifier: fname.Identifier, **kwargs) -> list[mobj.DGNode]:
+def lsWithWildcard(
+    identifier: fname.Identifier, **kwargs: Any
+) -> list[mobj.DGNode]:
     """Find a node using wildcards"""
     return cmds.ls(f"*{identifier}*", **kwargs)
 

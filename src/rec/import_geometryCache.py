@@ -59,7 +59,7 @@ def assetize(assetName: fname.NameIdentifier, namespace: str) -> None:
     Also, expose the cacheFile node's cache directory and filename attributes.
     """
     cacheFileNodes = mobj.lsWithWildcard(assetName, type="cacheFile")
-    componentNodes = []
+    componentNodes: list[mobj.DGNode] = []
     for i, c in enumerate(cacheFileNodes):
         components = GeometryCacheComponents(c)
         components.rename(assetName)

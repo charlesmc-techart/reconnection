@@ -3,6 +3,7 @@ from collections.abc import Callable
 from contextlib import ContextDecorator
 from functools import partial
 from pathlib import Path
+from typing import Any
 
 import maya.cmds as cmds
 
@@ -31,12 +32,12 @@ class SuspendedRedraw(ContextDecorator):
     def __enter__(self) -> None:
         cmds.refresh(suspend=True)
 
-    def __exit__(self, *args) -> None:
+    def __exit__(self, *args: Any) -> None:
         cmds.refresh(suspend=False)
 
 
 def logScriptEditorOutput(
-    func: Callable[[],], *, dir: Path = _LOGS_PATH
+    func: Callable[[], Any], *, dir: Path = _LOGS_PATH
 ) -> Callable[[], None]:
     """Decorator for writing the script editor's output to a text file"""
     projectPath = fpath.getProjectPath()
