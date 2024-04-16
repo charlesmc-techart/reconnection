@@ -1,3 +1,0 @@
-from collections.abc import Sequence
-
-class MMatrix(Sequence[float]): ...
