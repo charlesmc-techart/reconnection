@@ -3,8 +3,9 @@ archive
 *.bak
 *.log
 *.txt
-misc
-tests
+misc/
+tests/
+typings/
 
 # caches
 .cache/
