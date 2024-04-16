@@ -4,7 +4,7 @@
 source "${0:h}/errorMessage.zsh"
 
 declare -a NAMES_TO_EXCLUDE args
-readonly NAMES_TO_EXCLUDE=('.DS_Store' '__pycache__' 'logs/')
+readonly NAMES_TO_EXCLUDE=('*.csv' '*.txt*' '.DS_Store' '__pycache__' 'logs/')
 
 args=(--archive)
 if [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
