@@ -1,5 +1,6 @@
 # main
 archive
+*.csv
 *.log
 *.txt*
 misc/
