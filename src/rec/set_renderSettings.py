@@ -14,6 +14,9 @@ def globals() -> None:
         ("animation", True),
         ("putFrameBeforeExt", True),
         ("periodInExt", 1),
+        ("modifyExtension", True),
+        ("startExtension", 1),
+        ("byExtension", 1),
     ):
         cmds.setAttr(f"{drg}.{attribute}", value)
     try:
