@@ -24,7 +24,8 @@ def renderFlair(scene: str) -> None:
         "-file",
         scene,
         "-command",
-        'python(""Import flair_batch"") -noAutoloagPlugins',
+        'python(""Import flair_batch"")',
+        "-noAutoloagPlugins",
     )
     results = runCmd(args)
     print(results)
