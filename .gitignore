@@ -3,6 +3,7 @@ archive
 *.csv
 *.log
 *.txt*
+**/__render.*
 misc/
 tests/
 typings/
