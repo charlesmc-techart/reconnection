@@ -27,11 +27,11 @@ def main(scriptFile: Path) -> None:
         if os.path.isfile(scene):
             scene = Path(scene)
             break
+        mqueue.updateTxtQueue(RENDER_QUEUE, queue=queue)
         with FAILED_TO_RENDER.open("a", encoding="utf8") as f:
-            f.write(f"{scene}")
+            print(scene, file=f)
 
-    # mayaPath = os.path.join(os.environ["MAYA_LOCATION"], "bin")
-    mayaPath = "/Applications/Autodesk/maya2023/Maya.app/Contents/bin"
+    mayaPath = os.path.join(os.environ["MAYA_LOCATION"], "bin")
     if "arnold" in scene.stem:
         args = (
             os.path.join(mayaPath, "Render"),
