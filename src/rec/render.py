@@ -1,5 +1,5 @@
 #!/Applications/Autodesk/maya2023/Maya.app/Contents/bin/mayapy
-"""Batch render scenes from a queue; to be called by Cmd or Zsh"""
+"""Batch render a Maya scene from the queue; to be called by Cmd or Zsh"""
 
 import os
 import shutil
@@ -24,11 +24,12 @@ def main():
         except IndexError:  # Queue is empty
             return
         if os.path.isfile(scene):
+            scene = Path(scene)
             break
         with FAILED_TO_RENDER.open("a", encoding="utf8") as f:
-            f.write(scene)
+            f.write(f"{scene}")
 
-    if "arnold" in os.path.basename(scene):
+    if "arnold" in scene.stem:
         print(
             os.path.join(os.environ["MAYA_LOCATION"], "bin", "Render"),
             "-renderer",

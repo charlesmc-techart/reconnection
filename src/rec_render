@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+# Batch render Maya scenes from the queue
 
 readonly SCRIPT="${0:A:h}/rec/render.py"
 
