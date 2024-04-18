@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+
+readonly SCRIPT="${0:A:h}/rec/render.py"
+
+while (true); do
+  renderArgs="$(${SCRIPT})"
+
+  if [[ -z "${renderArgs}" ]]; then
+    break
+  fi
+
+  "${(s/,/)renderArgs}"
+done
