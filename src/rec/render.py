@@ -3,15 +3,21 @@
 
 import os
 import shutil
+from pathlib import Path
 
 import rec.modules.queue as mqueue
 
 
+_SCRIPTS_DIR = Path(__file__).parents[1]
+
+RENDER_QUEUE = _SCRIPTS_DIR / "__render_queue.txt"
+FAILED_TO_RENDER = _SCRIPTS_DIR / "__render_queue_failed.csv"
+
+
 def main():
-    shutil.copy(mqueue.RENDER_QUEUE, f"{mqueue.RENDER_QUEUE}~")
+    shutil.copy(RENDER_QUEUE, f"{RENDER_QUEUE}~")
 
-    queue = mqueue.readTxtQueue(mqueue.RENDER_QUEUE)
-
+    queue = mqueue.readTxtQueue(RENDER_QUEUE)
     while True:
         try:
             scene = queue.popleft().strip()
@@ -19,7 +25,7 @@ def main():
             return
         if os.path.isfile(scene):
             break
-        with mqueue.FAILED_QUEUE.open("a", encoding="utf8") as f:
+        with FAILED_TO_RENDER.open("a", encoding="utf8") as f:
             f.write(scene)
 
     if "arnold" in os.path.basename(scene):
@@ -41,11 +47,11 @@ def main():
             scene,
             "-command",
             'python(""Import flair_batch"")',
-            "-noAutoloagPlugins",
+            "-noAutoloadPlugins",
             sep=",",
         )
 
-    mqueue.updateTxtQueue(mqueue.RENDER_QUEUE, queue=queue)
+    mqueue.updateTxtQueue(RENDER_QUEUE, queue=queue)
 
 
 if __name__ == "__main__":
