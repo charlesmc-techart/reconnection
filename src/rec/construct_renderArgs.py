@@ -3,6 +3,7 @@
 
 import os
 import shutil
+import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -22,7 +23,7 @@ def main(scriptFile: Path) -> None:
         try:
             scene = queue.popleft().strip()
         except IndexError:  # Queue is empty
-            exit(1)  # Break out of the while loop in Cmd / Zsh
+            sys.exit(1)  # Break out of the while loop in Cmd / Zsh
         if os.path.isfile(scene):
             scene = Path(scene)
             break
