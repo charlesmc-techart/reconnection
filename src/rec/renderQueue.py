@@ -1,3 +1,5 @@
+"""Add to the render queue"""
+
 from __future__ import annotations
 
 from typing import NoReturn

@@ -1,5 +1,5 @@
 #!/Applications/Autodesk/maya2023/Maya.app/Contents/bin/mayapy
-"""Export Mechanic geometry caches"""
+"""Import or export Mechanic geometry caches"""
 
 import shutil
 from pathlib import Path

@@ -1,3 +1,5 @@
+"""Set render settings"""
+
 import maya.cmds as cmds
 
 import rec.modules.files.names as fname

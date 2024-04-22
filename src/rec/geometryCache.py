@@ -1,4 +1,4 @@
-"""Export a geometry cache for the selected objects"""
+"""Export or import a geometry cache for the selected objects"""
 
 from __future__ import annotations
 

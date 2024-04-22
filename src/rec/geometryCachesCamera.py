@@ -1,4 +1,5 @@
-"""Export character geometry caches, Robot face alembic cache, and camera"""
+"""Export or import character geometry caches, Robot face alembic cache,
+and camera"""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Reference a 3D asset from the ASSETS directory"""
+"""Load or unload asset references"""
 
 from __future__ import annotations
 
