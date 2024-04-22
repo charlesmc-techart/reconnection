@@ -7,6 +7,7 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
+import rec.modules.files.paths as fpath
 import rec.modules.queue as mqueue
 
 _SCRIPTS_DIR = Path(__file__).parents[1]
@@ -37,8 +38,8 @@ def main(scriptFile: Path) -> None:
             os.path.join(mayaPath, "Render"),
             "-renderer",
             "arnold",
-            # "-proj",
-            # "",
+            "-proj",
+            fpath.findSharedDrive(),
             "-ai:threads",
             "-1",
             "-ai:aerr",
@@ -52,8 +53,8 @@ def main(scriptFile: Path) -> None:
             os.path.join(mayaPath, "mayabatch"),
             "-file",
             scene,
-            # "-proj",
-            # "",
+            "-proj",
+            fpath.findSharedDrive(),
             "-command",
             '"python(\\"Import flair_batch\\")"',
             "-noAutoloadPlugins",
