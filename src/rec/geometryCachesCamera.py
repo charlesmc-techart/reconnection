@@ -21,9 +21,7 @@ import rec.modules.files.paths as fpath
 import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj
 import rec.modules.maya.ui as mui
-import rec.reference_asset as ras
-import rec.reference_character as rch
-import rec.unload_reference as urf
+import rec.reference
 
 ################################################################################
 # Export
@@ -224,14 +222,14 @@ def _findLatestVersionFile(
 def _unloadReferencedCharacter(assetName: fname.NameIdentifier) -> None:
     """Unload a referenced asset"""
     try:
-        referenceNode = ras.getReferenceNode(
+        referenceNode = rec.reference.findNode(
             f"{assetName}_{fname.AssetType.RIG}"
         )
     except IndexError as e:
         cmds.warning(e)
         return
 
-    urf.unloadReference(referenceNode)
+    rec.reference.unload(referenceNode)
 
 
 def _importGeometryCache(
@@ -261,7 +259,7 @@ def _replaceRigWithCachedModel(
     """Unload a referenced rig, reference just the model, then apply a cache"""
     _unloadReferencedCharacter(assetName)
     namespace = mobj.constructNamespace(cache.stem, fname.AssetType.CACHE)
-    rch.referenceCharacter(
+    rec.reference.character(
         model,
         namespace=namespace,
         geometry=geometryGrp,
@@ -321,7 +319,7 @@ def import_() -> None:
     ):
         _replaceRigWithCachedModel(
             mechanicName,
-            model=rch.getModelPathCmd(mechanicName),
+            model=rec.reference.getModelPathCmd(mechanicName),
             cache=mechanicCache,
             geometryGrp=mobj.MECHANIC_MODEL_GEO_GRP,
         )
@@ -333,7 +331,7 @@ def import_() -> None:
     ):
         _replaceRigWithCachedModel(
             robotName,
-            model=rch.getModelPathCmd(robotName),
+            model=rec.reference.getModelPathCmd(robotName),
             cache=robotCache,
             geometryGrp=mobj.ROBOT_MODEL_GEO_GRP,
         )
@@ -347,7 +345,7 @@ def import_() -> None:
         robotFaceNamespace = mobj.constructNamespace(
             robotFaceCache.stem, assetType=fname.AssetType.CACHE
         )
-        rch.referenceCharacter(
+        rec.reference.character(
             robotFaceCache,
             namespace=robotFaceNamespace,
             geometry=mobj.ROBOT_FACE_MODEL_GEO,
@@ -358,9 +356,9 @@ def import_() -> None:
         cameraNamespace = mobj.constructNamespace(
             cameraFile.stem, assetType=fname.AssetType.CAMERA
         )
-        ras.reference(file=cameraFile, namespace=cameraNamespace)
+        rec.reference.load(file=cameraFile, namespace=cameraNamespace)
 
         cameras = cmds.ls(f"{cameraNamespace}:*", transforms=True, long=True)
         for c in (c for c in cameras if c.count("|") == 1):
-            rch.parent(c, mobj.TopLevelGroup.CAMERA)
+            rec.reference.parent(c, mobj.TopLevelGroup.CAMERA)
     ui.update().close()

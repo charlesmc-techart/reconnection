@@ -34,7 +34,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.reference_asset as reference_asset\n\nreference_asset.main()"
+        -command "import rec.reference\n\nrec.reference.asset()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
@@ -69,7 +69,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.unload_reference as unload_reference\n\nunload_reference.main()"
+        -command "import rec.reference\n\nrec.reference.unloadSelected()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
@@ -117,7 +117,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.reference_character as reference_character\n\nreference_character.referenceMechanicModel()"
+        -command "import rec.reference\n\nrec.reference.mechanicModel()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
@@ -152,7 +152,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.reference_character as reference_character\n\nreference_character.referenceRobotModel()"
+        -command "import rec.reference\n\nrec.reference.robotModel()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
@@ -187,7 +187,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.reference_character as reference_character\n\nreference_character.main()"
+        -command "import rec.reference\n\nrec.reference.mechanicAndRobotModels()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
