@@ -13,7 +13,7 @@ import rec.modules.queue as mqueue
 _SCRIPTS_DIR = Path(__file__).parents[1]
 
 RENDER_QUEUE = _SCRIPTS_DIR / "__render_queue.txt"
-FAILED_TO_RENDER = _SCRIPTS_DIR / "__render_queue_failed.csv"
+FAILED_TO_RENDER = _SCRIPTS_DIR / "__render_failed.txt"
 
 
 def main(scriptFile: Path) -> None:
