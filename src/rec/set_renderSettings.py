@@ -22,15 +22,16 @@ def globals() -> None:
     try:
         cache = cmds.ls(type="cacheFile")[0]
     except IndexError:
-        pass  # Don't set the frame range
-    else:
-        startFrame = cmds.getAttr(f"{cache}.originalStart")
-        cmds.playbackOptions(minTime=startFrame, animationStartTime=startFrame)
-        cmds.setAttr(f"{drg}.startFrame", startFrame)
+        cmds.warning("No geometry cache applied in the scene.")
+        return
 
-        endFrame = cmds.getAttr(f"{cache}.originalEnd")
-        cmds.playbackOptions(maxTime=endFrame, animationEndTime=endFrame)
-        cmds.setAttr(f"{drg}.endFrame", endFrame)
+    startFrame = cmds.getAttr(f"{cache}.originalStart")
+    cmds.playbackOptions(minTime=startFrame, animationStartTime=startFrame)
+    cmds.setAttr(f"{drg}.startFrame", startFrame)
+
+    endFrame = cmds.getAttr(f"{cache}.originalEnd")
+    cmds.playbackOptions(maxTime=endFrame, animationEndTime=endFrame)
+    cmds.setAttr(f"{drg}.endFrame", endFrame)
 
 
 @mapp.logScriptEditorOutput
