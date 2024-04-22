@@ -89,7 +89,7 @@ def main() -> None:
     if not mobj.lsSelectedGeometry():
         raise mobj.NoGeometrySelectedError
 
-    shot = fname.ShotID.fromFilename(fpath.getScenePath().stem)
+    shot = fname.ShotId.fromFilename(fpath.getScenePath().stem)
     shotPath = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
     cachesDir = shotPath / fpath.CACHES_DIR
     # cachesDir = fpath.getScenePath().parents[1] / "cache"

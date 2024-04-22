@@ -34,7 +34,7 @@ def getScenePath() -> Path:
     return path
 
 
-def findShotFiles(shot: fname.ShotID, dir: Path) -> tuple[Path, ...]:
+def findShotFiles(shot: fname.ShotId, dir: Path) -> tuple[Path, ...]:
     """Filter shot files in the provided directory
 
     The internal list is sorted so the last item is the latest version,
@@ -104,7 +104,7 @@ def findModelPath(assetName: fname.NameIdentifier, parentDir: Path) -> Path:
     raise FileNotFoundError(parentDir / filePathPattern)
 
 
-def findShotPath(shot: fname.ShotID, parentDir: Path) -> Path | NoReturn:
+def findShotPath(shot: fname.ShotId, parentDir: Path) -> Path | NoReturn:
     """Get the path to the specific shot directory"""
 
     def findDir(identifier: str, parentDir: Path) -> Path:

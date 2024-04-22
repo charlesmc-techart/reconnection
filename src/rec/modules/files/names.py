@@ -15,12 +15,12 @@ class InvalidFilenameError(ValueError):
     """File does not adhere to re:connection's filename protocol"""
 
 
-class ShotID:
+class ShotId:
     """Shot identifier used in asset filenames, formatted 'rec_seq###'"""
 
     __slots__ = "name", "sequence", "number", "full"
 
-    def __new__(cls, name: str) -> ShotID:
+    def __new__(cls, name: str) -> ShotId:
         try:
             int(name[3:])
         except ValueError as e:
@@ -41,7 +41,7 @@ class ShotID:
         return f"{self.__class__.__name__}({self.name!r})"
 
     @classmethod
-    def fromFilename(cls, filename: str, affix: str = f"{SHOW}_") -> ShotID:
+    def fromFilename(cls, filename: str, affix: str = f"{SHOW}_") -> ShotId:
         if affix not in filename:
             message = f"Filename {filename!r} must match pattern: 'rec_seq###'"
             raise InvalidFilenameError(message)
@@ -73,7 +73,7 @@ TypeIdentifier = Union[AssetType, str]
 
 
 def constructFilenameBase(
-    shot: ShotID, assetName: NameIdentifier | None, assetType: TypeIdentifier
+    shot: ShotId, assetName: NameIdentifier | None, assetType: TypeIdentifier
 ) -> str:
     """Construct a filename base, formatted 'rec_seq###_name_type'"""
     if assetName:
@@ -93,7 +93,7 @@ class FileExt(strEnum.StringEnum):
     PYTHON = ".py"
 
 
-Identifier = Union[ShotID, NameIdentifier, TypeIdentifier]
+Identifier = Union[ShotId, NameIdentifier, TypeIdentifier]
 
 
 def inFilename(identifier: Identifier, file: Path) -> bool:

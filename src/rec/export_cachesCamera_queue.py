@@ -29,7 +29,7 @@ def main() -> None:
     while queue:
         scene = Path(queue.popleft())
 
-        shot = fname.ShotID.fromFilename(scene.stem)
+        shot = fname.ShotId.fromFilename(scene.stem)
         shotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
         cachesDir = shotDir / fpath.CACHES_DIR
 

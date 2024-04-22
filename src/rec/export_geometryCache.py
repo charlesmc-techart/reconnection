@@ -17,7 +17,7 @@ import rec.modules.maya.ui as mui
 
 def constructFilename(
     dir: Path,
-    shot: fname.ShotID,
+    shot: fname.ShotId,
     assetType: fname.TypeIdentifier,
     assetName: fname.NameIdentifier | None = None,
 ) -> str:
@@ -116,7 +116,7 @@ def main() -> None:
     if not geometry:
         raise mobj.NoGeometrySelectedError
 
-    shot = fname.ShotID.fromFilename(fpath.getScenePath().stem)
+    shot = fname.ShotId.fromFilename(fpath.getScenePath().stem)
     shotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
     cachesDir = shotDir / fpath.CACHES_DIR
     # cachesDir = fpath.getScenePath().parents[1] / "cache"

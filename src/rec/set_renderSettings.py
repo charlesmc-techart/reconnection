@@ -19,6 +19,7 @@ def globals() -> None:
         ("byExtension", 1),
     ):
         cmds.setAttr(f"{drg}.{attribute}", value)
+
     try:
         cache = cmds.ls(type="cacheFile")[0]
     except IndexError:
@@ -37,9 +38,9 @@ def globals() -> None:
 @mapp.logScriptEditorOutput
 def flair() -> None:
     """Set Flair render settings"""
-    shotName = fname.ShotID.fromFilename(fpath.getScenePath().stem).name
+    shotName = fname.ShotId.fromFilename(fpath.getScenePath().stem).name
     cmds.setAttr(
-        "flailGlobals._sequenceName",
+        "flairGlobals._sequenceName",
         f"{shotName.upper()}.<####>",
         type="string",
     )
@@ -49,11 +50,10 @@ def flair() -> None:
         #
         ("_bundleAOVs", True),  # FIXME: set bundle AOVs in EXR to True
         ("_eachLight", True),  # FIXME: set render each light to True
-        ("_format", ".exr"),  # FIXME: set format to EXR
     ):
         try:
             cmds.setAttr(f"flairGlobals.{attribute}", value)
-        except Exception as e:
+        except RuntimeError as e:
             cmds.warning(e)
 
     cmds.flair(alpha=2)  # set alpha to Premult
@@ -66,6 +66,7 @@ def flair() -> None:
         "shadows",
         "ambientOcclusionTarget",
         "bloomTarget",
+        "outputTarget",
     )
     cmds.flair(target=targets)  # set render targets
 

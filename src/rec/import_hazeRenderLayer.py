@@ -52,7 +52,7 @@ def main() -> None:
 
     scene = fpath.getScenePath()
     sceneName = scene.stem
-    shot = fname.ShotID.fromFilename(sceneName)
+    shot = fname.ShotId.fromFilename(sceneName)
 
     # Set render settings
     set_renderSettings.globals()
