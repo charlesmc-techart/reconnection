@@ -10,8 +10,8 @@ if (( $# < 1 )); then
 fi
 
 for dir in "$@"; do
-  if [[ ! -d "$d" ]]; then
+  if [[ ! -d "${dir}" ]]; then
     continue
   fi
-  find "$dir" -type f -name '*.log' -Btime "${FILE_AGE}" -delete
+  find "${dir}" -type f -name '*.log' -ctime "${FILE_AGE}" -delete
 done
