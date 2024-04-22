@@ -1,11 +1,8 @@
-import sys
 from argparse import ArgumentParser
 from collections.abc import Sequence
 from pathlib import Path
 
 import maya.cmds as cmds
-
-sys.path.append(f"{Path(__file__).parents[1]}")
 
 import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj

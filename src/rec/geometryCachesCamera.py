@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import os
 import subprocess
-import sys
 from collections.abc import Sequence
 from functools import partial
 from pathlib import Path
@@ -99,12 +98,9 @@ def _exportMayaAsciiThenBinary(
 
         mobj.export(nodes, filePath=asciiFilePath, fileType=mapp.FileType.ASCII)
 
-        mayaPath = os.path.join(os.environ["MAYA_LOCATION"], "bin")
-        if mayaPath not in sys.path:
-            sys.path.append(mayaPath)
-
+        mayapy = os.path.join(os.environ["MAYA_LOCATION"], "bin", "mayapy")
         args = (
-            "mayapy",
+            mayapy,
             _SUBPROCESS_SCRIPT_PATH,
             asciiFilePath,
             binaryFilePath,
