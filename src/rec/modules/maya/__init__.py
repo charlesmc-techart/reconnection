@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 import maya.cmds as cmds
+import maya.standalone
 
 import rec.modules.files.paths as fpath
 import rec.modules.stringEnum as strEnum
@@ -19,6 +20,14 @@ class FileType(strEnum.StringEnum):
     ASCII = "mayaAscii"
     BINARY = "mayaBinary"
     ALEMBIC = "Alembic"
+
+
+class Standalone:
+    def __enter__(self) -> None:
+        maya.standalone.initialize()
+
+    def __exit__(self, *args: Any) -> None:
+        maya.standalone.uninitialize()
 
 
 def loadPlugin(pluginName: str) -> None:

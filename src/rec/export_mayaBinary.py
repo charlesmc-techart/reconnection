@@ -4,10 +4,9 @@ from collections.abc import Sequence
 from pathlib import Path
 
 import maya.cmds as cmds
-import maya.standalone
 
-maya.standalone.initialize()
 sys.path.append(f"{Path(__file__).parents[1]}")
+
 import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj
 
@@ -23,6 +22,6 @@ if __name__ == "__main__":
     parser.add_argument("mbPath", type=Path)
     parser.add_argument("nodes", nargs="+")
     args = parser.parse_args()
-    main(args.maPath, args.mbPath, args.nodes)
 
-maya.standalone.uninitialize()
+    with mapp.Standalone():
+        main(args.maPath, args.mbPath, args.nodes)

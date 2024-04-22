@@ -5,14 +5,12 @@ import shutil
 from pathlib import Path
 
 import maya.cmds as cmds
-import maya.standalone
-
-maya.standalone.initialize()
 
 import rec.geometryCache
 import rec.geometryCachesCamera
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
+import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj
 import rec.modules.queue as mqueue
 
@@ -59,6 +57,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
-
-maya.standalone.uninitialize()
+    with mapp.Standalone():
+        main()
