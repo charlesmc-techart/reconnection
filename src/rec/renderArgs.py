@@ -19,7 +19,7 @@ FAILED_TO_RENDER = _SCRIPTS_DIR / "__render_failed.txt"
 def main(scriptFile: Path) -> None:
     shutil.copy(RENDER_QUEUE, f"{RENDER_QUEUE}~")
 
-    queue = mqueue.readTxtQueue(RENDER_QUEUE)
+    queue = mqueue.readTxt(RENDER_QUEUE)
     while True:
         try:
             scene = queue.popleft().strip()
@@ -28,7 +28,7 @@ def main(scriptFile: Path) -> None:
         if os.path.isfile(scene):
             scene = Path(scene)
             break
-        mqueue.updateTxtQueue(RENDER_QUEUE, queue=queue)
+        mqueue.updateTxt(RENDER_QUEUE, queue=queue)
         with FAILED_TO_RENDER.open("a", encoding="utf8") as f:
             print(scene, file=f)
 
@@ -62,7 +62,7 @@ def main(scriptFile: Path) -> None:
     with scriptFile.open("w", encoding="utf-8") as f:
         print(*args, file=f)
 
-    mqueue.updateTxtQueue(RENDER_QUEUE, queue=queue)
+    mqueue.updateTxt(RENDER_QUEUE, queue=queue)
 
 
 if __name__ == "__main__":

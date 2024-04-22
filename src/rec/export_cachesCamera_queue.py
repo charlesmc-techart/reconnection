@@ -24,7 +24,7 @@ def main() -> None:
     # Backup the queue
     shutil.copy(_EXPORT_QUEUE, f"{_EXPORT_QUEUE}~")
 
-    queue = mqueue.readTxtQueue(_EXPORT_QUEUE)
+    queue = mqueue.readTxt(_EXPORT_QUEUE)
 
     while queue:
         scene = Path(queue.popleft())
@@ -55,7 +55,7 @@ def main() -> None:
             filename=mechanicFilename,
         )
 
-        mqueue.updateTxtQueue(_EXPORT_QUEUE, queue=queue)
+        mqueue.updateTxt(_EXPORT_QUEUE, queue=queue)
 
 
 if __name__ == "__main__":
