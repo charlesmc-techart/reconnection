@@ -1,5 +1,3 @@
-from functools import partial
-
 import maya.cmds as cmds
 
 import rec.modules.files.names as fname
@@ -76,15 +74,16 @@ def setFlair() -> None:
 
 def setArnold(renderFilename: str) -> None:
     """Set Arnold render settings"""
-    setStrAttr = partial(cmds.setAttr, type="string")
-    setStrAttr("defaultRenderGlobals.currentRenderer", "arnold")
-    setStrAttr("defaultRenderGlobals.imageFilePrefix", renderFilename)
+    cmds.setAttr(
+        "defaultRenderGlobals.currentRenderer", "arnold", type="string"
+    )
+    cmds.setAttr(
+        "defaultRenderGlobals.imageFilePrefix", renderFilename, type="string"
+    )
 
-    da = "defaultArnold"
-    setStrAttr(f"{da}Driver.aiTranslator", "exr", type="string")
-    cmds.setAttr(f"{da}Driver.mergeAOVs", True)
+    cmds.setAttr("defaultArnoldDriver.aiTranslator", "exr", type="string")
+    cmds.setAttr("defaultArnoldDriver.mergeAOVs", True)
 
-    daro = f"{da}RenderOptions"
     for attribute, value in (
         ("AA", 1),
         ("GIDiffuse", 1),
@@ -93,5 +92,5 @@ def setArnold(renderFilename: str) -> None:
         ("GISss", 0),
         ("GIVolume", 1),
     ):
-        cmds.setAttr(f"{daro}.{attribute}Samples", value)
-    cmds.setAttr(f"{daro}.GIVolumeDepth", 1)
+        cmds.setAttr(f"defaultArnoldRenderOptions.{attribute}Samples", value)
+    cmds.setAttr("defaultArnoldRenderOptions.GIVolumeDepth", 1)
