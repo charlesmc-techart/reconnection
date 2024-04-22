@@ -111,10 +111,10 @@ def _exportMayaAsciiThenBinary(
         )
         results = subprocess.run(args, capture_output=True, text=True)
     print(
-        "\n",
+        "",
         "stdout:",
         results.stdout,
-        "\n",
+        "",
         "stderr:",
         results.stderr,
         sep="\n",
