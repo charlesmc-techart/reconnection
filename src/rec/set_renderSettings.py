@@ -38,11 +38,14 @@ def globals() -> None:
 def flair() -> None:
     """Set Flair render settings"""
     shotName = fname.ShotID.fromFilename(fpath.getScenePath().stem).name
-
+    cmds.setAttr(
+        "flailGlobals._sequenceName",
+        f"{shotName.upper()}.<####>",
+        type="string",
+    )
     for attribute, value in (
-        ("_sequenceName", f"{shotName.upper()}.<####>"),  # FIXME: set name
-        ("_taa", True),  # FIXME: set quality to TAA
-        ("_renderScale", 1),  # FIXME: set render scale to 100%
+        ("_taa", True),
+        ("_renderScale", 1),
         #
         ("_bundleAOVs", True),  # FIXME: set bundle AOVs in EXR to True
         ("_eachLight", True),  # FIXME: set render each light to True
