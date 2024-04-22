@@ -114,19 +114,18 @@ def constructValidator(
     def hasExtension(file: Path, fileExt: FileExt) -> bool:
         return file.suffix == fileExt
 
-    def hasAnyEtension(file: Path, fileExts: Iterable[FileExt]) -> bool:
-        hasExtensionCmd = partial(hasExtension, file)
-        return any(map(hasExtensionCmd, fileExts))
+    def hasAnyEtension(file: Path, fileExts: set[FileExt]) -> bool:
+        return file.suffix in fileExts
 
     if assetType != AssetType.CACHE:
         fileExtValidator = partial(
             hasAnyEtension,
-            fileExts=(FileExt.MAYA_BINARY, FileExt.MAYA_ASCII),
+            fileExts={FileExt.MAYA_BINARY, FileExt.MAYA_ASCII},
         )
     elif assetName != AssetName.ROBOT_FACE:
         fileExtValidator = partial(
             hasAnyEtension,
-            fileExts=(FileExt.MAYA_CACHE, FileExt.XML),
+            fileExts={FileExt.MAYA_CACHE, FileExt.XML},
         )
     else:
         fileExtValidator = partial(hasExtension, fileExt=FileExt.ALEMBIC)
