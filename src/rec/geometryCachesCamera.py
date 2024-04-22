@@ -110,7 +110,15 @@ def _exportMayaAsciiThenBinary(
             *nodes,
         )
         results = subprocess.run(args, capture_output=True, text=True)
-    print(results.stderr)
+    print(
+        "\n",
+        "stdout:",
+        results.stdout,
+        "\n",
+        "stderr:",
+        results.stderr,
+        sep="\n",
+    )
 
 
 def _exportCamera(cameraNodes: Sequence[mobj.DAGNode], filePath: Path) -> None:
