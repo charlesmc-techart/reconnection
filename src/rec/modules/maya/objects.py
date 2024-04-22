@@ -8,7 +8,6 @@ import maya.cmds as cmds
 
 import rec.modules.files.names as fname
 import rec.modules.maya as mapp
-import rec.modules.maya.objects as mobj
 import rec.modules.stringEnum as strEnum
 
 DGNode = DAGNode = ShapeNode = str
@@ -87,7 +86,7 @@ def lsUnknown() -> list[DGNode]:
 def export(
     nodes: Sequence[DGNode], filePath: Path, fileType: mapp.FileType
 ) -> None:
-    with mobj.TemporarySelection(nodes):
+    with TemporarySelection(nodes):
         cmds.file(
             filePath.as_posix(),
             exportSelectedStrict=True,
@@ -97,9 +96,7 @@ def export(
         )
 
 
-def lsWithWildcard(
-    identifier: fname.Identifier, **kwargs: Any
-) -> list[mobj.DGNode]:
+def lsWithWildcard(identifier: fname.Identifier, **kwargs: Any) -> list[DGNode]:
     """Find a node using wildcards"""
     return cmds.ls(f"*{identifier}*", **kwargs)
 
