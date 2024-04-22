@@ -56,7 +56,7 @@ def main(scriptFile: Path) -> None:
             "-proj",
             fpath.findSharedDrive(),
             "-command",
-            '"python(\\"Import flair_batch\\")"',
+            '"python(\\"import flair_batch\\")"',
             "-noAutoloadPlugins",
         )
     with scriptFile.open("w", encoding="utf-8") as f:
