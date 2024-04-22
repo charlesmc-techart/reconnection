@@ -36,7 +36,7 @@ def main() -> None:
     cmds.setAttr(f"{atmosphere}.samples", 10)
     cmds.connectAttr(
         f"{atmosphere}.message",
-        f"defaultArnoldRenderOptions.atmosphere",
+        "defaultArnoldRenderOptions.atmosphere",
         force=True,
     )
 

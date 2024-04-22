@@ -3,11 +3,10 @@
 
 import os
 import shutil
-from pathlib import Path
 from argparse import ArgumentParser
+from pathlib import Path
 
 import rec.modules.queue as mqueue
-
 
 _SCRIPTS_DIR = Path(__file__).parents[1]
 
@@ -55,7 +54,7 @@ def main(scriptFile: Path) -> None:
             # "-proj",
             # "",
             "-command",
-            'python(""Import flair_batch"")',
+            '"python(\\"Import flair_batch\\")"',
             "-noAutoloadPlugins",
         )
     with scriptFile.open("w", encoding="utf-8") as f:
