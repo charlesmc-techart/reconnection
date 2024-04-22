@@ -10,7 +10,7 @@ import maya.standalone
 maya.standalone.initialize()
 
 import rec.export_cachesCamera as ecc
-import rec.export_geometryCache as egc
+import rec.geometryCache
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.objects as mobj
@@ -33,7 +33,7 @@ def main() -> None:
         shotDir = fpath.findShotPath(shot, parentDir=fpath.findSharedDrive())
         cachesDir = shotDir / fpath.CACHES_DIR
 
-        mechanicFilename = egc.constructFilename(
+        mechanicFilename = rec.geometryCache.constructFilename(
             dir=cachesDir,
             shot=shot,
             assetName=fname.AssetName.MECHANIC,

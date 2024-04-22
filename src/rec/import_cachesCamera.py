@@ -9,7 +9,7 @@ import maya.api.OpenMaya as om
 import maya.cmds as cmds
 import maya.mel as mel
 
-import rec.import_geometryCache as igc
+import rec.geometryCache
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya as mapp
@@ -68,7 +68,7 @@ def importGeometryCache(
     with mobj.TemporarySelection(geometry):
         mel.eval(doImportCacheFileCmd)
 
-    igc.assetize(assetName, namespace=namespace)
+    rec.geometryCache.assetize(assetName, namespace=namespace)
 
 
 def replaceRigWithCachedModel(

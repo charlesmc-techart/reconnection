@@ -13,7 +13,7 @@ from typing import NoReturn
 
 import maya.cmds as cmds
 
-import rec.export_geometryCache as ogc
+import rec.geometryCache
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya as mapp
@@ -29,7 +29,7 @@ def exportGeometryCache(
 ) -> None:
     """Export a geometry cache for all geometry under a group"""
     geometry = mobj.lsChildren(geometryGrp)
-    ogc.export(geometry, dir=dir, filename=filename)
+    rec.geometryCache.export(geometry, dir=dir, filename=filename)
 
 
 def exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
@@ -140,7 +140,7 @@ def main() -> None:
     # cachesDir = fpath.getScenePath().parents[1] / "cache"
 
     constructFilenameCmd = partial(
-        ogc.constructFilename,
+        rec.geometryCache.constructFilename,
         dir=cachesDir,
         shot=shot,
     )

@@ -235,7 +235,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.export_geometryCache as export_geometryCache\n\nexport_geometryCache.main()"
+        -command "import rec.geometryCache\n\nrec.geometryCache.exportSelected()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
@@ -270,7 +270,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.import_geometryCache as import_geometryCache\n\nimport_geometryCache.main()"
+        -command "import rec.geometryCache\n\nrec.geometryCache.importSelected()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
