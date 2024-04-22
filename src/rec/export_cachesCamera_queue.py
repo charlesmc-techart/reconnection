@@ -9,8 +9,8 @@ import maya.standalone
 
 maya.standalone.initialize()
 
-import rec.export_cachesCamera as ecc
 import rec.geometryCache
+import rec.geometryCachesCamera
 import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya.objects as mobj
@@ -49,7 +49,7 @@ def main() -> None:
         )
 
         cmds.file(scene, open=True)
-        ecc.exportGeometryCache(
+        rec.geometryCachesCamera.exportGeometryCache(
             mobj.MECHANIC_MODEL_GEO_GRP,
             dir=cachesDir,
             filename=mechanicFilename,

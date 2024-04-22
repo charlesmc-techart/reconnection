@@ -318,7 +318,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.export_cachesCamera as export_cachesCamera\n\nexport_cachesCamera.main()"
+        -command "import rec.geometryCachesCamera\n\nrec.geometryCachesCamera.export()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
@@ -353,7 +353,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.import_cachesCamera as import_cachesCamera\n\nimport_cachesCamera.main()"
+        -command "import rec.geometryCachesCamera\n\nrec.geometryCachesCamera.import_()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
