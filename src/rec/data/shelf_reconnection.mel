@@ -401,7 +401,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.set_renderSettings as set_renderSettings\n\nset_renderSettings.globals()"
+        -command "import rec.renderSettings\n\nrec.renderSettings.setGlobals()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1
@@ -436,7 +436,7 @@ global proc shelf_reconnection () {
         -style "iconOnly"
         -marginWidth 0
         -marginHeight 1
-        -command "import rec.set_renderSettings as set_renderSettings\n\nset_renderSettings.flair()"
+        -command "import rec.renderSettings\n\nrec.renderSettings.setFlair()"
         -sourceType "python"
         -commandRepeatable 1
         -flat 1

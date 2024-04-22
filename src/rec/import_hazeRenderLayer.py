@@ -9,7 +9,7 @@ import rec.modules.files.names as fname
 import rec.modules.files.paths as fpath
 import rec.modules.maya as mapp
 import rec.modules.maya.objects as mobj
-import rec.set_renderSettings
+import rec.renderSettings
 
 _TEMPLATE_DIR = Path(__file__).with_name("data")
 _TEMPLATE = _TEMPLATE_DIR / "renderLayer_haze.json"
@@ -55,8 +55,8 @@ def main() -> None:
     shot = fname.ShotId.fromFilename(sceneName)
 
     # Set render settings
-    rec.set_renderSettings.globals()
-    rec.set_renderSettings.arnold(f"{shot.name}.{_LAYER_NAME}".upper())
+    rec.renderSettings.setGlobals()
+    rec.renderSettings.setArnold(f"{shot.name}.{_LAYER_NAME}".upper())
 
     # Save scene as new file
     # Construct filename base

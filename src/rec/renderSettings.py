@@ -7,7 +7,7 @@ import rec.modules.files.paths as fpath
 import rec.modules.maya as mapp
 
 
-def globals() -> None:
+def setGlobals() -> None:
     """Set global render settings"""
     drg = "defaultRenderGlobals"
     for attribute, value in (
@@ -36,7 +36,7 @@ def globals() -> None:
 
 
 @mapp.logScriptEditorOutput
-def flair() -> None:
+def setFlair() -> None:
     """Set Flair render settings"""
     shot = fname.ShotId.fromFilename(fpath.getScenePath().stem)
     renderDrive = fpath.findSharedDrive(dir=fpath.RENDER_GDRIVE)
@@ -74,7 +74,7 @@ def flair() -> None:
     cmds.flair(target=targets)  # set render targets
 
 
-def arnold(renderFilename: str) -> None:
+def setArnold(renderFilename: str) -> None:
     """Set Arnold render settings"""
     setStrAttr = partial(cmds.setAttr, type="string")
     setStrAttr("defaultRenderGlobals.currentRenderer", "arnold")
