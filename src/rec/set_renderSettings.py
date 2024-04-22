@@ -38,10 +38,13 @@ def globals() -> None:
 @mapp.logScriptEditorOutput
 def flair() -> None:
     """Set Flair render settings"""
-    shotName = fname.ShotId.fromFilename(fpath.getScenePath().stem).name
+    shot = fname.ShotId.fromFilename(fpath.getScenePath().stem)
+    renderDrive = fpath.findSharedDrive(dir=fpath.RENDER_GDRIVE)
+    shotDir = fpath.findShotPath(shot, parentDir=renderDrive)
+
     cmds.setAttr(
         "flairGlobals._sequenceName",
-        f"{shotName.upper()}.<####>",
+        f"{shot.name.upper()}.<####>",
         type="string",
     )
     for attribute, value in (
