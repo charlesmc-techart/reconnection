@@ -104,19 +104,20 @@ def inFilename(identifier: Identifier, file: Path) -> bool:
 Validator = Callable[[Path], bool]
 
 
+def hasExtension(file: Path, fileExt: FileExt) -> bool:
+    return file.suffix == fileExt
+
+
+def hasAnyEtension(file: Path, fileExts: set[FileExt]) -> bool:
+    return file.suffix in fileExts
+
+
 def constructValidator(
     filenameBase: str,
     assetName: NameIdentifier | None,
     assetType: TypeIdentifier,
 ) -> Validator:
     """Construct a validator used for filtering assets"""
-
-    def hasExtension(file: Path, fileExt: FileExt) -> bool:
-        return file.suffix == fileExt
-
-    def hasAnyEtension(file: Path, fileExts: set[FileExt]) -> bool:
-        return file.suffix in fileExts
-
     if assetType != AssetType.CACHE:
         fileExtValidator = partial(
             hasAnyEtension,

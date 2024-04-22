@@ -3,7 +3,6 @@ global proc shelf_reconnection () {
     global string $gBuffStr0;
     global string $gBuffStr1;
 
-
     shelfButton
         -enableCommandRepeat 1
         -flexibleWidthType 3
@@ -492,6 +491,54 @@ global proc shelf_reconnection () {
     shelfButton
         -enableCommandRepeat 1
         -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Add scene to render queue"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Add Scene to Render Queue"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "a rq"
+        -overlayLabelColor 0 1 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.renderQueue\n\nrec.renderQueue.main()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    separator
+        -enable 1
+        -width 34
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -style "shelf"
+        -horizontal 0
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
         -flexibleWidthValue 32
         -enable 1
         -width 35
@@ -559,5 +606,4 @@ global proc shelf_reconnection () {
         -commandRepeatable 1
         -flat 1
     ;
-
 }
