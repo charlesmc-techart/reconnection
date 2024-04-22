@@ -37,10 +37,10 @@ def globals() -> None:
 @mapp.logScriptEditorOutput
 def flair() -> None:
     """Set Flair render settings"""
-    shot = fname.ShotID.fromFilename(fpath.getScenePath().stem)
+    shotName = fname.ShotID.fromFilename(fpath.getScenePath().stem).name
 
     for attribute, value in (
-        ("_sequenceName", f"{shot.name.upper()}.<####>"),  # FIXME: set name
+        ("_sequenceName", f"{shotName.upper()}.<####>"),  # FIXME: set name
         ("_taa", True),  # FIXME: set quality to TAA
         ("_format", ".exr"),  # FIXME: set format to EXR
         ("_renderScale", 1),  # FIXME: set render scale to 100%
