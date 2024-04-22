@@ -155,7 +155,7 @@ def mechanicAndRobotModels() -> None:
 ################################################################################
 
 
-class _NoReferenceNodeSelectedError(Exception):
+class NoReferenceNodeSelectedError(Exception):
     def __init__(self) -> None:
         super().__init__("No reference node selected")
 
@@ -170,7 +170,7 @@ def unload(referenceNode: mobj.ReferenceNode) -> None:
 def unloadSelected() -> None:
     selection = cmds.ls(selection=True, type="reference")
     if not selection:
-        raise _NoReferenceNodeSelectedError
+        raise NoReferenceNodeSelectedError
 
     for s in selection:
         unload(s)
