@@ -42,10 +42,11 @@ def flair() -> None:
     for attribute, value in (
         ("_sequenceName", f"{shotName.upper()}.<####>"),  # FIXME: set name
         ("_taa", True),  # FIXME: set quality to TAA
-        ("_format", ".exr"),  # FIXME: set format to EXR
         ("_renderScale", 1),  # FIXME: set render scale to 100%
-        ("_eachLight", True),  # FIXME: set render each light to True
+        #
         ("_bundleAOVs", True),  # FIXME: set bundle AOVs in EXR to True
+        ("_eachLight", True),  # FIXME: set render each light to True
+        ("_format", ".exr"),  # FIXME: set format to EXR
     ):
         try:
             cmds.setAttr(f"flairGlobals.{attribute}", value)
@@ -69,8 +70,8 @@ def flair() -> None:
 def arnold(renderFilename: str) -> None:
     """Set Arnold render settings"""
     setStrAttr = partial(cmds.setAttr, type="string")
-    setStrAttr(f"defaultRenderGlobals.currentRenderer", "arnold")
-    setStrAttr(f"defaultRenderGlobals.imageFilePrefix", renderFilename)
+    setStrAttr("defaultRenderGlobals.currentRenderer", "arnold")
+    setStrAttr("defaultRenderGlobals.imageFilePrefix", renderFilename)
 
     da = "defaultArnold"
     setStrAttr(f"{da}Driver.aiTranslator", "exr", type="string")
@@ -86,5 +87,4 @@ def arnold(renderFilename: str) -> None:
         ("GIVolume", 1),
     ):
         cmds.setAttr(f"{daro}.{attribute}Samples", value)
-    cmds.setAttr(f"{daro}.GIVolumeDepth", 1)
     cmds.setAttr(f"{daro}.GIVolumeDepth", 1)
