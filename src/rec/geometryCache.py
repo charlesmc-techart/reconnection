@@ -241,6 +241,7 @@ def importSelected() -> None:
         cacheFileNode = cmds.ls(f"{assetNamePattern}Cache1")[0]
     except IndexError:
         raise mui.NoFileSelectedError
+
     cacheFilename = cmds.getAttr(f"{cacheFileNode}.cacheName")
     assetize(
         # Formatted: 'rec_seq###_name_cache_v###'

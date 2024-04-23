@@ -65,7 +65,8 @@ def _getCameraComponents(
     try:
         camera = mobj.lsChildren(cameraGrp, allDescendents=True, type="camera")
     except ValueError as e:
-        raise mobj.TopLevelGroupDoesNotExistError("_____CAMERA_____") from e
+        groupName = "_____CAMERA_____"
+        raise mobj.TopLevelGroupDoesNotExistError(groupName) from e
     try:
         camera = camera[0]
     except TypeError:
@@ -233,7 +234,7 @@ def _unloadReferencedCharacter(assetName: fname.NameIdentifier) -> None:
         rec.reference.unload(referenceNode)
         return
 
-    rec.reference.unload(referenceNode)
+    cmds.warning(f"No reference node for: {assetName}")
 
 
 def _importGeometryCache(
