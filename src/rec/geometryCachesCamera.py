@@ -3,6 +3,8 @@ and camera"""
 
 from __future__ import annotations
 
+__author__ = "Charles Mesa Cayobit"
+
 import os
 import subprocess
 from collections.abc import Sequence

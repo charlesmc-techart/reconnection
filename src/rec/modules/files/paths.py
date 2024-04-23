@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+__author__ = "Charles Mesa Cayobit"
+
 import os
 import sys
 from collections.abc import Iterable

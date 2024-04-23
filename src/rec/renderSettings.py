@@ -1,5 +1,7 @@
 """Set render settings"""
 
+__author__ = "Charles Mesa Cayobit"
+
 import maya.cmds as cmds
 
 import rec.modules.files.names as fname

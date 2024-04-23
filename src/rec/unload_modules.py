@@ -1,5 +1,7 @@
 """Unload the re:connection Python modules"""
 
+__author__ = "Charles Mesa Cayobit"
+
 import sys
 
 import rec.modules.files.names as fname

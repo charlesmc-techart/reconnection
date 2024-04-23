@@ -1,3 +1,5 @@
+__author__ = "Charles Mesa Cayobit"
+
 import traceback
 from collections.abc import Callable
 from contextlib import ContextDecorator

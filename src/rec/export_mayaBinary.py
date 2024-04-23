@@ -1,3 +1,5 @@
+__author__ = "Charles Mesa Cayobit"
+
 from argparse import ArgumentParser
 from collections.abc import Sequence
 from pathlib import Path

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+__author__ = "Charles Mesa Cayobit"
+
 from functools import partial
 from pathlib import Path
 from typing import NoReturn

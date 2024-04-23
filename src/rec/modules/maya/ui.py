@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+__author__ = "Charles Mesa Cayobit"
+
 from collections.abc import Iterator
 from pathlib import Path
 

@@ -1,6 +1,8 @@
 #!/Applications/Autodesk/maya2023/Maya.app/Contents/bin/mayapy
 """Import or export Mechanic geometry caches"""
 
+__author__ = "Charles Mesa Cayobit"
+
 import shutil
 from pathlib import Path
 

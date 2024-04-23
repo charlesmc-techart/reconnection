@@ -1,5 +1,7 @@
 """Import the haze render layer template"""
 
+__author__ = "Charles Mesa Cayobit"
+
 from pathlib import Path
 
 import maya.app.renderSetup.model.renderSetup as renderSetup

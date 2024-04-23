@@ -1,5 +1,7 @@
 """Import or update the re:connection custom shelf"""
 
+__author__ = "Charles Mesa Cayobit"
+
 import os
 import sys
 from pathlib import Path

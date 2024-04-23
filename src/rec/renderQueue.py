@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+__author__ = "Charles Mesa Cayobit"
+
 from typing import NoReturn
 
 import rec.modules.files.names as fname

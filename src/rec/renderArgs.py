@@ -1,6 +1,8 @@
 #!/Applications/Autodesk/maya2023/Maya.app/Contents/bin/mayapy
 """Construct the args needed to batch render with Cmd or Zsh"""
 
+__author__ = "Charles Mesa Cayobit"
+
 import os
 import shutil
 import sys
