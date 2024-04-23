@@ -12,7 +12,6 @@ import maya.cmds as cmds
 
 import rec.modules.files.names as fname
 
-_DRIVE = "G"
 MAIN_GDRIVE = "REC"
 POST_PRODUCTION_GDRIVE = "REC_POST"
 RENDER_GDRIVE = "REC_RENDER"
@@ -72,7 +71,7 @@ class DirectoryNotFoundError(FileNotFoundError):
 
 
 def findSharedDrive(
-    *, drive: str = _DRIVE, dir: str = POST_PRODUCTION_GDRIVE
+    *, drive: str = "G", dir: str = POST_PRODUCTION_GDRIVE
 ) -> Path | NoReturn:
     """Get the path to re:connection's Google shared drive
 
