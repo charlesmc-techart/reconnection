@@ -3,6 +3,7 @@ from __future__ import annotations
 __author__ = "Charles Mesa Cayobit"
 
 from collections.abc import Sequence
+from functools import partial
 from pathlib import Path
 from typing import Any
 
@@ -55,12 +56,12 @@ class TemporarySelection:
         cmds.undoInfo(stateWithoutFlush=True)
 
 
-def lsSelectedGeometry() -> list[DAGNode]:
-    return [
-        s
-        for s in cmds.ls(selection=True, transforms=True)
-        if cmds.listRelatives(s, shapes=True, noIntermediate=True, type="mesh")
-    ]
+def lsSelectedGeometry() -> list[DAGNode] | None:
+    selection = cmds.ls(selection=True, transforms=True)
+    hasShape = partial(
+        cmds.listRelatives, shapes=True, noIntermediate=True, type="mesh"
+    )
+    return [s for s in selection if hasShape(s)] or None
 
 
 class NoGeometrySelectedError(Exception):

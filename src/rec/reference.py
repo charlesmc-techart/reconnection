@@ -22,16 +22,17 @@ import rec.modules.maya.ui as mui
 ################################################################################
 
 
-def findNode(identifier: fname.Identifier) -> mobj.ReferenceNode:
+def findNode(identifier: fname.Identifier) -> mobj.ReferenceNode | None:
     """Get an asset's reference node"""
-    return mobj.lsWithWildcard(identifier, type="reference")[0]
+    try:
+        return mobj.lsWithWildcard(identifier, type="reference")[0]
+    except TypeError:
+        return None
 
 
 def load(file: Path, namespace: str) -> None:
     """Reference an asset into the scene if it isn't yet"""
-    try:
-        findNode(namespace)
-    except IndexError:
+    if findNode(namespace) is None:
         fileExt = file.suffix
         if fileExt == fname.FileExt.MAYA_BINARY:
             fileType = mapp.FileType.BINARY
@@ -170,8 +171,8 @@ def unload(referenceNode: mobj.ReferenceNode) -> None:
 
 @mapp.logScriptEditorOutput
 def unloadSelected() -> None:
-    selection = cmds.ls(selection=True, type="reference")
-    if not selection:
+    selection = cmds.ls(selection=True, type="reference") or None
+    if selection is None:
         raise NoReferenceNodeSelectedError
 
     for s in selection:

@@ -228,12 +228,9 @@ def _findLatestVersionFile(
 # TODO: Python warning or something more meaningful?
 def _unloadReferencedCharacter(assetName: fname.NameIdentifier) -> None:
     """Unload a referenced asset"""
-    try:
-        referenceNode = rec.reference.findNode(
-            f"{assetName}_{fname.AssetType.RIG}"
-        )
-    except IndexError as e:
-        cmds.warning(e)
+    referenceNode = rec.reference.findNode(f"{assetName}_{fname.AssetType.RIG}")
+    if referenceNode is not None:
+        rec.reference.unload(referenceNode)
         return
 
     rec.reference.unload(referenceNode)

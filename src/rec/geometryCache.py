@@ -121,7 +121,7 @@ def _buildWindow(*objects: str, outputPath: Path) -> mui.ProgressWindow:
 @mapp.logScriptEditorOutput
 def exportSelected() -> None:
     geometry = mobj.lsSelectedGeometry()
-    if not geometry:
+    if geometry is None:
         raise mobj.NoGeometrySelectedError
 
     shot = fname.ShotId.fromFilename(fpath.getScenePath().stem)
@@ -218,7 +218,7 @@ def assetize(assetName: fname.NameIdentifier, namespace: str) -> None:
 # FIXME: make importing from test folder separate from main
 @mapp.logScriptEditorOutput
 def importSelected() -> None:
-    if not mobj.lsSelectedGeometry():
+    if mobj.lsSelectedGeometry() is None:
         raise mobj.NoGeometrySelectedError
 
     shot = fname.ShotId.fromFilename(fpath.getScenePath().stem)
