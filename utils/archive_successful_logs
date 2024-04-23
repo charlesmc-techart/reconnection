@@ -5,14 +5,19 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 
+def _has_traceback(file: Path) -> bool:
+    with file.open("r", encoding="utf-8") as f:
+        for line in f:
+            if "Traceback" in line:
+                return True
+    return False
+
+
 def main(dir: Path) -> None:
-    for log in (f for f in dir.iterdir() if f.suffix == ".log"):
-        with log.open("r", encoding="utf-8") as f:
-            for line in f:
-                if "Traceback" in line:
-                    break
-            else:
-                log.rename(f"{dir}/success/{log.name}")
+    log_files = (f for f in dir.iterdir() if f.suffix == ".log")
+    for log in log_files:
+        if not _has_traceback(log):
+            log.rename(f"{dir}/success/{log.name}")
 
 
 if __name__ == "__main__":

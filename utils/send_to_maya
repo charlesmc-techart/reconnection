@@ -1,10 +1,10 @@
 #!/usr/bin/env zsh
 # Send a Python script to Maya via a socket opened by `commandPort`
-# The script must be under src/rec/, and the socket must be /tmp/vscodeToMaya
+# The script must be under src/rec/, and the socket must be /tmp/vscode_to_maya
 
 source "${0:h}/error_message.zsh"
 
-readonly SOCKET=/tmp/vscodeToMaya
+readonly SOCKET=/tmp/vscode_to_maya
 
 if [[ ! -S "${SOCKET}" ]]; then
   err "${0:t}: ${SOCKET}: Not a socket"
