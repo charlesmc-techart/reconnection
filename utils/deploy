@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 # Sync the scripts to the specified directory
 
-source "${0:h}/errorMessage.zsh"
+source "${0:h}/error_message.zsh"
 
 declare -a NAMES_TO_EXCLUDE args
 readonly NAMES_TO_EXCLUDE=('*.csv' '*.txt*' '.DS_Store' '__pycache__' 'logs/')

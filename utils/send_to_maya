@@ -2,7 +2,7 @@
 # Send a Python script to Maya via a socket opened by `commandPort`
 # The script must be under src/rec/, and the socket must be /tmp/vscodeToMaya
 
-source "${0:h}/errorMessage.zsh"
+source "${0:h}/error_message.zsh"
 
 readonly SOCKET=/tmp/vscodeToMaya
 
@@ -14,13 +14,13 @@ elif [[ "${1:e}" != 'py' ]]; then
   err "${0:t}: ${1:P}: Not a Python file"
 fi;
 
-readonly parentDir="${1:h:t}"
-if [[ "${parentDir}" != 'rec' ]]; then
+readonly parent_dir="${1:h:t}"
+if [[ "${parent_dir}" != 'rec' ]]; then
   err "${0:t}: Script must be from src/rec/"
 fi;
 
 cat << END | nc -U "${SOCKET}"
-from ${parentDir}.${1:t:r} import main
+from ${parent_dir}.${1:t:r} import main
 
 main()
 END
