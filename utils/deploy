@@ -7,20 +7,25 @@ declare -a NAMES_TO_EXCLUDE args
 readonly NAMES_TO_EXCLUDE=('*.csv' '*.txt*' '.DS_Store' '__pycache__' 'logs/')
 
 args=(--archive)
-if [[ "$1" == '-n' || "$1" == '--dry-run' ]]; then
+if [[ "$1" == '-n' || "$1" == '--dry-run' ]]
+then
   args+=(--dry-run --verbose)
   shift
-elif (( $# > 1 )); then
+elif (( $# > 1 ))
+then
   err "${0:t}: Only valid optional flag is '-n' or '--dry-run'"
 fi
 
-if [[ -z "$1" ]]; then
+if [[ -z "$1" ]]
+then
   err "${0:t}: No target directory given"
-elif [[ ! -d "$1" ]]; then
+elif [[ ! -d "$1" ]]
+then
   err "${0:t}: ${1:P}: Not a directory"
 fi
 
-for n in "${NAMES_TO_EXCLUDE[@]}"; do
+for n in "${NAMES_TO_EXCLUDE[@]}"
+do
   args+=(--exclude="${n}")
 done
 

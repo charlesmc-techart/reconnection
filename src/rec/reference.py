@@ -72,6 +72,7 @@ def _getFilePath() -> str:
 
 @mapp.logScriptEditorOutput
 def asset() -> None | NoReturn:
+    """Reference an asset from `REC/02_ASSETS`"""
     assetsDir = fpath.findSharedDrive(dir="REC/02_ASSETS")
     mui.setDefaultFileBrowserDir(assetsDir)
 
@@ -171,6 +172,7 @@ def unload(referenceNode: mobj.ReferenceNode) -> None:
 
 @mapp.logScriptEditorOutput
 def unloadSelected() -> None:
+    """Unload the selected referenced asset"""
     selection = cmds.ls(selection=True, type="reference") or None
     if selection is None:
         raise NoReferenceNodeSelectedError

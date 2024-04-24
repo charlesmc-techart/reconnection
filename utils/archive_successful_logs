@@ -5,25 +5,27 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 
-def _has_traceback(file: Path) -> bool:
-    with file.open("r", encoding="utf-8") as f:
+def _has_traceback(log_file: Path) -> bool:
+    with log_file.open("r", encoding="utf-8") as f:
         for line in f:
             if "Traceback" in line:
                 return True
     return False
 
 
-def main(dir: Path) -> None:
-    log_files = (f for f in dir.iterdir() if f.suffix == ".log")
-    for log in log_files:
-        if not _has_traceback(log):
-            log.rename(f"{dir}/success/{log.name}")
+def main(logs_dir: Path) -> None:
+    log_files = (lf for lf in logs_dir.iterdir() if lf.suffix == ".log")
+    for lf in log_files:
+        if not _has_traceback(lf):
+            lf.rename(f"{dir}/success/{lf.name}")
 
 
 if __name__ == "__main__":
     parser = ArgumentParser(
         prog="Successful Logs Archiver", description=__doc__
     )
-    parser.add_argument("dir", type=Path, help="Directory containing log files")
+    parser.add_argument(
+        "logs_dir", type=Path, help="Directory containing log files"
+    )
     args = parser.parse_args()
-    main(args.dir)
+    main(args.logs_dir)

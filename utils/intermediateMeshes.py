@@ -6,13 +6,13 @@ import maya.cmds as cmds
 
 
 def revealAllItermediateMeshes() -> None:
-    for s in cmds.listRelatives(allDescendents=True, type="mesh"):
-        cmds.setAttr(f"{s}.intermediateObject", False)
+    for shape in cmds.listRelatives(allDescendents=True, type="mesh"):
+        cmds.setAttr(f"{shape}.intermediateObject", False)
 
 
 def hideIntermediateMeshes() -> None:
-    for s in cmds.ls("rec_asset_*:*_geoShape", type="mesh"):
-        cmds.setAttr(f"{s}.intermediateObject", True)
+    for shape in cmds.ls("rec_asset_*:*_geoShape", type="mesh"):
+        cmds.setAttr(f"{shape}.intermediateObject", True)
 
 
 def connectShapeOrigToDeformers() -> None:

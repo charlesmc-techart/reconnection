@@ -6,18 +6,22 @@ source "${0:h}/error_message.zsh"
 
 readonly SOCKET=/tmp/vscode_to_maya
 
-if [[ ! -S "${SOCKET}" ]]; then
+if [[ ! -S "${SOCKET}" ]]
+then
   err "${0:t}: ${SOCKET}: Not a socket"
-elif [[ ! -f "$1" ]]; then
+elif [[ ! -f "$1" ]]
+then
   err "${0:t}: ${1:P}: Not a file"
-elif [[ "${1:e}" != 'py' ]]; then
+elif [[ "${1:e}" != 'py' ]]
+then
   err "${0:t}: ${1:P}: Not a Python file"
-fi;
+fi
 
 readonly parent_dir="${1:h:t}"
-if [[ "${parent_dir}" != 'rec' ]]; then
+if [[ "${parent_dir}" != 'rec' ]]
+then
   err "${0:t}: Script must be from src/rec/"
-fi;
+fi
 
 cat << END | nc -U "${SOCKET}"
 from ${parent_dir}.${1:t:r} import main

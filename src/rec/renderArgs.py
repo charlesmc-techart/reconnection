@@ -72,7 +72,9 @@ if __name__ == "__main__":
         prog="re:connection Batch Render Args Constructor", description=__doc__
     )
     parser.add_argument(
-        "file", type=Path, help="path to script file the shell will execute"
+        "scriptPath",
+        type=Path,
+        help="path to script file the shell will execute",
     )
     args = parser.parse_args()
-    main(args.file)
+    main(args.scriptPath)

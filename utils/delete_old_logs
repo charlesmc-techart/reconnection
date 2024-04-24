@@ -5,12 +5,15 @@ source "${0:h}/error_message.zsh"
 
 readonly FILE_AGE=+2w
 
-if (( $# < 1 )); then
+if (( $# < 1 ))
+then
   err "${0:t}: No directories given"
 fi
 
-for dir in "$@"; do
-  if [[ ! -d "${dir}" ]]; then
+for dir in "$@"
+do
+  if [[ ! -d "${dir}" ]]
+  then
     continue
   fi
   find "${dir}" -type f -name '*.log' -ctime "${FILE_AGE}" -delete
