@@ -17,7 +17,7 @@ def main(logs_dir: Path) -> None:
     log_files = (lf for lf in logs_dir.iterdir() if lf.suffix == ".log")
     for lf in log_files:
         if not _has_traceback(lf):
-            lf.rename(f"{dir}/success/{lf.name}")
+            lf.rename(f"{logs_dir}/success/{lf.name}")
 
 
 if __name__ == "__main__":
