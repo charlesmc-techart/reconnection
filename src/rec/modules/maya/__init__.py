@@ -90,7 +90,7 @@ def logScriptEditorOutput(
                 *divider,
                 f"{fullFuncName} completed",
             )
-            logFilePath.rename(f"{dir}/success/{logFilename}")
+            logFilePath.rename(Path(f"{dir}/success/{logFilename}"))
         finally:
             cmds.cmdFileOutput(close=fd)
 
