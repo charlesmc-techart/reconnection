@@ -6,19 +6,21 @@ __author__ = "Charles Mesa Cayobit"
 import os
 import shutil
 import sys
-from argparse import ArgumentParser
 from pathlib import Path
+
+_SCRIPTS_DIR = Path(__file__).parents[1]
+sys.path.insert(0, f"{_SCRIPTS_DIR}")
 
 import rec.modules.files.paths as fpath
 import rec.modules.queue as mqueue
 
-_SCRIPTS_DIR = Path(__file__).parents[1]
+ARGS_FILE = _SCRIPTS_DIR / "__render_args.cmd"
 
 RENDER_QUEUE = _SCRIPTS_DIR / "__render_queue.txt"
 FAILED_TO_RENDER = _SCRIPTS_DIR / "__render_failed.txt"
 
 
-def main(scriptFile: Path) -> None:
+def main() -> None:
     shutil.copy(RENDER_QUEUE, f"{RENDER_QUEUE}~")
 
     queue = mqueue.readTxt(RENDER_QUEUE)
@@ -37,11 +39,11 @@ def main(scriptFile: Path) -> None:
     mayaPath = os.path.join(os.environ["MAYA_LOCATION"], "bin")
     if "arnold" in scene.stem:
         args = (
-            os.path.join(mayaPath, "Render"),
+            f'"{os.path.join(mayaPath, "Render")}"',
             "-renderer",
             "arnold",
             "-proj",
-            fpath.findSharedDrive(),
+            f'"{fpath.findSharedDrive()}"',
             "-ai:threads",
             "-1",
             "-ai:aerr",
@@ -52,29 +54,20 @@ def main(scriptFile: Path) -> None:
         )
     else:
         args = (
-            os.path.join(mayaPath, "mayabatch"),
+            f'"{os.path.join(mayaPath, "mayabatch")}"',
             "-file",
-            scene,
+            f'"{scene}"',
             "-proj",
-            fpath.findSharedDrive(),
+            f'"{fpath.findSharedDrive()}"',
             "-command",
-            '"python(\\"import flair_batch\\")"',
+            '"python(\\"import rec.renderFlair\\")"',
             "-noAutoloadPlugins",
         )
-    with scriptFile.open("w", encoding="utf-8") as f:
+    with ARGS_FILE.open("w", encoding="utf-8") as f:
         print(*args, file=f)
 
     mqueue.updateTxt(RENDER_QUEUE, queue=queue)
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(
-        prog="re:connection Batch Render Args Constructor", description=__doc__
-    )
-    parser.add_argument(
-        "scriptPath",
-        type=Path,
-        help="path to script file the shell will execute",
-    )
-    args = parser.parse_args()
-    main(args.scriptPath)
+    main()
