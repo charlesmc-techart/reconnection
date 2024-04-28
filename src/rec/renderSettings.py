@@ -42,7 +42,7 @@ def setFlair() -> None:
     """Set Flair render settings"""
     shot = fname.ShotId.fromFilename(fpath.getScenePath().stem)
     renderDrive = fpath.findSharedDrive(dir=fpath.RENDER_GDRIVE)
-    shotDir = fpath.findShotPath(shot, parentDir=renderDrive)
+    shotDir = fpath.findShotPath(shot, parentDir=renderDrive) / "IMAGES"
 
     for attribute, value in (
         ("_sequenceDir", shotDir.as_posix()),
@@ -53,13 +53,7 @@ def setFlair() -> None:
         except RuntimeError as e:
             cmds.warning(e)
 
-    for attribute, value in (
-        ("_taa", True),
-        ("_renderScale", 1),
-        #
-        ("_bundleAOVs", True),  # FIXME: set bundle AOVs in EXR to True
-        ("_eachLight", True),  # FIXME: set render each light to True
-    ):
+    for attribute, value in (("_taa", True), ("_renderScale", 1)):
         try:
             cmds.setAttr(f"flairGlobals.{attribute}", value)
         except RuntimeError as e:
@@ -67,17 +61,7 @@ def setFlair() -> None:
 
     cmds.flair(alpha=2)  # set alpha to Premult
 
-    targets = (
-        # "cryptomatte",
-        # "albedo",
-        # "lighting",
-        # "specular",
-        # "shadows",
-        # "ambientOcclusionTarget",
-        # "bloomTarget",
-        "outputTarget",
-    )
-    cmds.flair(target=targets)  # set render targets
+    cmds.flair(target=("outputTarget",))  # set render targets
 
 
 def setArnold(renderFilename: str) -> None:
