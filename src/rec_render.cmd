@@ -8,5 +8,5 @@ set "CMD=%~dp0__render_args.cmd"
 "%MAYAPY%" "%SCRIPT%"
 if errorlevel 1 goto :eof
 
-call "%CMD%"
+"%CMD%"
 goto :loop
