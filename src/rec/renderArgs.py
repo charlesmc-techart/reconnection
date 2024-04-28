@@ -50,7 +50,7 @@ def main() -> None:
             "true",
             "-ai:alf",
             "true",
-            scene,
+            f'"{scene}"',
         )
     else:
         args = (
