@@ -26,4 +26,4 @@ def main() -> None | NoReturn:
         raise fname.InvalidFilenameError(message)
 
     with rec.renderArgs.RENDER_QUEUE.open("a", encoding="utf-8") as f:
-        print(scene, file=f)
+        print(scene.as_posix(), file=f)
