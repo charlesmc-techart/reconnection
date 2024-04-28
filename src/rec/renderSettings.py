@@ -44,11 +44,15 @@ def setFlair() -> None:
     renderDrive = fpath.findSharedDrive(dir=fpath.RENDER_GDRIVE)
     shotDir = fpath.findShotPath(shot, parentDir=renderDrive)
 
-    cmds.setAttr(
-        "flairGlobals._sequenceName",
-        f"{shot.name.upper()}.<####>",
-        type="string",
-    )
+    for attribute, value in (
+        ("_sequenceDir", shotDir.as_posix()),
+        ("_sequenceName", f"{shot.name.upper()}.<###>"),
+    ):
+        try:
+            cmds.setAttr(f"flairGlobals.{attribute}", value, type="string")
+        except RuntimeError as e:
+            cmds.warning(e)
+
     for attribute, value in (
         ("_taa", True),
         ("_renderScale", 1),
@@ -64,13 +68,13 @@ def setFlair() -> None:
     cmds.flair(alpha=2)  # set alpha to Premult
 
     targets = (
-        "cryptomatte",
-        "albedo",
-        "lighting",
-        "specular",
-        "shadows",
-        "ambientOcclusionTarget",
-        "bloomTarget",
+        # "cryptomatte",
+        # "albedo",
+        # "lighting",
+        # "specular",
+        # "shadows",
+        # "ambientOcclusionTarget",
+        # "bloomTarget",
         "outputTarget",
     )
     cmds.flair(target=targets)  # set render targets
