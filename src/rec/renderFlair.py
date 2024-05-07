@@ -15,5 +15,4 @@ def main() -> None:
     renderer.render()
 
 
-if __name__ == "__main__":
-    main()
+main()
