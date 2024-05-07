@@ -19,11 +19,12 @@ import rec.modules.queue as mqueue
 RENDER_QUEUE = _SCRIPTS_DIR / "__render_queue.txt"
 FAILED_TO_RENDER = _SCRIPTS_DIR / "__render_failed.txt"
 
+MAYA_PATH = os.path.join(os.environ["MAYA_LOCATION"], "bin", "mayabatch")
+
 
 def render(scene: Path) -> None:
-    mayaPath = os.path.join(os.environ["MAYA_LOCATION"], "bin", "mayabatch")
     args = (
-        mayaPath,
+        MAYA_PATH,
         "-file",
         scene.as_posix(),
         "-proj",
@@ -32,7 +33,6 @@ def render(scene: Path) -> None:
         'python("import rec.renderFlair")',
         "-noAutoloadPlugins",
     )
-
     subprocess.run(args, stdout=sys.stdout, stderr=sys.stderr)
 
 
