@@ -2,6 +2,7 @@ from __future__ import annotations
 
 __author__ = "Charles Mesa Cayobit"
 
+from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -23,27 +24,15 @@ class NoFileSelectedError(Exception):
         super().__init__("No file was selected")
 
 
-class ProgressWindow:
-    """A window with a prgress bar"""
+class Window(ABC):
+    instances: dict[str, Window] = {}
 
-    _instances: dict[str, ProgressWindow] = {}
-
-    __slots__ = (
-        "_name",
-        "_title",
-        "name",
-        "title",
-        "text",
-        "progressBar",
-        "tasks",
-        "tasksDone",
-    )
-
-    def __new__(cls, name: str, title: str) -> ProgressWindow:
+    def __new__(cls, name: str, title: str) -> Window:
         """Only create one instance for each title"""
-        if title not in cls._instances:
-            cls._instances[title] = super().__new__(cls)
-        return cls._instances[title]
+        id = name + title
+        if id not in cls.instances:
+            cls.instances[id] = super().__new__(cls)
+        return cls.instances[id]
 
     def __init__(self, name: str, title: str) -> None:
         self._name = name
@@ -51,17 +40,36 @@ class ProgressWindow:
 
         self.name = f"{fname.SHOW}_{name}"
         self.title = f"{fname.SHOW_FULL_TITLE} {title}"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self._name!r}, {self._title!r})"
+
+    @abstractmethod
+    def build(self) -> Window:
+        if cmds.window(self.name, exists=True):
+            self.close()
+
+    def show(self) -> Window:
+        cmds.showWindow(self.name)
+        return self
+
+    def close(self) -> None:
+        cmds.deleteUI(self.name, window=True)
+
+
+class ProgressWindow(Window):
+    """A window with a prgress bar"""
+
+    def __init__(self, name: str, title: str) -> None:
+        super().__init__(name, title=title)
         self.text: str
         self.progressBar: str
         self.tasks: Iterator[str]
         self.tasksDone = 0
 
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self._name!r}, {self._title!r})"
-
     def build(self) -> ProgressWindow:
-        if cmds.window(self.name, exists=True):
-            cmds.deleteUI(self.name, window=True)
+        super().build()
+
         window = cmds.window(
             self.name,
             parent=mel.eval("$gMainWindow = $gMainWindow"),
@@ -113,11 +121,3 @@ class ProgressWindow:
             self.tasksDone += 1
 
         return self
-
-    def show(self) -> ProgressWindow:
-        cmds.showWindow(self.name)
-
-        return self
-
-    def close(self) -> None:
-        cmds.deleteUI(self.name)

@@ -27,6 +27,7 @@ class TopLevelGroup(strEnum.StringEnum):
 
     CHARACTER = "::_*CHARACTER*_"
     CAMERA = "::_*CAMERA*_"
+    CACHE = "::*CACHE*"
 
 
 class TopLevelGroupDoesNotExistError(Exception):

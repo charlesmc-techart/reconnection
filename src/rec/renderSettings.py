@@ -4,7 +4,8 @@ from __future__ import annotations
 
 __author__ = "Charles Mesa Cayobit"
 
-from typing import ClassVar
+from functools import partial
+from typing import Any, ClassVar
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -42,10 +43,19 @@ def setGlobals() -> None:
     cmds.setAttr(f"{drg}.endFrame", endFrame)
 
 
-class setPlayblast:
+class Playblast:
     """Temporarily set playblast settings"""
 
-    modelEditorOptions: ClassVar[dict[str, bool | str]] = {
+    __slots__ = (
+        "viewport",
+        "_modelEditorCmd",
+        "_origShowMenuOptions",
+        "_origHardwareRenderGlobalsOptions",
+        "_origGradient",
+        "_origBgRgb",
+    )
+
+    showMenuOptions: ClassVar[dict[str, bool | str]] = {
         "allObjects": False,
         "displayAppearance": "smoothShaded",
         "displayLights": "flat",
@@ -68,42 +78,41 @@ class setPlayblast:
 
     def __init__(self) -> None:
         self.viewport: str = cmds.playblast(activeEditor=True)
+        self._modelEditorCmd = partial(cmds.modelEditor, self.viewport)
 
-        self.origModelEditorOptions: dict[str, bool | str] = {}
-        for k in self.modelEditorOptions:
-            if k == "allObjects":
-                self.origModelEditorOptions[k] = True
+        self._origShowMenuOptions: dict[str, bool | str] = {}
+        for option in self.showMenuOptions:
+            if option == "allObjects":
+                self._origShowMenuOptions[option] = True
             else:
-                self.origModelEditorOptions[k] = cmds.modelEditor(
-                    self.viewport, query=True, **{k: True}
+                self._origShowMenuOptions[option] = self._modelEditorCmd(
+                    query=True, **{option: True}
                 )
 
-        self.origHardwareRenderGlobalsOptions: dict[str, bool] = {
-            k: cmds.getAttr(f"hardwareRenderingGlobals.{k}")
-            for k in self.hardwareRenderGlobalsOptions
-        }
-        self.origGradient: bool = cmds.displayPref(
+        self._origHardwareRenderGlobalsOptions = (
+            (attribute, cmds.getAttr(f"hardwareRenderingGlobals.{attribute}"))
+            for attribute in self.hardwareRenderGlobalsOptions
+        )
+        self._origGradient: bool = cmds.displayPref(
             query=True, displayGradient=True
         )
-        self.origBg = cmds.displayRGBColor("background", query=True)
+        self._origBgRgb = cmds.displayRGBColor("background", query=True)
 
     def __enter__(self) -> str:
-        cmds.modelEditor(self.viewport, edit=True, **self.modelEditorOptions)
-        for k, v in self.hardwareRenderGlobalsOptions.items():
-            cmds.setAttr(f"hardwareRenderingGlobals.{k}", v)
+        self._modelEditorCmd(edit=True, **self.showMenuOptions)
+        for attribute, value in self.hardwareRenderGlobalsOptions.items():
+            cmds.setAttr(f"hardwareRenderingGlobals.{attribute}", value)
         cmds.displayPref(displayGradient=False)
         cmds.displayRGBColor("background", 0, 0, 0)
 
         return self.viewport
 
-    def __exit__(self, *args) -> None:
-        cmds.modelEditor(
-            self.viewport, edit=True, **self.origModelEditorOptions
-        )
-        for k, v in self.origHardwareRenderGlobalsOptions.items():
-            cmds.setAttr(f"hardwareRenderingGlobals.{k}", v)
-        cmds.displayPref(displayGradient=self.origGradient)
-        cmds.displayRGBColor("background", *self.origBg)
+    def __exit__(self, *args: Any) -> None:
+        self._modelEditorCmd(edit=True, **self._origShowMenuOptions)
+        for attribute, value in self._origHardwareRenderGlobalsOptions:
+            cmds.setAttr(f"hardwareRenderingGlobals.{attribute}", value)
+        cmds.displayPref(displayGradient=self._origGradient)
+        cmds.displayRGBColor("background", *self._origBgRgb)
 
         mel.eval("rebuildShowMenu")
 

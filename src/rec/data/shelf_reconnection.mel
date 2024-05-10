@@ -539,6 +539,124 @@ global proc shelf_reconnection () {
     shelfButton
         -enableCommandRepeat 1
         -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Export a mask for the Mechanic"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Export Mask for the Mechanic"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "e cm"
+        -overlayLabelColor 1 0 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.export_compositingMask\n\nrec.export_compositingMask.exportMechanic()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Export a mask for the Robot"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Export Mask for the Robot"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "e cr"
+        -overlayLabelColor 1 0 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.export_compositingMask\n\nrec.export_compositingMask.exportRobot()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 64
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Export a mask for the selected objects"
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -align "center"
+        -label "Export Mask for Selected Objects"
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont"
+        -imageOverlayLabel "e cs"
+        -overlayLabelColor 1 0 0
+        -overlayLabelBackColor 0 0 0 1
+        -image "commandButton.png"
+        -image1 "commandButton.png"
+        -style "iconOnly"
+        -marginWidth 0
+        -marginHeight 1
+        -command "import rec.export_compositingMask\n\nrec.export_compositingMask.exportSelected()"
+        -sourceType "python"
+        -commandRepeatable 1
+        -flat 1
+    ;
+    separator
+        -enable 1
+        -width 34
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -enableBackground 0
+        -backgroundColor 0 0 0
+        -highlightColor 0.321569 0.521569 0.65098
+        -style "shelf"
+        -horizontal 0
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
         -flexibleWidthValue 32
         -enable 1
         -width 35
