@@ -17,6 +17,11 @@ DGNode = DAGNode = ShapeNode = str
 ReferenceNode = DGNode
 
 
+def nodeExists(name: DGNode, type_: str) -> bool:
+    """Check if the node exists and is the specified type"""
+    return cmds.objExists(name) and cmds.objectType(name, isType=type_)
+
+
 class TopLevelGroup(strEnum.StringEnum):
     """Patterns for top-level groups parented under the world"""
 

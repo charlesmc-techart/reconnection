@@ -24,10 +24,7 @@ def main() -> None:
     mapp.loadPlugin("mtoa")
 
     def createAiNode(node: mobj.DGNode) -> mobj.DGNode:
-        if not (
-            cmds.objExists(f"::{node}")
-            and cmds.objectType(f"::{node}", isType=node)
-        ):
+        if not mobj.nodeExists(node, type_=node):
             node = cmds.shadingNode(node, asShader=True, name=node)
         return node
 
