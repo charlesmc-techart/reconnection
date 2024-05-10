@@ -26,9 +26,9 @@ def render(scene: Path) -> None:
     args = (
         MAYA_PATH,
         "-file",
-        scene.as_posix(),
+        scene,
         "-proj",
-        fpath.findSharedDrive().as_posix(),
+        fpath.findSharedDrive(),
         "-command",
         'python("import rec.renderFlair")',
         "-noAutoloadPlugins",
