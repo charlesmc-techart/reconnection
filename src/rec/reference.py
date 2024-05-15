@@ -26,7 +26,7 @@ def findNode(identifier: fname.Identifier) -> mobj.ReferenceNode | None:
     """Get an asset's reference node"""
     try:
         return mobj.lsWithWildcard(identifier, type="reference")[0]
-    except TypeError:
+    except IndexError:
         return None
 
 
