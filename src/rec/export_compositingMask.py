@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
-from functools import partial
-from typing import Any, Literal, Union
+from typing import Any, Literal
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -24,6 +23,7 @@ class _Mask:
 
     def __init__(self, target: mobj.DAGNode | Sequence[mobj.DAGNode]) -> None:
         self.target = target
+        print(self.target)
 
         self.origShaderConnections: dict[str, str] = {}
         for m in cmds.ls(type="shadingEngine"):
@@ -31,7 +31,7 @@ class _Mask:
                 self.origShaderConnections[m] = shader[0]
 
     def __enter__(self) -> None:
-        if self.target is mobj.ROBOT_MODEL_GEO_GRP:
+        if mobj.ROBOT_MODEL_GEO_GRP[1:] in self.target:
             cmds.setAttr(f"{mobj.ROBOT_FACE_MODEL_GEO}.visibility", False)
 
         self._create("black", colorRgb=(0, 0, 0))
@@ -188,7 +188,7 @@ def exportMechanic() -> None:
 
     geometry = mobj.MECHANIC_MODEL_GEO_GRP
     if not mobj.nodeExists(geometry, "transform"):
-        raise RuntimeError("Mechanic not in scene")
+        raise Exception("Mechanic not in scene")
 
     _main(shot=shot, geometry=geometry, label="MC")
 
@@ -197,9 +197,11 @@ def exportMechanic() -> None:
 def exportRobot() -> None:
     shot = fname.ShotId.fromFilename(fpath.getScenePath().stem)
 
-    geometry = mobj.ROBOT_MODEL_GEO_GRP
-    if not mobj.nodeExists(geometry, "transform"):
-        raise RuntimeError("Robot not in scene")
+    for geometry in cmds.ls(mobj.ROBOT_MODEL_GEO_GRP, transforms=True):
+        if "robot" in geometry:
+            break
+    else:
+        raise Exception("Robot not in scene")
 
     _main(shot=shot, geometry=geometry, label="RB")
 
