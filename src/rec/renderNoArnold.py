@@ -25,6 +25,7 @@ MAYA_PATH = os.path.join(os.environ["MAYA_LOCATION"], "bin", "mayabatch")
 def render(scene: Path) -> None:
     args = (
         MAYA_PATH,
+        "-batch",
         "-file",
         scene,
         "-proj",
