@@ -3,7 +3,7 @@ __author__ = "Charles Mesa Cayobit"
 import traceback
 from collections.abc import Callable
 from contextlib import ContextDecorator
-from functools import partial
+from functools import partial, wraps
 from pathlib import Path
 from typing import Any
 
@@ -75,6 +75,7 @@ def logScriptEditorOutput(
     printCmd = partial(print, sep="\n")
     divider = "", "#" * 80, ""
 
+    @wraps(func)
     def funcWithLogging() -> None:
         fd = cmds.cmdFileOutput(open=logFilePath.as_posix())
 
