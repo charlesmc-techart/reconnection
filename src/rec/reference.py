@@ -145,7 +145,7 @@ def robotModel() -> None:
     character(
         file,
         namespace=namespace,
-        geometry=mobj.MECHANIC_MODEL_GEO_GRP,
+        geometry=mobj.ROBOT_MODEL_GEO_GRP,
     )
 
 
