@@ -1,5 +1,5 @@
 # main
-archive
+archive*
 *.csv
 *.log
 *.txt*
