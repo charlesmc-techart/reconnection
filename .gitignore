@@ -4,15 +4,9 @@ archive*
 *.log
 *.txt*
 **/__render.*
-misc/
-tests/
-typings/
+misc
+tests
+typings
 
 # caches
-.cache/
-*.zwc
-__pycache__
-
-# misc
-.DS_Store
-.vscode/
+.cache
