@@ -1,9 +1,10 @@
 # main
-archive*
 *.csv
 *.log
 *.txt*
 **/__render.*
+archive*
+!archive_successful_logs
 misc
 tests
 typings
