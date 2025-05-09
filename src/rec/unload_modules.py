@@ -16,5 +16,4 @@ def main() -> None:
                     del sys.modules[m]
         except RuntimeError:
             continue
-        else:
-            break
+        break

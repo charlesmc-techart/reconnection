@@ -73,7 +73,7 @@ def main() -> None:
         assetName=fname.AssetName.ARNOLD,
         assetType=fname.AssetType.LIGHTS,
     )
-    sceneFiles = fpath.findShotFiles(shot, dir=scene.parent)
+    sceneFiles = fpath.findShotFiles(shot, directory=scene.parent)
     versionSuffix = fname.constructVersionSuffix(validator, files=sceneFiles)
 
     if mobj.lsUnknown():

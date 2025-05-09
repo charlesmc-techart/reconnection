@@ -16,7 +16,7 @@ import rec.renderArgs
 def main() -> None | NoReturn:
     scene = fpath.getScenePath()
 
-    if fname.inFilename("untitiled", scene):
+    if fname.inFilename("untitled", scene):
         message = f"Filename {scene.name!r} must match pattern: 'rec_seq###_description'"
         raise fname.InvalidFilenameError(message)
     elif not fname.hasAnyEtension(

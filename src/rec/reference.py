@@ -24,6 +24,7 @@ import rec.modules.maya.ui as mui
 
 def findNode(identifier: fname.Identifier) -> mobj.ReferenceNode | None:
     """Get an asset's reference node"""
+
     try:
         return mobj.lsWithWildcard(identifier, type="reference")[0]
     except IndexError:
@@ -32,6 +33,7 @@ def findNode(identifier: fname.Identifier) -> mobj.ReferenceNode | None:
 
 def load(file: Path, namespace: str) -> None:
     """Reference an asset into the scene if it isn't yet"""
+
     if findNode(namespace) is None:
         fileExt = file.suffix
         if fileExt == fname.FileExt.MAYA_BINARY:
@@ -73,7 +75,8 @@ def _getFilePath() -> str:
 @mapp.logScriptEditorOutput
 def asset() -> None | NoReturn:
     """Reference an asset from `REC/02_ASSETS`"""
-    assetsDir = fpath.findSharedDrive(dir="REC/02_ASSETS")
+
+    assetsDir = fpath.findSharedDrive(directory="REC/02_ASSETS")
     mui.setDefaultFileBrowserDir(assetsDir)
 
     filePath = _getFilePath()
@@ -95,6 +98,7 @@ def asset() -> None | NoReturn:
 # TODO: something more useful than a warming?
 def parent(child: mobj.DAGNode, parent: mobj.DAGNode) -> None:
     """Parent a node if it isn't parented to anything"""
+
     if mobj.getParent(child):
         return
 
@@ -111,6 +115,7 @@ def character(
     characterGrp: mobj.TopLevelGroup = mobj.TopLevelGroup.CHARACTER,
 ) -> None:
     """Reference a or a component of a character"""
+
     load(file, namespace=namespace)
 
     with mobj.TemporarySelection(geometry):
@@ -120,7 +125,8 @@ def character(
 
 
 getModelPathCmd = partial(
-    fpath.findModelPath, parentDir=fpath.findSharedDrive(dir=fpath.ASSETS_DIR)
+    fpath.findModelPath,
+    parentDir=fpath.findSharedDrive(directory=fpath.ASSETS_DIR),
 )
 _constructNamespaceCmd = partial(
     mobj.constructNamespace, assetType=fname.AssetType.MODEL
@@ -166,6 +172,7 @@ class NoReferenceNodeSelectedError(Exception):
 
 def unload(referenceNode: mobj.ReferenceNode) -> None:
     """Unload a reference"""
+
     file = Path(cmds.referenceQuery(referenceNode, filename=True))
     cmds.file(file.as_posix(), unloadReference=referenceNode)
 
@@ -173,6 +180,7 @@ def unload(referenceNode: mobj.ReferenceNode) -> None:
 @mapp.logScriptEditorOutput
 def unloadSelected() -> None:
     """Unload the selected referenced asset"""
+
     selection = cmds.ls(selection=True, type="reference") or None
     if selection is None:
         raise NoReferenceNodeSelectedError

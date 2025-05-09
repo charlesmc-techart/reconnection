@@ -22,6 +22,7 @@ _EXPORT_QUEUE = _SCRIPTS_DIR / "__cache_queue.txt"
 
 def main() -> None:
     # Backup the queue
+
     shutil.copy(_EXPORT_QUEUE, f"{_EXPORT_QUEUE}~")
 
     queue = mqueue.readTxt(_EXPORT_QUEUE)

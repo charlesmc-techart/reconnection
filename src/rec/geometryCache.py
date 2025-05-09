@@ -38,7 +38,7 @@ def constructFilename(
     )
     versionSuffix = fname.constructVersionSuffix(
         validator,
-        files=fpath.findShotFiles(shot, dir=dir),
+        files=fpath.findShotFiles(shot, directory=dir),
     )
     return f"{filenameBase}_{versionSuffix}"
 

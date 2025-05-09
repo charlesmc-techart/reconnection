@@ -30,12 +30,14 @@ def exportGeometryCache(
     geometryGrp: mobj.DAGNode, dir: Path, filename: str
 ) -> None:
     """Export a geometry cache for all geometry under a group"""
+
     geometry = mobj.lsChildren(geometryGrp)
     rec.geometryCache.export(geometry, dir=dir, filename=filename)
 
 
 def _exportAlembicCache(geometry: mobj.DAGNode, filePath: Path) -> None:
     """Export an Alembic cache"""
+
     mapp.loadPlugin("AbcExport")
     cmds.workspace(fileRule=("alembicCache", filePath.parent.as_posix()))
 
@@ -133,6 +135,7 @@ def _findLatestVersionFile(
     assetName: fname.NameIdentifier | None = None,
 ) -> Path | None:
     """Get the file path to the asset's latest version"""
+
     filenameBase = fname.constructFilenameBase(
         shot, assetName=assetName, assetType=assetType
     )
@@ -141,13 +144,14 @@ def _findLatestVersionFile(
     )
     return fpath.findLatestVersionAsset(
         validator,
-        files=fpath.findShotFiles(shot, dir=dir),
+        files=fpath.findShotFiles(shot, directory=dir),
     )
 
 
 # TODO: Python warning or something more meaningful?
 def _unloadReferencedCharacter(assetName: fname.NameIdentifier) -> None:
     """Unload a referenced asset"""
+
     referenceNode = rec.reference.findNode(f"{assetName}_{fname.AssetType.RIG}")
     if referenceNode is not None:
         rec.reference.unload(referenceNode)
@@ -163,6 +167,7 @@ def _importGeometryCache(
     namespace: str,
 ) -> None:
     """Call the MEL procedure for importing a geometry cache"""
+
     geometry = mobj.lsChildren(geometryGrp)
 
     cmds.workspace(fileRule=("fileCache", file.parent.as_posix()))
@@ -181,6 +186,7 @@ def _replaceRigWithCachedModel(
     geometryGrp: mobj.DAGNode,
 ) -> None:
     """Unload a referenced rig, reference just the model, then apply a cache"""
+
     _unloadReferencedCharacter(assetName)
     namespace = mobj.constructNamespace(cache.stem, fname.AssetType.CACHE)
     rec.reference.character(

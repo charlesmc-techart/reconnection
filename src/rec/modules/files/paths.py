@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import NoReturn
 
 import maya.cmds as cmds
-
 import rec.modules.files.names as fname
 
 MAIN_GDRIVE = "REC"
@@ -22,6 +21,7 @@ CACHES_DIR = os.path.join("LIGHT", "cache")
 
 def getProjectPath() -> Path:
     """Get the path to the current project"""
+
     return Path(cmds.workspace(query=True, fullName=True))
 
 
@@ -31,32 +31,33 @@ def getScenePath() -> Path:
     If the scene is blank and unsaved, it gets the path to the current project,
     including the untitled file.
     """
+
     if path := cmds.file(query=True, sceneName=True):
-        path = Path(path)
-    else:
-        path = getProjectPath() / "untitled"
-    return path
+        return Path(path)
+    return getProjectPath() / "untitled"
 
 
-def findShotFiles(shot: fname.ShotId, dir: Path) -> tuple[Path, ...]:
+def findShotFiles(shot: fname.ShotId, directory: Path) -> tuple[Path, ...]:
     """Filter shot files in the provided directory
 
     The internal list is sorted so the last item is the latest version,
     then it is returned as a tuple.
     """
+
     files = [
         f
-        for f in dir.iterdir()
+        for f in directory.iterdir()
         if f.is_file() and fname.inFilename(shot, file=f)
     ]
-    files.sort()
+    files.sort(key=lambda f: f.name)
     return tuple(files)
 
 
 def findLatestVersionAsset(
-    validator: fname.Validator, files: Iterable[Path]
+        validator: fname.Validator, files: Iterable[Path]
 ) -> Path | None:
     """Get the file path to the asset's latest version"""
+
     file = None
     for file in filter(validator, files):
         continue
@@ -66,33 +67,35 @@ def findLatestVersionAsset(
 class DirectoryNotFoundError(FileNotFoundError):
     """Provided directory could not be found on the Google shared drive"""
 
-    def __init__(self, dir: Path | str) -> None:
-        super().__init__(f"Directory not found: '{dir}'")
+    def __init__(self, directory: Path | str) -> None:
+        super().__init__(f"Directory not found: '{directory}'")
 
 
 def findSharedDrive(
-    *, drive: str = "G", dir: str = POST_PRODUCTION_GDRIVE
+        *, drive: str = "G", directory: str = POST_PRODUCTION_GDRIVE
 ) -> Path | NoReturn:
     """Get the path to re:connection's Google shared drive
 
     By default, it gets the post-production shared drive.
     """
+
     if sys.platform == "win32":
-        path = Path(f"{drive}:", "Shared drives", dir)
+        path = Path(f"{drive}:", "Shared drives", directory)
         if path.is_dir():
             return path
         raise DirectoryNotFoundError(path)
     else:
         pathPattern = "Library/CloudStorage/GoogleDrive*/Shared drives"
-        for path in Path.home().glob(f"{pathPattern}/{dir}"):
+        for path in Path.home().glob(f"{pathPattern}/{directory}"):
             if path.is_dir():
                 return path
-        raise DirectoryNotFoundError(f"~/{pathPattern}/{dir}")
+        raise DirectoryNotFoundError(f"~/{pathPattern}/{directory}")
 
 
 # TODO: cleaner way to do this?
 def findModelPath(assetName: fname.NameIdentifier, parentDir: Path) -> Path:
     """Get the path to the model's master file"""
+
     assetType = fname.AssetType.MODEL
     filePathPattern = os.path.join(
         f"{assetName}".upper(),

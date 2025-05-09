@@ -120,8 +120,9 @@ class Playblast:
 @mapp.logScriptEditorOutput
 def setFlair() -> None:
     """Set Flair render settings"""
+
     shot = fname.ShotId.fromFilename(fpath.getScenePath().stem)
-    renderDrive = fpath.findSharedDrive(dir=fpath.RENDER_GDRIVE)
+    renderDrive = fpath.findSharedDrive(directory=fpath.RENDER_GDRIVE)
     shotDir = fpath.findShotPath(shot, parentDir=renderDrive) / "IMAGES"
 
     for attribute, value in (
@@ -146,6 +147,7 @@ def setFlair() -> None:
 
 def setArnold(renderFilename: str) -> None:
     """Set Arnold render settings"""
+
     cmds.setAttr(
         "defaultRenderGlobals.currentRenderer", "arnold", type="string"
     )

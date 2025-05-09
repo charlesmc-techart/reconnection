@@ -75,9 +75,10 @@ TypeIdentifier = Union[AssetType, str]
 
 
 def constructFilenameBase(
-    shot: ShotId, assetName: NameIdentifier | None, assetType: TypeIdentifier
+        shot: ShotId, assetName: NameIdentifier | None, assetType: TypeIdentifier
 ) -> str:
     """Construct a filename base, formatted 'rec_seq###_name_type'"""
+
     if assetName:
         return f"{shot.full}_{assetName}_{assetType}"
     else:
@@ -100,6 +101,7 @@ Identifier = Union[ShotId, NameIdentifier, TypeIdentifier]
 
 def inFilename(identifier: Identifier, file: Path) -> bool:
     """Check if an identifier is the filename"""
+
     return f"{identifier}" in file.stem
 
 
@@ -115,11 +117,12 @@ def hasAnyEtension(file: Path, fileExts: set[FileExt]) -> bool:
 
 
 def constructValidator(
-    filenameBase: str,
-    assetName: NameIdentifier | None,
-    assetType: TypeIdentifier,
+        filenameBase: str,
+        assetName: NameIdentifier | None,
+        assetType: TypeIdentifier,
 ) -> Validator:
     """Construct a validator used for filtering assets"""
+
     if assetType != AssetType.CACHE:
         fileExtValidator = partial(
             hasAnyEtension,
@@ -136,9 +139,10 @@ def constructValidator(
 
 
 def constructVersionSuffix(
-    validator: Validator, files: Iterable[Path], versionIndicator: str = "v"
+        validator: Validator, files: Iterable[Path], versionIndicator: str = "v"
 ) -> str:
     """Construct a filename version, formatted 'v###'"""
+    
     filenames = {f.stem for f in files if validator(f)}
     try:
         filename = sorted(filenames)[-1]

@@ -28,6 +28,7 @@ def getComponents(
 
     If the camera uses a camera and aim, get the lookAt and locator nodes, too.
     """
+
     try:
         camera = mobj.lsChildren(cameraGrp, allDescendents=True, type="camera")
     except ValueError as e:
@@ -60,6 +61,7 @@ def _exportMayaAsciiThenBinary(
     The nodes exported to an ASCII file in a temporary directory. Then, another
     instance of Maya is opened to export the nodes into a binary file.
     """
+
     prefix = f"{fname.SHOW}_"
     asciiFilename = f"{prefix}temp{fname.FileExt.MAYA_ASCII}"
     with TemporaryDirectory(prefix=prefix) as tempDir:
@@ -89,6 +91,7 @@ def _exportMayaAsciiThenBinary(
 
 def export(cameraNodes: Sequence[mobj.DAGNode], filePath: Path) -> None:
     """If unknown nodes are present, temporarily export to an ASCII file"""
+
     if mobj.lsUnknown():
         _exportMayaAsciiThenBinary(cameraNodes, binaryFilePath=filePath)
         return

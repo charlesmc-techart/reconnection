@@ -145,7 +145,6 @@ def _main(
     geometry: mobj.DAGNode | Sequence[mobj.DAGNode],
     label: str,
 ) -> None:
-
     try:
         camera = rec.camera.getComponents(mobj.TopLevelGroup.CAMERA)
     except mobj.TopLevelGroupDoesNotExistError:
@@ -160,7 +159,6 @@ def _main(
     exportDir = fpath.findSharedDrive()
     filename = f"{shot.name}_{label}_alpha".upper()
     filePath = exportDir / filename
-    import os
 
     resolutionWidth = cmds.getAttr("defaultResolution.width")
     resolutionHeight = cmds.getAttr("defaultResolution.height")
@@ -169,8 +167,8 @@ def _main(
         cmds.playblast(
             clearCache=True,
             compression="h.264",
-            # filename=filePath.as_posix(),
-            filename=os.path.join("/Users/charles_mc/Desktop", filename),
+            filename=filePath.as_posix(),
+            # filename=os.path.join("/Users/charles_mc/Desktop", filename),
             forceOverwrite=True,
             format="qt",
             percent=100,
