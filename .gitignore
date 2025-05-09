@@ -1,7 +1,9 @@
 # main
 *.csv
 *.log
+*.png
 *.txt*
+*.zip
 **/__render.*
 archive*
 !archive_successful_logs
